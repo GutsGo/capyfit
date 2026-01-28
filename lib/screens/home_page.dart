@@ -29,8 +29,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeController.forward();
-    _countController.forward();
+    Future.delayed(const Duration(milliseconds: 150), () {
+      if (mounted) {
+        _fadeController.forward();
+        _countController.forward();
+      }
+    });
   }
 
   @override
@@ -40,9 +44,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  int _lastIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>();
+    final currentTab = appState.currentTabIndex;
+
+    // Check if we just switched back to the Home tab
+    if (currentTab == 0 && _lastIndex != 0) {
+      _fadeController.forward(from: 0);
+      _countController.forward(from: 0);
+    }
+    _lastIndex = currentTab;
+
     final stats = appState.userStats;
     final today = DateTime.now();
     final dateStr = "${today.year}年${today.month}月${today.day}日";
@@ -72,7 +87,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               const SizedBox(height: 24),
 
               // Stats Grid
-              _buildStatsGrid(stats),
+              _buildStatsGrid(stats, appState.todayConsumedCalories),
               const SizedBox(height: 24),
 
               // Today's Plan Section
@@ -132,7 +147,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return FadeTransition(
       opacity: _fadeController,
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero)
+        position: Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
             .animate(
               CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
             ),
@@ -177,7 +192,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildStatsGrid(UserStats stats) {
+  Widget _buildStatsGrid(UserStats stats, int todayCalories) {
     return AnimatedBuilder(
       animation: _countController,
       builder: (context, child) {
@@ -208,7 +223,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             _buildStatCard(
               LucideIcons.trendingUp,
-              (1250 * val).round().toString(),
+              (todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
               const Color(0x267EB8A2),
@@ -328,7 +343,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: HandDrawnCard(
-        onTap: () => appState.togglePlanComplete(plan.id),
+        onTap: () {
+          appState.togglePlanComplete(plan.id);
+          _countController.forward(from: 0);
+        },
         child: Row(
           children: [
             Container(
@@ -360,7 +378,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
                   Text(
-                    '${plan.time} · ${plan.duration}分钟 · ${_getIntensityLabel(plan.intensity)}',
+                    '${plan.time} · ${plan.duration}分钟 · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.textMuted,

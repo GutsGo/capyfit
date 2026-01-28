@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
@@ -14,26 +15,22 @@ class ExercisePage extends StatefulWidget {
 }
 
 class _ExercisePageState extends State<ExercisePage> {
-  String selectedCategory = '全部';
+  List<String> selectedCategories = [];
   String searchQuery = '';
-
-  final List<String> categories = [
-    '全部',
-    '胸部',
-    '背部',
-    '腿部',
-    '肩部',
-    '手臂',
-    '核心',
-    '有氧',
-  ];
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>();
+
+    // Dynamically get categories from existing exercises
+    final dynamicCategories = appState.exercises
+        .map((ex) => _getCategoryLabel(ex.category))
+        .toSet()
+        .toList();
+
     final exercises = appState.exercises.where((ex) {
-      if (selectedCategory != '全部' &&
-          _getCategoryLabel(ex.category) != selectedCategory) {
+      if (selectedCategories.isNotEmpty &&
+          !selectedCategories.contains(_getCategoryLabel(ex.category))) {
         return false;
       }
       if (searchQuery.isNotEmpty &&
@@ -43,9 +40,23 @@ class _ExercisePageState extends State<ExercisePage> {
       return true;
     }).toList();
 
+    // Split exercises into two columns for masonry-like adaptive height
+    final leftColumnItems = <Exercise>[];
+    final rightColumnItems = <Exercise>[];
+    for (var i = 0; i < exercises.length; i++) {
+      if (i % 2 == 0) {
+        leftColumnItems.add(exercises[i]);
+      } else {
+        rightColumnItems.add(exercises[i]);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('动作库', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          '动作库',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -53,7 +64,7 @@ class _ExercisePageState extends State<ExercisePage> {
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
             child: TextField(
               onChanged: (val) => setState(() => searchQuery = val),
               decoration: InputDecoration(
@@ -69,111 +80,222 @@ class _ExercisePageState extends State<ExercisePage> {
             ),
           ),
 
-          // Category Filter
-          SizedBox(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final cat = categories[index];
-                final isSelected = selectedCategory == cat;
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 8,
-                  ),
-                  child: ChoiceChip(
-                    label: Text(cat),
-                    selected: isSelected,
-                    onSelected: (val) => setState(() => selectedCategory = cat),
-                    selectedColor: AppColors.primary,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.textMain,
-                      fontSize: 13,
-                    ),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-          // Exercise List
+          // Exercise List with Adaptive Height
           Expanded(
-            child: GridView.builder(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.85,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Left Column
+                  Expanded(
+                    child: Column(
+                      children: leftColumnItems
+                          .map(
+                            (ex) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildExerciseCard(ex),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Right Column
+                  Expanded(
+                    child: Column(
+                      children: rightColumnItems
+                          .map(
+                            (ex) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildExerciseCard(ex),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
               ),
-              itemCount: exercises.length,
-              itemBuilder: (context, index) {
-                final ex = exercises[index];
-                return _buildExerciseCard(ex);
-              },
             ),
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showFilterSheet(dynamicCategories),
+        shape: const CircleBorder(),
+        backgroundColor: AppColors.primary,
+        child: const Icon(LucideIcons.filter, color: Colors.white),
+      ),
+    );
+  }
+
+  void _showFilterSheet(List<String> categories) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '筛选分类',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(LucideIcons.x, size: 20),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: categories.map((cat) {
+                      final isSelected = selectedCategories.contains(cat);
+                      return FilterChip(
+                        label: Text(cat),
+                        selected: isSelected,
+                        onSelected: (val) {
+                          setState(() {
+                            if (val) {
+                              selectedCategories.add(cat);
+                            } else {
+                              selectedCategories.remove(cat);
+                            }
+                          });
+                          setModalState(() {});
+                        },
+                        selectedColor: AppColors.primary,
+                        checkmarkColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: isSelected ? Colors.white : AppColors.textMain,
+                        ),
+                        backgroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.transparent,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
   Widget _buildExerciseCard(Exercise ex) {
-    return HandDrawnCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Placeholder for image
-          Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight.withValues(alpha: 0.1),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        context.push('/exercise/detail', extra: ex);
+      },
+      child: HandDrawnCard(
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image
+            SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                child: Hero(
+                  tag: 'exercise_img_${ex.id}',
+                  child: ex.image != null
+                      ? Image.asset(
+                          ex.image!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: AppColors.primaryLight.withValues(
+                                alpha: 0.1,
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  LucideIcons.imageOff,
+                                  color: AppColors.textMuted,
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          color: AppColors.primaryLight.withValues(alpha: 0.1),
+                          child: const Center(
+                            child: Icon(
+                              LucideIcons.image,
+                              color: AppColors.primaryLight,
+                            ),
+                          ),
+                        ),
+                ),
               ),
             ),
-            child: const Center(
-              child: Icon(LucideIcons.image, color: AppColors.primaryLight),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  ex.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    ex.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    _buildTag(
-                      _getCategoryLabel(ex.category),
-                      AppColors.accentMint,
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      _buildTag(
+                        _getCategoryLabel(ex.category),
+                        AppColors.accentMint,
+                      ),
+                      const SizedBox(width: 4),
+                      _buildTag(
+                        _getDifficultyLabel(ex.difficulty),
+                        AppColors.accentOrange,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${ex.calories} kcal / 组',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                      fontStyle: FontStyle.italic,
                     ),
-                    const SizedBox(width: 4),
-                    _buildTag(
-                      _getDifficultyLabel(ex.difficulty),
-                      AppColors.accentOrange,
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -212,6 +334,10 @@ class _ExercisePageState extends State<ExercisePage> {
         return '核心';
       case ExerciseCategory.cardio:
         return '有氧';
+      case ExerciseCategory.yoga:
+        return '瑜伽';
+      case ExerciseCategory.other:
+        return '其他';
     }
   }
 

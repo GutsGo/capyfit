@@ -7,6 +7,7 @@ class HandDrawnCard extends StatelessWidget {
   final double? width;
   final double? height;
   final VoidCallback? onTap;
+  final Color? color;
 
   const HandDrawnCard({
     super.key,
@@ -15,6 +16,7 @@ class HandDrawnCard extends StatelessWidget {
     this.width,
     this.height,
     this.onTap,
+    this.color,
   });
 
   @override
@@ -23,7 +25,7 @@ class HandDrawnCard extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: color ?? AppColors.card,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(

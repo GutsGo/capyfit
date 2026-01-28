@@ -1,4 +1,15 @@
-enum ExerciseCategory { chest, back, legs, shoulders, arms, core, cardio }
+enum ExerciseCategory {
+  chest,
+  back,
+  legs,
+  shoulders,
+  arms,
+  core,
+  cardio,
+  yoga,
+  other,
+}
+
 enum Difficulty { beginner, intermediate, advanced }
 
 class Exercise {
@@ -12,6 +23,8 @@ class Exercise {
   final String? duration;
   final String? description;
   final List<String>? tips;
+  final List<String>? steps;
+  final int calories;
   final String? image;
 
   Exercise({
@@ -20,11 +33,13 @@ class Exercise {
     required this.category,
     required this.difficulty,
     required this.targetMuscles,
+    required this.calories,
     this.sets,
     this.reps,
     this.duration,
     this.description,
     this.tips,
+    this.steps,
     this.image,
   });
 }

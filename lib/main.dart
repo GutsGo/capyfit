@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'models/exercise.dart';
 import 'providers/app_provider.dart';
 import 'theme/app_colors.dart';
 import 'screens/home_page.dart';
 import 'screens/plan_page.dart';
 import 'screens/diet_page.dart';
 import 'screens/exercise_page.dart';
+import 'screens/exercise_detail_page.dart';
 import 'screens/profile_page.dart';
+import 'screens/add_plan_page.dart';
 import 'widgets/main_scaffold.dart';
 
 void main() {
@@ -60,6 +63,13 @@ final _router = GoRouter(
             GoRoute(
               path: '/exercise',
               builder: (context, state) => const ExercisePage(),
+              routes: [
+                GoRoute(
+                  path: 'detail',
+                  builder: (context, state) =>
+                      ExerciseDetailPage(exercise: state.extra as Exercise),
+                ),
+              ],
             ),
           ],
         ),
@@ -72,6 +82,11 @@ final _router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/plan/add',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const AddPlanPage(),
     ),
   ],
 );
@@ -93,6 +108,11 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.background,
+        appBarTheme: const AppBarTheme(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
         fontFamily: '.SF Pro Text', // System font on Mac/iOS
       ),
     );
