@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/hand_drawn_widgets.dart';
 import '../models/exercise.dart';
 
 class ExercisePage extends StatefulWidget {
@@ -64,17 +65,18 @@ class _ExercisePageState extends State<ExercisePage> {
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-            child: TextField(
-              onChanged: (val) => setState(() => searchQuery = val),
-              decoration: InputDecoration(
-                hintText: '搜索动作...',
-                prefixIcon: const Icon(LucideIcons.search, size: 20),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: HandDrawnContainer(
+              color: Colors.white,
+              borderRadius: 16,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: TextField(
+                onChanged: (val) => setState(() => searchQuery = val),
+                decoration: const InputDecoration(
+                  hintText: '搜索动作...',
+                  prefixIcon: Icon(LucideIcons.search, size: 20),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
             ),
@@ -120,9 +122,9 @@ class _ExercisePageState extends State<ExercisePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: HandDrawnFAB(
+        heroTag: 'exercise_fab',
         onPressed: () => _showFilterSheet(dynamicCategories),
-        shape: const CircleBorder(),
         backgroundColor: AppColors.primary,
         child: const Icon(LucideIcons.filter, color: Colors.white),
       ),
@@ -132,18 +134,31 @@ class _ExercisePageState extends State<ExercisePage> {
   void _showFilterSheet(List<String> categories) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return Container(
-              padding: const EdgeInsets.all(24),
+            return HandDrawnContainer(
+              color: AppColors.background,
+              borderRadius: 32,
+              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.border,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -184,19 +199,18 @@ class _ExercisePageState extends State<ExercisePage> {
                         labelStyle: TextStyle(
                           color: isSelected ? Colors.white : AppColors.textMain,
                         ),
-                        backgroundColor: AppColors.background,
+                        backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
                             color: isSelected
                                 ? AppColors.primary
-                                : Colors.transparent,
+                                : AppColors.border,
                           ),
                         ),
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
             );
@@ -301,16 +315,23 @@ class _ExercisePageState extends State<ExercisePage> {
   }
 
   Widget _buildTag(String label, Color color) {
+    // 通过 HSL 降低亮度来获取一个更深的文字颜色，确保可读性
+    final hsl = HSLColor.fromColor(color);
+    final textColor = hsl
+        .withLightness((hsl.lightness - 0.45).clamp(0.0, 1.0))
+        .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
+        .toColor();
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: color,
+          color: textColor,
           fontSize: 10,
           fontWeight: FontWeight.bold,
         ),

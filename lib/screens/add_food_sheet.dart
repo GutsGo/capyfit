@@ -5,10 +5,12 @@ import '../providers/app_provider.dart';
 import '../models/diet_entry.dart';
 import '../models/food_item.dart';
 import '../theme/app_colors.dart';
+import '../widgets/hand_drawn_widgets.dart';
 
 class AddFoodSheet extends StatefulWidget {
-  final MealType mealType;
-  const AddFoodSheet({super.key, required this.mealType});
+  final MealType? mealType;
+  final bool onlyAddToList;
+  const AddFoodSheet({super.key, this.mealType, this.onlyAddToList = false});
 
   @override
   State<AddFoodSheet> createState() => _AddFoodSheetState();
@@ -25,6 +27,15 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
   final _proteinController = TextEditingController();
   final _carbController = TextEditingController();
   final _fatController = TextEditingController();
+  final _emojiController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.onlyAddToList) {
+      _isAddingCustom = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,26 +44,38 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         .where((f) => f.name.toLowerCase().contains(_searchQuery.toLowerCase()))
         .toList();
 
-    return Container(
+    return HandDrawnContainer(
+      color: AppColors.background,
+      borderRadius: 32,
+      margin: const EdgeInsets.all(12),
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-        top: 24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        top: 12,
         left: 20,
         right: 20,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.border,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _isAddingCustom ? '自定义食物' : '新增记录',
+                widget.onlyAddToList
+                    ? '新增自定义食物'
+                    : (_isAddingCustom ? '自定义食物' : '新增记录'),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -73,7 +96,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
           else
             _buildFoodList(presets),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -85,29 +108,28 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         Row(
           children: [
             Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: '搜索食物...',
-                  prefixIcon: const Icon(LucideIcons.search, size: 20),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
+              child: HandDrawnContainer(
+                color: Colors.white,
+                borderRadius: 16,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: '搜索食物...',
+                    prefixIcon: Icon(LucideIcons.search, size: 20),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(vertical: 12),
                   ),
+                  onChanged: (v) => setState(() => _searchQuery = v),
                 ),
-                onChanged: (v) => setState(() => _searchQuery = v),
               ),
             ),
             const SizedBox(width: 12),
             GestureDetector(
               onTap: () => setState(() => _isAddingCustom = true),
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
+              child: HandDrawnContainer(
+                padding: const EdgeInsets.all(12),
+                color: Colors.white,
+                borderRadius: 16,
                 child: const Icon(
                   LucideIcons.plus,
                   color: AppColors.primary,
@@ -126,6 +148,9 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
             itemBuilder: (context, index) {
               final food = presets[index];
               return ListTile(
+                leading: food.emoji != null
+                    ? Text(food.emoji!, style: const TextStyle(fontSize: 24))
+                    : const Icon(LucideIcons.utensils, size: 20),
                 title: Text(food.name),
                 subtitle: Text('${food.caloriesPer100g.round()} kcal / 100g'),
                 onTap: () => setState(() => _selectedFood = food),
@@ -150,37 +175,30 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
           style: const TextStyle(color: AppColors.textMuted),
         ),
         const SizedBox(height: 24),
-        TextField(
-          controller: _weightController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            labelText: '摄入重量 (克)',
-            suffixText: 'g',
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
+        HandDrawnContainer(
+          color: Colors.white,
+          borderRadius: 16,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: TextField(
+            controller: _weightController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: '摄入重量 (克)',
+              suffixText: 'g',
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
           ),
         ),
         const SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton(
+          child: HandDrawnButton(
             onPressed: _saveEntry,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: const Text(
-              '保存',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            label: '保存',
+            backgroundColor: AppColors.primary,
+            textColor: Colors.white,
+            height: 56,
           ),
         ),
       ],
@@ -190,7 +208,19 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
   Widget _buildCustomForm() {
     return Column(
       children: [
-        _buildTextField(_nameController, '食物名称', '例如：苹果'),
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: _buildTextField(_nameController, '食物名称', '例如：苹果'),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              flex: 1,
+              child: _buildTextField(_emojiController, 'Emoji', '🍎'),
+            ),
+          ],
+        ),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -238,20 +268,12 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         const SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton(
+          child: HandDrawnButton(
             onPressed: _saveCustomFood,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: const Text(
-              '保存并选择',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            label: widget.onlyAddToList ? '保存食物' : '保存并选择',
+            backgroundColor: AppColors.primary,
+            textColor: Colors.white,
+            height: 56,
           ),
         ),
       ],
@@ -264,17 +286,21 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
     String hint, {
     bool isNum = false,
   }) {
-    return TextField(
-      controller: controller,
-      keyboardType: isNum ? TextInputType.number : TextInputType.text,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
+    return HandDrawnContainer(
+      color: Colors.white,
+      borderRadius: 16,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: TextField(
+        controller: controller,
+        keyboardType: isNum ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
         ),
       ),
     );
@@ -290,9 +316,16 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
       proteinPer100g: double.tryParse(_proteinController.text) ?? 0,
       carbsPer100g: double.tryParse(_carbController.text) ?? 0,
       fatPer100g: double.tryParse(_fatController.text) ?? 0,
+      emoji: _emojiController.text.isNotEmpty ? _emojiController.text : null,
     );
 
     Provider.of<AppProvider>(context, listen: false).addFoodPreset(food);
+
+    if (widget.onlyAddToList) {
+      Navigator.pop(context);
+      return;
+    }
+
     setState(() {
       _selectedFood = food;
       _isAddingCustom = false;
@@ -300,19 +333,20 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
   }
 
   void _saveEntry() {
-    if (_selectedFood == null) return;
+    if (_selectedFood == null || widget.mealType == null) return;
     final weight = double.tryParse(_weightController.text) ?? 100;
     final ratio = weight / 100.0;
 
     final entry = DietEntry(
       id: DateTime.now().toString(),
-      meal: widget.mealType,
+      meal: widget.mealType!,
       name: _selectedFood!.name,
       calories: (_selectedFood!.caloriesPer100g * ratio).round(),
       protein: _selectedFood!.proteinPer100g * ratio,
       carbs: _selectedFood!.carbsPer100g * ratio,
       fat: _selectedFood!.fatPer100g * ratio,
       time: TimeOfDay.now().format(context),
+      date: DateTime.now().toString().split(' ')[0],
     );
 
     Provider.of<AppProvider>(context, listen: false).addDietEntry(entry);

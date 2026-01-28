@@ -2,6 +2,8 @@ enum WorkoutType { strength, cardio, yoga, other }
 
 enum Intensity { low, medium, high }
 
+enum PlanMode { longTerm, timed, oneTime }
+
 class WorkoutPlan {
   final String id;
   final String name;
@@ -13,6 +15,7 @@ class WorkoutPlan {
   final Intensity intensity;
   final bool completed;
   final List<String>? exercises;
+  final PlanMode mode;
 
   WorkoutPlan({
     required this.id,
@@ -25,6 +28,7 @@ class WorkoutPlan {
     required this.intensity,
     required this.completed,
     this.exercises,
+    this.mode = PlanMode.oneTime,
   });
 
   WorkoutPlan copyWith({
@@ -38,6 +42,7 @@ class WorkoutPlan {
     Intensity? intensity,
     bool? completed,
     List<String>? exercises,
+    PlanMode? mode,
   }) {
     return WorkoutPlan(
       id: id ?? this.id,
@@ -50,6 +55,7 @@ class WorkoutPlan {
       intensity: intensity ?? this.intensity,
       completed: completed ?? this.completed,
       exercises: exercises ?? this.exercises,
+      mode: mode ?? this.mode,
     );
   }
 }

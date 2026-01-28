@@ -11,6 +11,7 @@ import 'screens/exercise_page.dart';
 import 'screens/exercise_detail_page.dart';
 import 'screens/profile_page.dart';
 import 'screens/add_plan_page.dart';
+import 'screens/diet_library_page.dart';
 import 'widgets/main_scaffold.dart';
 
 void main() {
@@ -61,21 +62,6 @@ final _router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/exercise',
-              builder: (context, state) => const ExercisePage(),
-              routes: [
-                GoRoute(
-                  path: 'detail',
-                  builder: (context, state) =>
-                      ExerciseDetailPage(exercise: state.extra as Exercise),
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
               path: '/profile',
               builder: (context, state) => const ProfilePage(),
             ),
@@ -87,6 +73,23 @@ final _router = GoRouter(
       path: '/plan/add',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const AddPlanPage(),
+    ),
+    GoRoute(
+      path: '/exercise',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ExercisePage(),
+      routes: [
+        GoRoute(
+          path: 'detail',
+          builder: (context, state) =>
+              ExerciseDetailPage(exercise: state.extra as Exercise),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/diet/library',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const DietLibraryPage(),
     ),
   ],
 );

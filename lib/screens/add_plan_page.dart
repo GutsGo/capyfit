@@ -6,6 +6,7 @@ import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/workout_plan.dart';
 import '../models/exercise.dart';
+import '../widgets/hand_drawn_widgets.dart';
 
 class AddPlanPage extends StatefulWidget {
   const AddPlanPage({super.key});
@@ -21,6 +22,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
   final _caloriesController = TextEditingController(text: '0');
 
   WorkoutType _type = WorkoutType.strength;
+  PlanMode _mode = PlanMode.longTerm;
   final Intensity _intensity = Intensity.medium;
   final List<String> _selectedExercises = [];
   int _totalCalories = 0;
@@ -61,38 +63,66 @@ class _AddPlanPageState extends State<AddPlanPage> {
     final allExercises = context.read<AppProvider>().exercises;
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
+        return HandDrawnContainer(
+          color: AppColors.background,
+          borderRadius: 32,
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '选择动作库项目',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
-              Expanded(
-                child: ListView.builder(
+              const Text(
+                '选择动作库项目',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textMain,
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 400,
+                child: ListView.separated(
                   itemCount: allExercises.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final ex = allExercises[index];
-                    return ListTile(
-                      title: Text(ex.name),
-                      subtitle: Text(
-                        '${ex.calories} kcal/组 · ${ex.sets ?? 3}组',
+                    return HandDrawnContainer(
+                      padding: const EdgeInsets.all(12),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          ex.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          '${ex.calories} kcal/组 · ${ex.sets ?? 3}组',
+                          style: const TextStyle(color: AppColors.textMuted),
+                        ),
+                        trailing: const Icon(
+                          LucideIcons.plusCircle,
+                          color: AppColors.primary,
+                        ),
+                        onTap: () {
+                          _addExerciseFromLibrary(ex);
+                          Navigator.pop(context);
+                        },
                       ),
-                      trailing: const Icon(
-                        LucideIcons.plusCircle,
-                        color: AppColors.primary,
-                      ),
-                      onTap: () {
-                        _addExerciseFromLibrary(ex);
-                        Navigator.pop(context);
-                      },
                     );
                   },
                 ),
@@ -108,26 +138,48 @@ class _AddPlanPageState extends State<AddPlanPage> {
     final controller = TextEditingController();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('自定义动作'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(hintText: '输入动作名称'),
-          autofocus: true,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: HandDrawnContainer(
+          color: AppColors.background,
+          borderRadius: 24,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '自定义动作',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              HandDrawnTextField(controller: controller, hintText: '输入动作名称'),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      '取消',
+                      style: TextStyle(color: AppColors.textMuted),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  HandDrawnButton(
+                    onPressed: () {
+                      _addCustomExercise(controller.text);
+                      Navigator.pop(context);
+                    },
+                    label: '添加',
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _addCustomExercise(controller.text);
-              Navigator.pop(context);
-            },
-            child: const Text('添加'),
-          ),
-        ],
       ),
     );
   }
@@ -135,15 +187,25 @@ class _AddPlanPageState extends State<AddPlanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
           '新增训练计划',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 24,
+            letterSpacing: 1,
+          ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft, color: AppColors.textMain),
+          icon: const Icon(
+            LucideIcons.chevronLeft,
+            color: AppColors.textMain,
+            size: 28,
+          ),
           onPressed: () => context.pop(),
         ),
       ),
@@ -152,156 +214,142 @@ class _AddPlanPageState extends State<AddPlanPage> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(24),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '计划名称',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
+                      // Plan Name
+                      _buildLabel('计划名称'),
+                      HandDrawnTextField(
                         controller: _nameController,
-                        decoration: InputDecoration(
-                          hintText: '例如：胸部训练、早起跑步',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
+                        hintText: '例如：胸部训练、早起跑步',
                         validator: (val) =>
                             (val == null || val.isEmpty) ? '请输入名称' : null,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
 
+                      // Duration & Calories
                       Row(
                         children: [
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  '时长 (分钟)',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8),
-                                TextFormField(
+                                _buildLabel('时长 (分钟)'),
+                                HandDrawnTextField(
                                   controller: _durationController,
                                   keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 20),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  '预估消耗 (kcal)',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8),
-                                TextFormField(
+                                _buildLabel('预估消耗 (kcal)'),
+                                HandDrawnTextField(
                                   controller: _caloriesController,
                                   keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
 
-                      const Text(
-                        '训练项目',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                      // Training Items
+                      _buildLabel('训练项目'),
+                      HandDrawnContainer(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
                             if (_selectedExercises.isEmpty)
                               const Padding(
-                                padding: EdgeInsets.all(16),
+                                padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Text(
                                   '暂无训练项目',
-                                  style: TextStyle(color: AppColors.textMuted),
-                                ),
-                              ),
-                            ..._selectedExercises.asMap().entries.map(
-                              (entry) => ListTile(
-                                title: Text(entry.value),
-                                trailing: IconButton(
-                                  icon: const Icon(
-                                    LucideIcons.minusCircle,
-                                    color: Colors.redAccent,
-                                    size: 20,
-                                  ),
-                                  onPressed: () => setState(
-                                    () =>
-                                        _selectedExercises.removeAt(entry.key),
+                                  style: TextStyle(
+                                    color: AppColors.textMuted,
+                                    fontSize: 16,
                                   ),
                                 ),
+                              )
+                            else
+                              ..._selectedExercises.asMap().entries.map(
+                                (entry) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        LucideIcons.checkCircle,
+                                        size: 16,
+                                        color: AppColors.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          entry.value,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          LucideIcons.x,
+                                          color: Colors.redAccent,
+                                          size: 18,
+                                        ),
+                                        onPressed: () => setState(
+                                          () => _selectedExercises.removeAt(
+                                            entry.key,
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            const Divider(height: 1),
+
+                            if (_selectedExercises.isNotEmpty)
+                              const Divider(
+                                height: 24,
+                                thickness: 1,
+                                color: AppColors.borderLight,
+                              ),
+
                             Row(
                               children: [
                                 Expanded(
-                                  child: TextButton.icon(
+                                  child: HandDrawnButton(
                                     onPressed: _showExerciseLibrary,
-                                    icon: const Icon(
-                                      LucideIcons.library,
-                                      size: 18,
-                                    ),
-                                    label: const Text('动作库选择'),
+                                    label: '动作库选择',
+                                    icon: LucideIcons.library,
+                                    backgroundColor:
+                                        AppColors.accentMint, // Mint
+                                    textColor: AppColors.textMain,
+                                    height: 48,
                                   ),
                                 ),
-                                Container(
-                                  width: 1,
-                                  height: 24,
-                                  color: AppColors.border,
-                                ),
+                                const SizedBox(width: 12),
                                 Expanded(
-                                  child: TextButton.icon(
+                                  child: HandDrawnButton(
                                     onPressed: _showCustomExerciseDialog,
-                                    icon: const Icon(
-                                      LucideIcons.plus,
-                                      size: 18,
-                                    ),
-                                    label: const Text('自定义动作'),
+                                    label: '自定义动作',
+                                    icon: LucideIcons.plus,
+                                    backgroundColor:
+                                        AppColors.accentPurple, // Purple
+                                    textColor: AppColors.textMain,
+                                    height: 48,
                                   ),
                                 ),
                               ],
@@ -309,86 +357,103 @@ class _AddPlanPageState extends State<AddPlanPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
 
-                      const Text(
-                        '完成倾向',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 12),
+                      // Type/Preference
+                      _buildLabel('完成倾向'),
                       Row(
                         children: [
-                          _buildTypeChip(WorkoutType.strength, '力量'),
-                          const SizedBox(width: 8),
-                          _buildTypeChip(WorkoutType.cardio, '有氧'),
-                          const SizedBox(width: 8),
-                          _buildTypeChip(WorkoutType.yoga, '瑜伽'),
+                          Expanded(
+                            child: _buildTypeChip(
+                              WorkoutType.strength,
+                              '力量',
+                              AppColors.accentMint,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildTypeChip(
+                              WorkoutType.cardio,
+                              '有氧',
+                              AppColors.accentPink,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildTypeChip(
+                              WorkoutType.yoga,
+                              '瑜伽',
+                              AppColors.accentPurple,
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
+
+                      // Plan Mode
+                      _buildLabel('计划类型'),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildModeChip(
+                              PlanMode.longTerm,
+                              '长期计划',
+                              AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildModeChip(
+                              PlanMode.timed,
+                              '时间计划',
+                              AppColors.accentMint,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildModeChip(
+                              PlanMode.oneTime,
+                              '单次计划',
+                              AppColors.accentOrange,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ),
               ),
             ),
+
+            // Bottom Action Bar
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    offset: const Offset(0, -4),
-                    blurRadius: 16,
-                  ),
-                ],
-              ),
+              // decoration: const BoxDecoration(
+              //   border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+              // ),
               child: Row(
                 children: [
                   Expanded(
-                    child: SizedBox(
-                      height: 54,
-                      child: OutlinedButton(
-                        onPressed: () => context.pop(),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppColors.border),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        child: const Text(
-                          '返回',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textMain,
-                          ),
-                        ),
-                      ),
+                    flex: 1,
+                    child: HandDrawnButton(
+                      onPressed: () => context.pop(),
+                      label: '返回',
+                      icon: LucideIcons.arrowLeft,
+                      backgroundColor: AppColors.accentOrange, // Beige/Orange
+                      textColor: AppColors.textMain,
+                      height: 56,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 20),
                   Expanded(
-                    child: SizedBox(
-                      height: 54,
-                      child: ElevatedButton(
-                        onPressed: _savePlan,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          '保存计划',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    flex: 2,
+                    child: HandDrawnButton(
+                      onPressed: _savePlan,
+                      label: '保存计划',
+                      backgroundColor: AppColors.primary,
+                      textColor: Colors.white,
+                      height: 56,
                     ),
                   ),
                 ],
@@ -400,24 +465,62 @@ class _AddPlanPageState extends State<AddPlanPage> {
     );
   }
 
-  Widget _buildTypeChip(WorkoutType type, String label) {
+  Widget _buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0, left: 4),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: AppColors.textMain,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTypeChip(WorkoutType type, String label, Color color) {
     final isSelected = _type == type;
     return GestureDetector(
       onTap: () => setState(() => _type = type),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
+      child: HandDrawnContainer(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        color: isSelected ? color : Colors.white,
+        borderRadius: 12,
+        borderColor: AppColors.primary,
+        borderWidth: 1.5,
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: AppColors.textMain,
+              fontSize: 16,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            ),
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : AppColors.textMain,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      ),
+    );
+  }
+
+  Widget _buildModeChip(PlanMode mode, String label, Color color) {
+    final isSelected = _mode == mode;
+    return GestureDetector(
+      onTap: () => setState(() => _mode = mode),
+      child: HandDrawnContainer(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        color: isSelected ? color : Colors.white,
+        borderRadius: 12,
+        borderColor: AppColors.primary,
+        borderWidth: 1.5,
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.white : AppColors.textMain,
+              fontSize: 16,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            ),
           ),
         ),
       ),
@@ -438,6 +541,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         intensity: _intensity,
         completed: false,
         exercises: _selectedExercises,
+        mode: _mode,
       );
       context.read<AppProvider>().addPlan(plan);
       context.pop();

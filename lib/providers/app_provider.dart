@@ -3,6 +3,7 @@ import '../models/workout_plan.dart';
 import '../models/diet_entry.dart';
 import '../models/exercise.dart';
 import '../models/food_item.dart';
+import '../models/user_profile.dart';
 
 class UserStats {
   final int totalWorkouts;
@@ -33,6 +34,7 @@ class AppProvider extends ChangeNotifier {
       intensity: Intensity.medium,
       completed: false,
       exercises: ['俯卧撑', '哑铃卧推', '飞鸟'],
+      mode: PlanMode.longTerm,
     ),
     WorkoutPlan(
       id: '2',
@@ -45,6 +47,20 @@ class AppProvider extends ChangeNotifier {
       intensity: Intensity.low,
       completed: true,
       exercises: ['慢跑', '开合跳'],
+      mode: PlanMode.oneTime,
+    ),
+    WorkoutPlan(
+      id: '3',
+      name: '午间拉伸',
+      date: DateTime.now().toString().split(' ')[0],
+      time: '12:00',
+      duration: 15,
+      calories: 80,
+      type: WorkoutType.yoga,
+      intensity: Intensity.low,
+      completed: false,
+      exercises: ['猫式伸展', '婴儿式'],
+      mode: PlanMode.timed,
     ),
   ];
 
@@ -58,6 +74,7 @@ class AppProvider extends ChangeNotifier {
       carbs: 45,
       fat: 12,
       time: '08:00',
+      date: DateTime.now().toString().split(' ')[0],
     ),
     DietEntry(
       id: '2',
@@ -68,6 +85,7 @@ class AppProvider extends ChangeNotifier {
       carbs: 25,
       fat: 20,
       time: '12:30',
+      date: DateTime.now().toString().split(' ')[0],
     ),
     DietEntry(
       id: '3',
@@ -78,6 +96,7 @@ class AppProvider extends ChangeNotifier {
       carbs: 15,
       fat: 28,
       time: '19:00',
+      date: DateTime.now().toString().split(' ')[0],
     ),
   ];
 
@@ -89,6 +108,7 @@ class AppProvider extends ChangeNotifier {
       proteinPer100g: 13,
       carbsPer100g: 1.1,
       fatPer100g: 9.5,
+      emoji: '🥚',
     ),
     FoodItem(
       id: 'f2',
@@ -97,6 +117,7 @@ class AppProvider extends ChangeNotifier {
       proteinPer100g: 31,
       carbsPer100g: 0,
       fatPer100g: 3.6,
+      emoji: '🍗',
     ),
     FoodItem(
       id: 'f3',
@@ -105,6 +126,7 @@ class AppProvider extends ChangeNotifier {
       proteinPer100g: 16.9,
       carbsPer100g: 66,
       fatPer100g: 6.9,
+      emoji: '🥣',
     ),
     FoodItem(
       id: 'f4',
@@ -113,6 +135,7 @@ class AppProvider extends ChangeNotifier {
       proteinPer100g: 20,
       carbsPer100g: 0,
       fatPer100g: 13,
+      emoji: '🐟',
     ),
     FoodItem(
       id: 'f5',
@@ -121,6 +144,7 @@ class AppProvider extends ChangeNotifier {
       proteinPer100g: 2.7,
       carbsPer100g: 28,
       fatPer100g: 0.3,
+      emoji: '🍚',
     ),
   ];
 
@@ -170,7 +194,7 @@ class AppProvider extends ChangeNotifier {
       sets: 3,
       reps: '30-60秒',
       description: '静态核心训练动作，增强核心稳定性。',
-      tips: ['身体保持直线', '收紧核心', '不要塌腰或翘臀'],
+      tips: ['身体保持直线', '收紧核心', '不要塌腰 or 翘臀'],
       steps: [
         '双肘支撑在肩部正下方',
         '双脚靠拢，脚尖点地',
@@ -223,6 +247,92 @@ class AppProvider extends ChangeNotifier {
     ),
   ];
 
+  UserProfile _userProfile = UserProfile(
+    height: 175,
+    weight: 70,
+    gender: Gender.male,
+    age: 25,
+    goal: UserGoal.maintain,
+    isSmartCalculation: true,
+  );
+
+  UserProfile get userProfile => _userProfile;
+  int get calorieGoal => _userProfile.isSmartCalculation
+      ? _calculateSmartCalorieGoal()
+      : _userProfile.customCalorieGoal;
+
+  void updateUserProfile(UserProfile profile) {
+    _userProfile = profile;
+    notifyListeners();
+  }
+
+  int _calculateSmartCalorieGoal() {
+    // Mifflin-St Jeor Equation
+    double bmr;
+    if (_userProfile.gender == Gender.male) {
+      bmr =
+          (10 * _userProfile.weight) +
+          (6.25 * _userProfile.height) -
+          (5 * _userProfile.age) +
+          5;
+    } else {
+      bmr =
+          (10 * _userProfile.weight) +
+          (6.25 * _userProfile.height) -
+          (5 * _userProfile.age) -
+          161;
+    }
+
+    // Activity multiplier (Assuming Moderate Activity: 1.55)
+    double tdee = bmr * 1.55;
+
+    // Goal adjustment
+    switch (_userProfile.goal) {
+      case UserGoal.muscleGain:
+        return (tdee + 300).round();
+      case UserGoal.weightLoss:
+        return (tdee - 500).round();
+      case UserGoal.maintain:
+        return tdee.round();
+    }
+  }
+
+  double get carbGoal {
+    int totalCals = calorieGoal;
+    switch (_userProfile.goal) {
+      case UserGoal.muscleGain:
+        return (totalCals * 0.45 / 4);
+      case UserGoal.weightLoss:
+        return (totalCals * 0.40 / 4);
+      case UserGoal.maintain:
+        return (totalCals * 0.50 / 4);
+    }
+  }
+
+  double get proteinGoal {
+    int totalCals = calorieGoal;
+    switch (_userProfile.goal) {
+      case UserGoal.muscleGain:
+        return (totalCals * 0.30 / 4);
+      case UserGoal.weightLoss:
+        return (totalCals * 0.40 / 4);
+      case UserGoal.maintain:
+        return (totalCals * 0.20 / 4);
+    }
+  }
+
+  double get fatGoal {
+    int totalCals = calorieGoal;
+    switch (_userProfile.goal) {
+      case UserGoal.muscleGain:
+        return (totalCals * 0.25 / 9);
+      case UserGoal.weightLoss:
+        return (totalCals * 0.20 / 9);
+      case UserGoal.maintain:
+        return (totalCals * 0.30 / 9);
+    }
+  }
+
   int _currentTabIndex = 0;
   int get currentTabIndex => _currentTabIndex;
 
@@ -232,8 +342,6 @@ class AppProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  int calorieGoal = 2000;
 
   List<WorkoutPlan> get plans => _plans;
   List<DietEntry> get dietEntries => _dietEntries;
@@ -275,7 +383,24 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get todayCalories => _dietEntries.fold(0, (sum, e) => sum + e.calories);
+  int getTodayCalories(String date) => _dietEntries
+      .where((e) => e.date == date)
+      .fold(0, (sum, e) => sum + e.calories);
+
+  double getTodayProtein(String date) => _dietEntries
+      .where((e) => e.date == date)
+      .fold(0.0, (sum, e) => sum + e.protein);
+
+  double getTodayCarbs(String date) => _dietEntries
+      .where((e) => e.date == date)
+      .fold(0.0, (sum, e) => sum + e.carbs);
+
+  double getTodayFat(String date) => _dietEntries
+      .where((e) => e.date == date)
+      .fold(0.0, (sum, e) => sum + e.fat);
+
+  int get todayCalories =>
+      getTodayCalories(DateTime.now().toString().split(' ')[0]);
 
   int get todayConsumedCalories {
     final today = DateTime.now().toString().split(' ')[0];
@@ -285,9 +410,10 @@ class AppProvider extends ChangeNotifier {
   }
 
   double get todayProtein =>
-      _dietEntries.fold(0.0, (sum, e) => sum + e.protein);
-  double get todayCarbs => _dietEntries.fold(0.0, (sum, e) => sum + e.carbs);
-  double get todayFat => _dietEntries.fold(0.0, (sum, e) => sum + e.fat);
+      getTodayProtein(DateTime.now().toString().split(' ')[0]);
+  double get todayCarbs =>
+      getTodayCarbs(DateTime.now().toString().split(' ')[0]);
+  double get todayFat => getTodayFat(DateTime.now().toString().split(' ')[0]);
 
   UserStats get userStats => UserStats(
     totalWorkouts: _plans.where((p) => p.completed).length,

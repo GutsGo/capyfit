@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import 'hand_drawn_widgets.dart';
 
 class HandDrawnCard extends StatelessWidget {
   final Widget child;
@@ -21,20 +22,13 @@ class HandDrawnCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return HandDrawnContainer(
       width: width,
       height: height,
-      decoration: BoxDecoration(
-        color: color ?? AppColors.card,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.12),
-            offset: const Offset(0, 4),
-            blurRadius: 8,
-          ),
-        ],
-      ),
+      color: color ?? AppColors.card,
+      borderRadius: 20,
+      borderWidth: 1.5,
+      // No padding here because we want InkWell to fill the container
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -54,23 +48,30 @@ class CustomProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return HandDrawnContainer(
       width: double.infinity,
-      height: 8,
-      alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: AppColors.border,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: FractionallySizedBox(
-        alignment: Alignment.centerLeft,
-        widthFactor: progress.clamp(0.0, 1.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
+      height: 12, // Slightly taller to account for border
+      color: Colors.white,
+      borderRadius: 7, // Rounded ends
+      borderColor: AppColors.textMain,
+      borderWidth: 1.2,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: progress.clamp(0.0, 1.0)),
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, child) {
+          return FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: value,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.transparent, width: 0),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

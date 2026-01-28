@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
+import 'profile_settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -163,7 +164,14 @@ class ProfilePage extends StatelessWidget {
                 title: '个人资料',
                 iconBgColor: const Color(0xFFF5E6D3),
                 iconColor: const Color(0xFF8B6F5C),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileSettingsPage(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
