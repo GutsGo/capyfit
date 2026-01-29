@@ -26,7 +26,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           widget.exercise.name,
@@ -35,7 +35,10 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft, color: AppColors.textMain),
+          icon: Icon(
+            LucideIcons.chevronLeft,
+            color: AppColors.getTextMainColor(context),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -57,7 +60,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                   child: HandDrawnCard(
                     width: double.infinity,
                     padding: EdgeInsets.zero,
-                    color: const Color(0xFFF8F8F2),
+                    color: AppColors.getCardColor(context),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: widget.exercise.image != null
@@ -90,10 +93,10 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                     const Spacer(),
                     Text(
                       '${widget.exercise.calories} kcal / 组',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textMain,
+                        color: AppColors.getTextMainColor(context),
                       ),
                     ),
                   ],
@@ -101,16 +104,20 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                 const SizedBox(height: 24),
 
                 // Description
-                const Text(
+                Text(
                   '动作精讲',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.getTextMainColor(context),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   widget.exercise.description ?? '暂无详细讲解',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                     height: 1.6,
                   ),
                 ),
@@ -119,9 +126,13 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                 // Steps
                 if (widget.exercise.steps != null &&
                     widget.exercise.steps!.isNotEmpty) ...[
-                  const Text(
+                  Text(
                     '训练步骤',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextMainColor(context),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ListView.separated(
@@ -165,9 +176,9 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                           Expanded(
                             child: Text(
                               widget.exercise.steps![index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
-                                color: AppColors.textMain,
+                                color: AppColors.getTextMainColor(context),
                                 height: 1.5,
                               ),
                             ),
@@ -187,19 +198,20 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            Icon(
+                            const Icon(
                               LucideIcons.lightbulb,
                               size: 20,
                               color: AppColors.accentOrange,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
                               '贴心贴士',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: AppColors.getTextMainColor(context),
                               ),
                             ),
                           ],
@@ -211,20 +223,23 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 6),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 6),
                                   child: CircleAvatar(
                                     radius: 3,
-                                    backgroundColor: AppColors.textMuted,
+                                    backgroundColor:
+                                        AppColors.getTextMutedColor(context),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     tip,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      color: AppColors.textMuted,
+                                      color: AppColors.getTextMutedColor(
+                                        context,
+                                      ),
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -302,7 +317,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: HandDrawnContainer(
-          color: AppColors.primary,
+          color: Theme.of(context).primaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
@@ -314,7 +329,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  '已成功创建今天 (${dateStr}) 的训练计划！',
+                  '已成功创建今天 ($dateStr) 的训练计划！',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -344,19 +359,29 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
   }
 
   Widget _buildTag(String label, Color color) {
-    // 通过 HSL 降低亮度来获取一个更深的文字颜色，确保在浅色背景上清晰可见
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final hsl = HSLColor.fromColor(color);
-    final textColor = hsl
-        .withLightness((hsl.lightness - 0.45).clamp(0.0, 1.0))
-        .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
-        .toColor();
+
+    // Get a color that is readable on the background
+    final textColor = isDark
+        ? hsl
+              .withLightness((hsl.lightness + 0.2).clamp(0.0, 1.0))
+              .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
+              .toColor()
+        : hsl
+              .withLightness((hsl.lightness - 0.45).clamp(0.0, 1.0))
+              .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
+              .toColor();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: color.withValues(alpha: isDark ? 0.25 : 0.15),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+        border: Border.all(
+          color: color.withValues(alpha: isDark ? 0.4 : 0.3),
+          width: 1,
+        ),
       ),
       child: Text(
         label,

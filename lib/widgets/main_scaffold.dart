@@ -36,7 +36,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       bottomNavigationBar: showBottomBar
           ? Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.getCardColor(context),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.08),
@@ -65,9 +65,9 @@ class _MainScaffoldState extends State<MainScaffold> {
                       widget.onItemSelected(index);
                     },
                     type: BottomNavigationBarType.fixed,
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.getCardColor(context),
                     selectedItemColor: AppColors.primary,
-                    unselectedItemColor: AppColors.textMuted,
+                    unselectedItemColor: AppColors.getTextMutedColor(context),
                     selectedFontSize: 12,
                     unselectedFontSize: 12,
                     elevation: 0,

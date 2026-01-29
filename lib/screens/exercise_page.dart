@@ -54,9 +54,13 @@ class _ExercisePageState extends State<ExercisePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '动作库',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: AppColors.getTextMainColor(context),
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -67,17 +71,25 @@ class _ExercisePageState extends State<ExercisePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: HandDrawnContainer(
-              color: Colors.white,
+              color: AppColors.getCardColor(context),
               borderRadius: 16,
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: TextField(
                 onChanged: (val) => setState(() => searchQuery = val),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: '搜索动作...',
-                  prefixIcon: Icon(LucideIcons.search, size: 20),
+                  hintStyle: TextStyle(
+                    color: AppColors.getTextMutedColor(context),
+                  ),
+                  prefixIcon: Icon(
+                    LucideIcons.search,
+                    size: 20,
+                    color: AppColors.getBorderColor(context),
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
+                style: TextStyle(color: AppColors.getTextMainColor(context)),
               ),
             ),
           ),
@@ -140,7 +152,7 @@ class _ExercisePageState extends State<ExercisePage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return HandDrawnContainer(
-              color: AppColors.background,
+              color: AppColors.getBackgroundColor(context),
               borderRadius: 32,
               margin: const EdgeInsets.all(12),
               padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
@@ -153,7 +165,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.border,
+                        color: AppColors.getBorderColor(context),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -162,11 +174,12 @@ class _ExercisePageState extends State<ExercisePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         '筛选分类',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: AppColors.getTextMainColor(context),
                         ),
                       ),
                       IconButton(
@@ -197,15 +210,17 @@ class _ExercisePageState extends State<ExercisePage> {
                         selectedColor: AppColors.primary,
                         checkmarkColor: Colors.white,
                         labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : AppColors.textMain,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.getTextMainColor(context),
                         ),
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.getCardColor(context),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
                             color: isSelected
                                 ? AppColors.primary
-                                : AppColors.border,
+                                : AppColors.getBorderColor(context),
                           ),
                         ),
                       );
@@ -277,9 +292,10 @@ class _ExercisePageState extends State<ExercisePage> {
                 children: [
                   Text(
                     ex.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      color: AppColors.getTextMainColor(context),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -299,9 +315,9 @@ class _ExercisePageState extends State<ExercisePage> {
                   const SizedBox(height: 8),
                   Text(
                     '${ex.calories} kcal / 组',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textMuted,
+                      color: AppColors.getTextMutedColor(context),
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -315,17 +331,24 @@ class _ExercisePageState extends State<ExercisePage> {
   }
 
   Widget _buildTag(String label, Color color) {
-    // 通过 HSL 降低亮度来获取一个更深的文字颜色，确保可读性
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final hsl = HSLColor.fromColor(color);
-    final textColor = hsl
-        .withLightness((hsl.lightness - 0.45).clamp(0.0, 1.0))
-        .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
-        .toColor();
+
+    // Get a color that is readable on the background
+    final textColor = isDark
+        ? hsl
+              .withLightness((hsl.lightness + 0.2).clamp(0.0, 1.0))
+              .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
+              .toColor()
+        : hsl
+              .withLightness((hsl.lightness - 0.45).clamp(0.0, 1.0))
+              .withSaturation((hsl.saturation + 0.1).clamp(0.0, 1.0))
+              .toColor();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: color.withValues(alpha: isDark ? 0.25 : 0.15),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(

@@ -6,6 +6,7 @@ import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/hand_drawn_widgets.dart';
+import '../widgets/floating_calendar.dart';
 import '../models/diet_entry.dart';
 import 'add_food_sheet.dart';
 
@@ -18,48 +19,21 @@ class DietPage extends StatefulWidget {
 
 class _DietPageState extends State<DietPage> {
   DateTime _selectedDate = DateTime.now();
-  late DateTime _todayStartOfWeek;
-  late PageController _pageController;
-  int _currentPageIndex = 1000;
 
   @override
   void initState() {
     super.initState();
-    _todayStartOfWeek = _getStartOfWeek(DateTime.now());
-    _pageController = PageController(initialPage: _currentPageIndex);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
-  }
-
-  DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday - 1));
-  }
-
-  DateTime _getWeekStartForIndex(int index) {
-    return _todayStartOfWeek.add(Duration(days: (index - 1000) * 7));
-  }
-
-  void _changeWeek(int offset) {
-    _pageController.animateToPage(
-      _currentPageIndex + offset,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeOutQuart,
-    );
   }
 
   void _jumpToToday() {
     setState(() {
       _selectedDate = DateTime.now();
     });
-    _pageController.animateToPage(
-      1000,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOutBack,
-    );
   }
 
   bool _isSameDay(DateTime a, DateTime b) {
@@ -76,7 +50,7 @@ class _DietPageState extends State<DietPage> {
     final isFuture = selectedDateStr.compareTo(todayStr) > 0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           '饮食记录',
@@ -85,8 +59,7 @@ class _DietPageState extends State<DietPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          if (!_isSameDay(_selectedDate, DateTime.now()) ||
-              _currentPageIndex != 1000)
+          if (!_isSameDay(_selectedDate, DateTime.now()))
             IconButton(
               icon: const Icon(
                 LucideIcons.calendarDays,
@@ -98,192 +71,92 @@ class _DietPageState extends State<DietPage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          _buildCalendar(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Nutrition Summary Card
-                  _buildNutritionSummaryCard(appState, selectedDateStr),
-                  const SizedBox(height: 24),
-
-                  // Meal Sections
-                  _buildMealSection(
-                    context,
-                    appState,
-                    MealType.breakfast,
-                    '早餐',
-                    LucideIcons.coffee,
-                    const Color(0xFFFFEFD5),
-                    const Color(0xFFD2691E),
-                    selectedDateStr,
-                    isToday,
-                    isFuture,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMealSection(
-                    context,
-                    appState,
-                    MealType.lunch,
-                    '午餐',
-                    LucideIcons.sun,
-                    const Color(0xFFFFF0E0),
-                    const Color(0xFFE8A87C),
-                    selectedDateStr,
-                    isToday,
-                    isFuture,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMealSection(
-                    context,
-                    appState,
-                    MealType.dinner,
-                    '晚餐',
-                    LucideIcons.moon,
-                    const Color(0xFFE0F2F1),
-                    const Color(0xFF7EB8A2),
-                    selectedDateStr,
-                    isToday,
-                    isFuture,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMealSection(
-                    context,
-                    appState,
-                    MealType.snack,
-                    '加餐',
-                    Icons.cookie_outlined,
-                    const Color(0xFFF5F5DC),
-                    const Color(0xFFC4A989),
-                    selectedDateStr,
-                    isToday,
-                    isFuture,
-                  ),
-
-                  const SizedBox(height: 100),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalendar() {
-    final currentWeekStart = _getWeekStartForIndex(_currentPageIndex);
-
-    return HandDrawnContainer(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      padding: const EdgeInsets.all(16),
-      color: Colors.white,
-      borderRadius: 24,
-      borderColor: AppColors.primary,
-      borderWidth: 1.5,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
-              IconButton(
-                icon: const Icon(LucideIcons.chevronLeft, size: 20),
-                onPressed: () => _changeWeek(-1),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              Text(
-                DateFormat(
-                  'yyyy年M月',
-                ).format(currentWeekStart.add(const Duration(days: 3))),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textMain,
+              const SizedBox(height: 65), // Space for collapsed calendar
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Nutrition Summary Card
+                      _buildNutritionSummaryCard(appState, selectedDateStr),
+                      const SizedBox(height: 24),
+
+                      // Meal Sections
+                      _buildMealSection(
+                        context,
+                        appState,
+                        MealType.breakfast,
+                        '早餐',
+                        LucideIcons.coffee,
+                        const Color(0xFFFFEFD5),
+                        const Color(0xFFD2691E),
+                        selectedDateStr,
+                        isToday,
+                        isFuture,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildMealSection(
+                        context,
+                        appState,
+                        MealType.lunch,
+                        '午餐',
+                        LucideIcons.sun,
+                        const Color(0xFFFFF0E0),
+                        const Color(0xFFE8A87C),
+                        selectedDateStr,
+                        isToday,
+                        isFuture,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildMealSection(
+                        context,
+                        appState,
+                        MealType.dinner,
+                        '晚餐',
+                        LucideIcons.moon,
+                        const Color(0xFFE0F2F1),
+                        const Color(0xFF7EB8A2),
+                        selectedDateStr,
+                        isToday,
+                        isFuture,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildMealSection(
+                        context,
+                        appState,
+                        MealType.snack,
+                        '加餐',
+                        Icons.cookie_outlined,
+                        const Color(0xFFF5F5DC),
+                        const Color(0xFFC4A989),
+                        selectedDateStr,
+                        isToday,
+                        isFuture,
+                      ),
+
+                      const SizedBox(height: 100),
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                icon: const Icon(LucideIcons.chevronRight, size: 20),
-                onPressed: () => _changeWeek(1),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 85,
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPageIndex = index;
-                });
-              },
-              itemBuilder: (context, weekIndex) {
-                final weekStart = _getWeekStartForIndex(weekIndex);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(7, (dayIndex) {
-                    final date = weekStart.add(Duration(days: dayIndex));
-                    final isSelected = _isSameDay(date, _selectedDate);
-                    final isToday = _isSameDay(date, DateTime.now());
-                    final weekDays = ['一', '二', '三', '四', '五', '六', '日'];
-
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedDate = date),
-                      child: Container(
-                        width: 40,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primaryDark
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              weekDays[dayIndex],
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: isSelected
-                                    ? Colors.white.withOpacity(0.8)
-                                    : AppColors.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              date.day.toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textMain,
-                              ),
-                            ),
-                            if (isToday) ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                '今天',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: isSelected
-                                      ? Colors.white.withOpacity(0.8)
-                                      : AppColors.accentOrange,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                );
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: FloatingCalendar(
+              selectedDate: _selectedDate,
+              onDateSelected: (date) {
+                setState(() => _selectedDate = date);
               },
             ),
           ),
@@ -320,9 +193,9 @@ class _DietPageState extends State<DietPage> {
                       return CircularProgressIndicator(
                         value: value,
                         strokeWidth: 10,
-                        backgroundColor: AppColors.border.withValues(
-                          alpha: 0.5,
-                        ),
+                        backgroundColor: AppColors.getBorderColor(
+                          context,
+                        ).withValues(alpha: 0.5),
                         valueColor: const AlwaysStoppedAnimation<Color>(
                           AppColors.primary,
                         ),
@@ -336,17 +209,17 @@ class _DietPageState extends State<DietPage> {
                   children: [
                     Text(
                       '$calories',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textMain,
+                        color: AppColors.getTextMainColor(context),
                       ),
                     ),
                     Text(
                       '/ ${state.calorieGoal} kcal',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: AppColors.textMuted,
+                        color: AppColors.getTextMutedColor(context),
                       ),
                     ),
                   ],
@@ -411,7 +284,7 @@ class _DietPageState extends State<DietPage> {
         Container(
           height: 6,
           decoration: BoxDecoration(
-            color: AppColors.border.withValues(alpha: 0.5),
+            color: AppColors.getBorderColor(context).withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(3),
           ),
           child: TweenAnimationBuilder<double>(
@@ -435,7 +308,10 @@ class _DietPageState extends State<DietPage> {
         const SizedBox(height: 8),
         Text(
           label,
-          style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+          style: TextStyle(
+            color: AppColors.getTextMutedColor(context),
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -479,18 +355,18 @@ class _DietPageState extends State<DietPage> {
               const SizedBox(width: 12),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textMain,
+                  color: AppColors.getTextMainColor(context),
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 '$totalCals kcal',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.textMuted,
+                  color: AppColors.getTextMutedColor(context),
                 ),
               ),
               const Spacer(),
@@ -511,11 +387,14 @@ class _DietPageState extends State<DietPage> {
             const SizedBox(height: 12),
             ...meals.map((meal) => _buildMealItem(meal, state, isToday)),
           ] else ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text(
                 '还没有记录',
-                style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                style: TextStyle(
+                  color: AppColors.getTextMutedColor(context),
+                  fontSize: 14,
+                ),
               ),
             ),
           ],
@@ -529,7 +408,7 @@ class _DietPageState extends State<DietPage> {
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       borderRadius: 16,
-      color: AppColors.background,
+      color: AppColors.getBackgroundColor(context),
       child: Row(
         children: [
           Expanded(
@@ -545,9 +424,9 @@ class _DietPageState extends State<DietPage> {
                 ),
                 Text(
                   entry.time,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textMuted,
+                    color: AppColors.getTextMutedColor(context),
                   ),
                 ),
               ],
@@ -555,20 +434,20 @@ class _DietPageState extends State<DietPage> {
           ),
           Text(
             '${entry.calories} kcal',
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: AppColors.primary,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           if (isToday) ...[
             const SizedBox(width: 8),
             GestureDetector(
               onTap: () => state.deleteDietEntry(entry.id),
-              child: const Icon(
+              child: Icon(
                 LucideIcons.x,
                 size: 16,
-                color: AppColors.textMuted,
+                color: AppColors.getTextMutedColor(context),
               ),
             ),
           ],
@@ -589,8 +468,12 @@ class _AddButton extends StatelessWidget {
       child: HandDrawnContainer(
         padding: const EdgeInsets.all(4),
         borderRadius: 8,
-        color: AppColors.background,
-        child: const Icon(LucideIcons.plus, size: 18, color: AppColors.primary),
+        color: AppColors.getBackgroundColor(context),
+        child: Icon(
+          LucideIcons.plus,
+          size: 18,
+          color: Theme.of(context).primaryColor,
+        ),
       ),
     );
   }

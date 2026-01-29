@@ -40,4 +40,27 @@ class UserProfile {
       customCalorieGoal: customCalorieGoal ?? this.customCalorieGoal,
     );
   }
+
+  int calculateRecommendedCalories() {
+    // Mifflin-St Jeor Equation
+    double bmr;
+    if (gender == Gender.male) {
+      bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+    } else {
+      bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+    }
+
+    // Activity multiplier (Assuming Moderate Activity: 1.55)
+    double tdee = bmr * 1.55;
+
+    // Goal adjustment
+    switch (goal) {
+      case UserGoal.muscleGain:
+        return (tdee + 300).round();
+      case UserGoal.weightLoss:
+        return (tdee - 500).round();
+      case UserGoal.maintain:
+        return tdee.round();
+    }
+  }
 }

@@ -36,10 +36,41 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _gender = profile.gender;
     _goal = profile.goal;
     _isSmart = profile.isSmartCalculation;
+
+    // Add listeners for real-time updates
+    _heightController.addListener(_onInputChanged);
+    _weightController.addListener(_onInputChanged);
+    _ageController.addListener(_onInputChanged);
+  }
+
+  void _onInputChanged() {
+    setState(() {
+      // Just trigger rebuild to update the "Current Recommended" display
+    });
+  }
+
+  int _calculateLiveRecommended() {
+    final height = double.tryParse(_heightController.text) ?? 175;
+    final weight = double.tryParse(_weightController.text) ?? 70;
+    final age = int.tryParse(_ageController.text) ?? 25;
+
+    final tempProfile = UserProfile(
+      height: height,
+      weight: weight,
+      gender: _gender,
+      age: age,
+      goal: _goal,
+      isSmartCalculation: _isSmart,
+    );
+
+    return tempProfile.calculateRecommendedCalories();
   }
 
   @override
   void dispose() {
+    _heightController.removeListener(_onInputChanged);
+    _weightController.removeListener(_onInputChanged);
+    _ageController.removeListener(_onInputChanged);
     _heightController.dispose();
     _weightController.dispose();
     _ageController.dispose();
@@ -60,15 +91,21 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
     provider.updateUserProfile(newProfile);
     Navigator.pop(context);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('个人资料已更新')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '个人资料已更新',
+          style: TextStyle(color: AppColors.getTextMainColor(context)),
+        ),
+        backgroundColor: AppColors.getCardColor(context),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           '个人设置',
@@ -76,7 +113,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColors.textMain,
+        foregroundColor: AppColors.getTextMainColor(context),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -127,7 +164,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -135,12 +172,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
+                              color: AppColors.getTextMainColor(context),
                             ),
                           ),
                           Text(
                             '根据身体数据自动推荐',
                             style: TextStyle(
-                              color: AppColors.textMuted,
+                              color: AppColors.getTextMutedColor(context),
                               fontSize: 12,
                             ),
                           ),
@@ -167,7 +205,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '当前推荐: ${context.watch<AppProvider>().calorieGoal} kcal / 天',
+                            '当前推荐: ${_calculateLiveRecommended()} kcal / 天',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -210,10 +248,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       padding: const EdgeInsets.only(left: 4, bottom: 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: AppColors.textMain,
+          color: AppColors.getTextMainColor(context),
         ),
       ),
     );
@@ -229,7 +267,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 14, color: AppColors.textMuted),
+          style: TextStyle(
+            fontSize: 14,
+            color: AppColors.getTextMutedColor(context),
+          ),
         ),
         const SizedBox(height: 8),
         HandDrawnTextField(
@@ -245,9 +286,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
+        Text(
           '性别',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: AppColors.getTextMainColor(context),
+          ),
         ),
         Row(
           children: [
@@ -272,9 +317,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '健身期望',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: AppColors.getTextMainColor(context),
+          ),
         ),
         const SizedBox(height: 12),
         Row(
@@ -307,7 +356,9 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       child: HandDrawnContainer(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         borderRadius: 12,
-        color: isSelected ? AppColors.primary : AppColors.background,
+        color: isSelected
+            ? AppColors.primary
+            : AppColors.getBackgroundColor(context),
         child: Text(
           label,
           style: TextStyle(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
-import 'profile_settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -15,10 +15,38 @@ class ProfilePage extends StatelessWidget {
     final stats = appState.userStats;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          '个人中心',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: AppColors.getTextMainColor(context),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              appState.themeMode == ThemeMode.system
+                  ? LucideIcons.monitor
+                  : appState.themeMode == ThemeMode.light
+                  ? LucideIcons.sun
+                  : LucideIcons.moon,
+              color: AppColors.getTextMainColor(context),
+            ),
+            onPressed: appState.toggleThemeMode,
+            tooltip: '切换主题模式',
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: SafeArea(
+        top: false, // AppBar is already there
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.fromLTRB(20, 2, 20, 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -36,7 +64,7 @@ class ProfilePage extends StatelessWidget {
                         border: Border.all(color: Colors.white, width: 3),
                         image: const DecorationImage(
                           image: AssetImage(
-                            'assets/images/capybara-mascot.png',
+                            'assets/images/capybara-mascot.webp',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -47,20 +75,20 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '健身达人',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textMain,
+                              color: AppColors.getTextMainColor(context),
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             '加入卡皮健身第 ${stats.joinedDays} 天',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textMuted,
+                              color: AppColors.getTextMutedColor(context),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -70,16 +98,26 @@ class ProfilePage extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF8E8E2),
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? const Color(
+                                      0xFFF8E8E2,
+                                    ).withValues(alpha: 0.1)
+                                  : const Color(0xFFF8E8E2),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
+                                Icon(
                                   LucideIcons.lock,
                                   size: 14,
-                                  color: Color(0xFFB98471),
+                                  color:
+                                      Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? const Color(0xFFD4A594)
+                                      : const Color(0xFFB98471),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
@@ -87,7 +125,11 @@ class ProfilePage extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
-                                    color: const Color(0xFFB98471),
+                                    color:
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? const Color(0xFFD4A594)
+                                        : const Color(0xFFB98471),
                                   ),
                                 ),
                               ],
@@ -102,14 +144,14 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Achievement Section
-              const Padding(
-                padding: EdgeInsets.only(left: 4, bottom: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
                   '我的成就',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                   ),
                 ),
               ),
@@ -122,6 +164,7 @@ class ProfilePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildAchievementItem(
+                      context,
                       icon: LucideIcons.calendar,
                       value: stats.joinedDays.toString(),
                       label: '坚持天数',
@@ -129,6 +172,7 @@ class ProfilePage extends StatelessWidget {
                       iconColor: const Color(0xFF8B6F5C),
                     ),
                     _buildAchievementItem(
+                      context,
                       icon: LucideIcons.medal,
                       value: stats.totalWorkouts.toString(),
                       label: '完成训练',
@@ -136,6 +180,7 @@ class ProfilePage extends StatelessWidget {
                       iconColor: const Color(0xFF7EB8A2),
                     ),
                     _buildAchievementItem(
+                      context,
                       icon: LucideIcons.clock,
                       value: (stats.totalDuration / 60).toStringAsFixed(0),
                       label: '训练小时',
@@ -148,33 +193,30 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Settings Section
-              const Padding(
-                padding: EdgeInsets.only(left: 4, bottom: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
                   '设置',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                   ),
                 ),
               ),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.user,
                 title: '个人资料',
                 iconBgColor: const Color(0xFFF5E6D3),
                 iconColor: const Color(0xFF8B6F5C),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileSettingsPage(),
-                    ),
-                  );
+                  context.push('/profile/settings');
                 },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.bell,
                 title: '提醒设置',
                 iconBgColor: const Color(0xFFE3F1EC),
@@ -183,6 +225,7 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.target,
                 title: '目标设置',
                 iconBgColor: const Color(0xFFFDF0E8),
@@ -191,6 +234,7 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.database,
                 title: '数据备份',
                 iconBgColor: const Color(0xFFF1D7D2),
@@ -200,18 +244,19 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 24),
 
               // About Section
-              const Padding(
-                padding: EdgeInsets.only(left: 4, bottom: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
                   '关于',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                   ),
                 ),
               ),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.helpCircle,
                 title: '使用帮助',
                 iconBgColor: const Color(0xFFF1EFEC),
@@ -220,6 +265,7 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
+                context,
                 icon: LucideIcons.messageSquare,
                 title: '意见反馈',
                 iconBgColor: const Color(0xFFE3F1EC),
@@ -232,23 +278,28 @@ class ProfilePage extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       '卡皮健身 v1.0.0',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textMuted,
+                        color: AppColors.getTextMutedColor(context),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       '非商用版本 · 仅供学习交流',
-                      style: TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.getTextMutedColor(
+                          context,
+                        ).withValues(alpha: 0.7),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Opacity(
                       opacity: 0.5,
                       child: Image.asset(
-                        'assets/images/capy_running.png',
+                        'assets/images/capy_running.webp',
                         width: 40,
                         height: 40,
                       ),
@@ -264,7 +315,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAchievementItem({
+  Widget _buildAchievementItem(
+    BuildContext context, {
     required IconData icon,
     required String value,
     required String label,
@@ -277,7 +329,9 @@ class ProfilePage extends StatelessWidget {
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            color: color,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? color.withValues(alpha: 0.2)
+                : color,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Icon(icon, color: iconColor, size: 28),
@@ -285,22 +339,26 @@ class ProfilePage extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: AppColors.textMain,
+            color: AppColors.getTextMainColor(context),
           ),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+          style: TextStyle(
+            fontSize: 12,
+            color: AppColors.getTextMutedColor(context),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSettingsItem({
+  Widget _buildSettingsItem(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required Color iconBgColor,
@@ -315,19 +373,27 @@ class ProfilePage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconBgColor,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? iconBgColor.withValues(alpha: 0.2)
+                  : iconBgColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: iconColor, size: 20),
+            child: Icon(
+              icon,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Color.lerp(iconColor, Colors.white, 0.3)
+                  : iconColor,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textMain,
+                color: AppColors.getTextMainColor(context),
               ),
             ),
           ),

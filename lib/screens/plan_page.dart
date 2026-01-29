@@ -7,6 +7,7 @@ import '../providers/app_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/hand_drawn_widgets.dart';
+import '../widgets/floating_calendar.dart';
 import '../models/workout_plan.dart';
 
 class PlanPage extends StatefulWidget {
@@ -18,48 +19,21 @@ class PlanPage extends StatefulWidget {
 
 class _PlanPageState extends State<PlanPage> {
   DateTime _selectedDate = DateTime.now();
-  late DateTime _todayStartOfWeek;
-  late PageController _pageController;
-  int _currentPageIndex = 1000;
 
   @override
   void initState() {
     super.initState();
-    _todayStartOfWeek = _getStartOfWeek(DateTime.now());
-    _pageController = PageController(initialPage: _currentPageIndex);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
-  }
-
-  DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday - 1));
-  }
-
-  DateTime _getWeekStartForIndex(int index) {
-    return _todayStartOfWeek.add(Duration(days: (index - 1000) * 7));
-  }
-
-  void _changeWeek(int offset) {
-    _pageController.animateToPage(
-      _currentPageIndex + offset,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeOutQuart,
-    );
   }
 
   void _jumpToToday() {
     setState(() {
       _selectedDate = DateTime.now();
     });
-    _pageController.animateToPage(
-      1000,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOutBack,
-    );
   }
 
   bool _isSameDay(DateTime a, DateTime b) {
@@ -90,15 +64,18 @@ class _PlanPageState extends State<PlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '训练计划',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: AppColors.getTextMainColor(context),
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          if (!_isSameDay(_selectedDate, DateTime.now()) ||
-              _currentPageIndex != 1000)
+          if (!_isSameDay(_selectedDate, DateTime.now()))
             IconButton(
               icon: const Icon(
                 LucideIcons.calendarDays,
@@ -124,8 +101,8 @@ class _PlanPageState extends State<PlanPage> {
                     TextSpan(text: '/${dayPlans.length}'),
                   ],
                 ),
-                style: const TextStyle(
-                  color: AppColors.textMuted,
+                style: TextStyle(
+                  color: AppColors.getTextMutedColor(context),
                   fontSize: 14,
                 ),
               ),
@@ -133,162 +110,221 @@ class _PlanPageState extends State<PlanPage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          _buildCalendar(),
-          Expanded(
-            child: dayPlans.isEmpty
-                ? _buildEmptyState(isHistory)
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: dayPlans.length,
-                    itemBuilder: (context, index) {
-                      final plan = dayPlans[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: HandDrawnCard(
-                          onTap: isToday
-                              ? () => appState.togglePlanComplete(plan.id)
-                              : null,
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: _getPlanTypeColor(
-                                    plan.type,
-                                  ).withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    plan.type == WorkoutType.strength
-                                        ? LucideIcons.dumbbell
-                                        : LucideIcons.heart,
-                                    color: _getPlanTypeColor(plan.type),
-                                    size: 24,
+          Column(
+            children: [
+              const SizedBox(height: 65), // Space for collapsed calendar
+              Expanded(
+                child: dayPlans.isEmpty
+                    ? _buildEmptyState(isHistory)
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: dayPlans.length,
+                        itemBuilder: (context, index) {
+                          final plan = dayPlans[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: HandDrawnCard(
+                              onTap: isToday
+                                  ? () => appState.togglePlanComplete(plan.id)
+                                  : null,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: _getPlanTypeColor(
+                                        plan.type,
+                                      ).withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        plan.type == WorkoutType.strength
+                                            ? LucideIcons.dumbbell
+                                            : LucideIcons.heart,
+                                        color: _getPlanTypeColor(plan.type),
+                                        size: 24,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                          child: Text(
-                                            plan.name,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              decoration: plan.completed
-                                                  ? TextDecoration.lineThrough
-                                                  : null,
-                                              color: plan.completed
-                                                  ? AppColors.textMuted
-                                                  : AppColors.textMain,
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                plan.name,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  decoration: plan.completed
+                                                      ? TextDecoration
+                                                            .lineThrough
+                                                      : null,
+                                                  color: plan.completed
+                                                      ? AppColors.getTextMutedColor(
+                                                          context,
+                                                        )
+                                                      : AppColors.getTextMainColor(
+                                                          context,
+                                                        ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 6,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color:
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 6,
+                                                    vertical: 2,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    plan.mode ==
+                                                        PlanMode.longTerm
+                                                    ? AppColors.primary.withValues(
+                                                        alpha:
+                                                            Theme.of(
+                                                                  context,
+                                                                ).brightness ==
+                                                                Brightness.dark
+                                                            ? 0.25
+                                                            : 0.1,
+                                                      )
+                                                    : AppColors.accentOrange
+                                                          .withValues(
+                                                            alpha:
+                                                                Theme.of(
+                                                                      context,
+                                                                    ).brightness ==
+                                                                    Brightness
+                                                                        .dark
+                                                                ? 0.25
+                                                                : 0.1,
+                                                          ),
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: Text(
                                                 plan.mode == PlanMode.longTerm
-                                                ? AppColors.primary.withValues(
-                                                    alpha: 0.1,
-                                                  )
-                                                : AppColors.accentOrange
-                                                      .withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(
-                                              6,
+                                                    ? '长期'
+                                                    : '单次',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color:
+                                                      plan.mode ==
+                                                          PlanMode.longTerm
+                                                      ? (Theme.of(
+                                                                  context,
+                                                                ).brightness ==
+                                                                Brightness.dark
+                                                            ? AppColors
+                                                                  .primaryLight
+                                                            : AppColors.primary)
+                                                      : (Theme.of(
+                                                                  context,
+                                                                ).brightness ==
+                                                                Brightness.dark
+                                                            ? AppColors
+                                                                  .accentOrange
+                                                                  .withValues(
+                                                                    alpha: 0.9,
+                                                                  )
+                                                            : AppColors
+                                                                  .accentOrange),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          child: Text(
-                                            plan.mode == PlanMode.longTerm
-                                                ? '长期'
-                                                : '单次',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color:
-                                                  plan.mode == PlanMode.longTerm
-                                                  ? AppColors.primary
-                                                  : AppColors.accentOrange,
-                                              fontWeight: FontWeight.bold,
+                                          ],
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          '${plan.time} · ${plan.duration}分钟 · ${_getIntensityLabel(plan.intensity)}',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColors.getTextMutedColor(
+                                              context,
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      '${plan.time} · ${plan.duration}分钟 · ${_getIntensityLabel(plan.intensity)}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.textMuted,
+                                  ),
+                                  if (isToday) ...[
+                                    IconButton(
+                                      icon: const Icon(
+                                        LucideIcons.trash2,
+                                        size: 18,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () => _confirmDelete(
+                                        context,
+                                        appState,
+                                        plan,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                    HandDrawnContainer(
+                                      width: 28,
+                                      height: 28,
+                                      borderRadius: 14,
+                                      borderWidth: 2,
+                                      borderColor: plan.completed
+                                          ? AppColors.accentMint
+                                          : AppColors.getBorderColor(context),
+                                      color: plan.completed
+                                          ? AppColors.accentMint
+                                          : Colors.transparent,
+                                      child: plan.completed
+                                          ? const Icon(
+                                              LucideIcons.check,
+                                              size: 16,
+                                              color: Colors.white,
+                                            )
+                                          : const SizedBox(),
+                                    ),
+                                  ] else if (isHistory)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      child: Icon(
+                                        plan.completed
+                                            ? LucideIcons.checkCircle2
+                                            : LucideIcons.circle,
+                                        size: 20,
+                                        color: plan.completed
+                                            ? AppColors.accentMint
+                                            : AppColors.getBorderColor(context),
+                                      ),
+                                    ),
+                                  // if isFuture, show no status and no operations as requested ("无状态和操作")
+                                ],
                               ),
-                              if (isToday) ...[
-                                IconButton(
-                                  icon: const Icon(
-                                    LucideIcons.trash2,
-                                    size: 18,
-                                    color: Colors.grey,
-                                  ),
-                                  onPressed: () =>
-                                      _confirmDelete(context, appState, plan),
-                                ),
-                                HandDrawnContainer(
-                                  width: 28,
-                                  height: 28,
-                                  borderRadius: 14,
-                                  borderWidth: 2,
-                                  borderColor: plan.completed
-                                      ? AppColors.accentMint
-                                      : AppColors.border,
-                                  color: plan.completed
-                                      ? AppColors.accentMint
-                                      : Colors.transparent,
-                                  child: plan.completed
-                                      ? const Icon(
-                                          LucideIcons.check,
-                                          size: 16,
-                                          color: Colors.white,
-                                        )
-                                      : const SizedBox(),
-                                ),
-                              ] else if (isHistory)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  child: Icon(
-                                    plan.completed
-                                        ? LucideIcons.checkCircle2
-                                        : LucideIcons.circle,
-                                    size: 20,
-                                    color: plan.completed
-                                        ? AppColors.accentMint
-                                        : AppColors.border,
-                                  ),
-                                ),
-                              // if isFuture, show no status and no operations as requested ("无状态和操作")
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: FloatingCalendar(
+              selectedDate: _selectedDate,
+              onDateSelected: (date) {
+                setState(() => _selectedDate = date);
+              },
+            ),
           ),
         ],
       ),
@@ -301,149 +337,34 @@ class _PlanPageState extends State<PlanPage> {
     );
   }
 
-  Widget _buildCalendar() {
-    final currentWeekStart = _getWeekStartForIndex(_currentPageIndex);
-
-    return HandDrawnContainer(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      padding: const EdgeInsets.all(16),
-      color: Colors.white,
-      borderRadius: 24,
-      borderColor: AppColors.primary,
-      borderWidth: 1.5,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(LucideIcons.chevronLeft, size: 20),
-                onPressed: () => _changeWeek(-1),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              Text(
-                DateFormat(
-                  'yyyy年M月',
-                ).format(currentWeekStart.add(const Duration(days: 3))),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textMain,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(LucideIcons.chevronRight, size: 20),
-                onPressed: () => _changeWeek(1),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 85,
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPageIndex = index;
-                });
-              },
-              itemBuilder: (context, weekIndex) {
-                final weekStart = _getWeekStartForIndex(weekIndex);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(7, (dayIndex) {
-                    final date = weekStart.add(Duration(days: dayIndex));
-                    final isSelected = _isSameDay(date, _selectedDate);
-                    final isToday = _isSameDay(date, DateTime.now());
-                    final weekDays = ['一', '二', '三', '四', '五', '六', '日'];
-
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedDate = date),
-                      child: Container(
-                        width: 40,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primaryDark
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              weekDays[dayIndex],
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: isSelected
-                                    ? Colors.white.withOpacity(0.8)
-                                    : AppColors.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              date.day.toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textMain,
-                              ),
-                            ),
-                            if (isToday) ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                '今天',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: isSelected
-                                      ? Colors.white.withOpacity(0.8)
-                                      : AppColors.accentOrange,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildEmptyState(bool isHistory) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/capybara-mascot.png',
+            'assets/images/capybara-mascot.webp',
             width: 150,
             height: 150,
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             '这一天还没有计划',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: AppColors.textMuted,
+              color: AppColors.getTextMutedColor(context),
             ),
           ),
           if (!isHistory) ...[
             const SizedBox(height: 8),
-            const Text(
+            Text(
               '点击右下角按钮添加计划吧~',
-              style: TextStyle(fontSize: 14, color: AppColors.textMuted),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.getTextMutedColor(context),
+              ),
             ),
           ],
           const SizedBox(height: 60), // Adjust for FAB space
@@ -484,21 +405,28 @@ class _PlanPageState extends State<PlanPage> {
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         child: HandDrawnContainer(
-          color: AppColors.background,
+          color: AppColors.getBackgroundColor(context),
           borderRadius: 24,
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 '确认删除',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.getTextMainColor(context),
+                ),
               ),
               const SizedBox(height: 16),
               Text(
                 '确定要删除计划 "${plan.name}" 吗？',
-                style: const TextStyle(fontSize: 16, color: AppColors.textMain),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.getTextMainColor(context),
+                ),
               ),
               const SizedBox(height: 24),
               Row(
@@ -506,9 +434,11 @@ class _PlanPageState extends State<PlanPage> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
+                    child: Text(
                       '取消',
-                      style: TextStyle(color: AppColors.textMuted),
+                      style: TextStyle(
+                        color: AppColors.getTextMutedColor(context),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),

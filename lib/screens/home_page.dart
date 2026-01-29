@@ -46,19 +46,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  int _lastIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>();
-    final currentTab = appState.currentTabIndex;
-
-    // Check if we just switched back to the Home tab
-    if (currentTab == 0 && _lastIndex != 0) {
-      _fadeController.forward(from: 0);
-      _countController.forward(from: 0);
-    }
-    _lastIndex = currentTab;
 
     final stats = appState.userStats;
     final today = DateTime.now();
@@ -121,7 +111,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               const SizedBox(height: 24),
 
               // Today's Plan Section
-              _buildSectionTitle('今日训练计划', onSeeAll: () {}),
+              _buildSectionTitle('今日训练计划'),
               const SizedBox(height: 12),
 
               HandDrawnCard(
@@ -130,17 +120,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           '今日完成进度',
                           style: TextStyle(
-                            color: AppColors.textMuted,
+                            color: AppColors.getTextMutedColor(context),
                             fontSize: 14,
                           ),
                         ),
                         Text(
                           '$completedCount/${todayPlans.length}',
-                          style: const TextStyle(
-                            color: AppColors.primary,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -188,16 +178,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               children: [
                 Text(
                   date,
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
+                  style: TextStyle(
+                    color: AppColors.getTextMutedColor(context),
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '$greeting，健身达人！',
-                  style: const TextStyle(
-                    color: AppColors.textMain,
+                  style: TextStyle(
+                    color: AppColors.getTextMainColor(context),
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -210,7 +200,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
             Image.asset(
-              'assets/images/capybara-mascot.png',
+              'assets/images/capybara-mascot.webp',
               width: 80,
               height: 80,
               fit: BoxFit.contain,
@@ -232,14 +222,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 3,
+          childAspectRatio: 2,
           children: [
             _buildStatCardWithImage(
               LucideIcons.calendar,
               (3 * val).round().toString(),
               '次',
               '本周训练',
-              'assets/images/icons/strong.png',
+              'assets/images/icons/calendar.webp',
               color: const Color(0xFF8B6B61),
             ),
             _buildStatCardWithImage(
@@ -247,7 +237,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.streakDays * val).round().toString(),
               '天',
               '连续打卡',
-              'assets/images/icons/energe.png',
+              'assets/images/icons/strong.webp',
               color: const Color(0xFFE57373),
             ),
             _buildStatCardWithImage(
@@ -255,7 +245,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
-              'assets/images/icons/pad.png',
+              'assets/images/icons/run.webp',
               color: const Color(0xFF81C784),
             ),
             _buildStatCardWithImage(
@@ -263,7 +253,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (4.5 * val).toStringAsFixed(1),
               'h',
               '训练时长',
-              'assets/images/icons/clock.png',
+              'assets/images/icons/clock.webp',
               color: const Color(0xFFA1887F),
             ),
           ],
@@ -314,18 +304,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                         Text(
                           unit,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textMuted,
+                            color: AppColors.getTextMutedColor(context),
                           ),
                         ),
                       ],
                     ),
                     Text(
                       label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textMuted,
+                        color: AppColors.getTextMutedColor(context),
                       ),
                     ),
                   ],
@@ -348,44 +338,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildSectionTitle(String title, {VoidCallback? onSeeAll}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textMain,
-          ),
-        ),
-        if (onSeeAll != null)
-          InkWell(
-            onTap: onSeeAll,
-            child: const Row(
-              children: [
-                Text(
-                  '查看全部',
-                  style: TextStyle(color: AppColors.primary, fontSize: 13),
-                ),
-                Icon(
-                  LucideIcons.chevronRight,
-                  size: 16,
-                  color: AppColors.primary,
-                ),
-              ],
-            ),
-          ),
-      ],
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: AppColors.getTextMainColor(context),
+      ),
     );
   }
 
   Widget _buildPlanItem(WorkoutPlan plan, AppProvider appState) {
     final isStrength = plan.type == WorkoutType.strength;
     final imagePath = isStrength
-        ? 'assets/images/icons/strong.png'
-        : 'assets/images/icons/run.png';
+        ? 'assets/images/icons/strong.webp'
+        : 'assets/images/icons/run.webp';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -425,16 +393,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ? TextDecoration.lineThrough
                           : null,
                       color: plan.completed
-                          ? AppColors.textMuted
-                          : AppColors.textMain,
+                          ? AppColors.getTextMutedColor(context)
+                          : AppColors.getTextMainColor(context),
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '${plan.time} · ${plan.duration}分钟 · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textMuted,
+                      color: AppColors.getTextMutedColor(context),
                     ),
                   ),
                 ],
@@ -449,7 +417,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               borderWidth: 2,
               borderColor: plan.completed
                   ? AppColors.accentMint
-                  : AppColors.textMuted,
+                  : AppColors.getTextMutedColor(context),
               color: plan.completed ? AppColors.accentMint : Colors.transparent,
               child: plan.completed
                   ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
@@ -473,7 +441,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _buildActionCardWithImage(
           '动作库',
           '学习标准动作',
-          'assets/images/icons/weightlifting.png',
+          'assets/images/icons/weightlifting.webp',
           () => context.push('/exercise'),
           icon: LucideIcons.dumbbell,
           iconColor: const Color(0xFF8B8B61),
@@ -481,7 +449,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _buildActionCardWithImage(
           '膳食库',
           '查看食物营养',
-          'assets/images/icons/eat.png',
+          'assets/images/icons/eat.webp',
           () => context.push('/diet/library'),
           icon: LucideIcons.utensils,
           iconColor: const Color(0xFFC17D5C),
@@ -535,10 +503,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -563,14 +531,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           children: [
             Image.asset(
-              'assets/images/icons/calendar.png',
+              'assets/images/icons/calendar.webp',
               width: 80,
               height: 80,
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               '今天还没有计划哦~',
-              style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+              style: TextStyle(
+                color: AppColors.getTextMutedColor(context),
+                fontSize: 14,
+              ),
             ),
           ],
         ),

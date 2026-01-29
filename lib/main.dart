@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'models/exercise.dart';
@@ -12,9 +13,20 @@ import 'screens/exercise_detail_page.dart';
 import 'screens/profile_page.dart';
 import 'screens/add_plan_page.dart';
 import 'screens/diet_library_page.dart';
+import 'screens/profile_settings_page.dart';
 import 'widgets/main_scaffold.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ),
+  );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => AppProvider())],
@@ -91,6 +103,11 @@ final _router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const DietLibraryPage(),
     ),
+    GoRoute(
+      path: '/profile/settings',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ProfileSettingsPage(),
+    ),
   ],
 );
 
@@ -99,15 +116,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppProvider>();
     return MaterialApp.router(
-      title: 'Kapi Fit',
+      title: 'CapyFit',
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
+      themeMode: appState.themeMode,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
           primary: AppColors.primary,
           surface: AppColors.background,
+          brightness: Brightness.light,
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.background,
@@ -115,8 +135,26 @@ class MyApp extends StatelessWidget {
           centerTitle: false,
           elevation: 0,
           backgroundColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         fontFamily: '.SF Pro Text', // System font on Mac/iOS
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          surface: AppColors.darkBackground,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+        scaffoldBackgroundColor: AppColors.darkBackground,
+        appBarTheme: const AppBarTheme(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+        fontFamily: '.SF Pro Text',
       ),
     );
   }

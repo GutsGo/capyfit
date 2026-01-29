@@ -33,23 +33,23 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '膳食库',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: AppColors.textMain,
+            color: AppColors.getTextMainColor(context),
           ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             LucideIcons.chevronLeft,
-            color: AppColors.textMain,
+            color: AppColors.getTextMainColor(context),
             size: 28,
           ),
           onPressed: () => context.pop(),
@@ -61,17 +61,25 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: HandDrawnContainer(
-              color: Colors.white,
+              color: AppColors.getCardColor(context),
               borderRadius: 16,
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: TextField(
                 onChanged: (val) => setState(() => searchQuery = val),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: '搜索食物...',
-                  prefixIcon: Icon(LucideIcons.search, size: 20),
+                  hintStyle: TextStyle(
+                    color: AppColors.getTextMutedColor(context),
+                  ),
+                  prefixIcon: Icon(
+                    LucideIcons.search,
+                    size: 20,
+                    color: AppColors.getBorderColor(context),
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
+                style: TextStyle(color: AppColors.getTextMainColor(context)),
               ),
             ),
           ),
@@ -133,18 +141,18 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
               children: [
                 Text(
                   food.name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: AppColors.textMain,
+                    color: AppColors.getTextMainColor(context),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '100g 约 ${food.caloriesPer100g} kcal',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: AppColors.textMuted,
+                    color: AppColors.getTextMutedColor(context),
                   ),
                 ),
               ],
@@ -171,14 +179,17 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
       children: [
         Text(
           '$label: ',
-          style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+          style: TextStyle(
+            fontSize: 11,
+            color: AppColors.getTextMutedColor(context),
+          ),
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.bold,
-            color: AppColors.textMain,
+            color: AppColors.getTextMainColor(context),
           ),
         ),
       ],

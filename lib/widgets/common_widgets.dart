@@ -25,7 +25,7 @@ class HandDrawnCard extends StatelessWidget {
     return HandDrawnContainer(
       width: width,
       height: height,
-      color: color ?? AppColors.card,
+      color: color ?? AppColors.getCardColor(context),
       borderRadius: 20,
       borderWidth: 1.5,
       // No padding here because we want InkWell to fill the container
@@ -51,9 +51,11 @@ class CustomProgressBar extends StatelessWidget {
     return HandDrawnContainer(
       width: double.infinity,
       height: 12, // Slightly taller to account for border
-      color: Colors.white,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.darkInputFill
+          : Colors.white,
       borderRadius: 7, // Rounded ends
-      borderColor: AppColors.textMain,
+      borderColor: AppColors.getBorderColor(context),
       borderWidth: 1.2,
       child: TweenAnimationBuilder<double>(
         tween: Tween<double>(begin: 0, end: progress.clamp(0.0, 1.0)),

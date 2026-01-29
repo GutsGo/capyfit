@@ -22,6 +22,20 @@ class UserStats {
 }
 
 class AppProvider extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode get themeMode => _themeMode;
+
+  void toggleThemeMode() {
+    if (_themeMode == ThemeMode.system) {
+      _themeMode = ThemeMode.light;
+    } else if (_themeMode == ThemeMode.light) {
+      _themeMode = ThemeMode.dark;
+    } else {
+      _themeMode = ThemeMode.system;
+    }
+    notifyListeners();
+  }
+
   final List<WorkoutPlan> _plans = [
     WorkoutPlan(
       id: '1',
@@ -161,7 +175,7 @@ class AppProvider extends ChangeNotifier {
       description: '经典的上肢训练动作，主要锻炼胸部肌肉。',
       tips: ['保持身体呈一条直线', '手肘与身体呈45度角', '下落时胸部接近地面'],
       steps: ['双手略宽于肩支撑地面', '身体保持从头到脚呈直线', '屈肘下落至胸部接近地面', '发力推起回到起始位置'],
-      image: 'assets/images/capy_pushup.png',
+      image: 'assets/images/capy_pushup.webp',
     ),
     Exercise(
       id: '2',
@@ -181,7 +195,7 @@ class AppProvider extends ChangeNotifier {
         '蹲至大腿与地面平行或略低',
         '脚跟发力站起完成动作',
       ],
-      image: 'assets/images/capy_squat.png',
+      image: 'assets/images/capy_squat.webp',
     ),
     Exercise(
       id: '3',
@@ -202,7 +216,7 @@ class AppProvider extends ChangeNotifier {
         '保持匀速呼吸，不要憋气',
         '在规定时间内保持稳定',
       ],
-      image: 'assets/images/capy_plank.png',
+      image: 'assets/images/capy_plank.webp',
     ),
     Exercise(
       id: '4',
@@ -215,7 +229,7 @@ class AppProvider extends ChangeNotifier {
       reps: '12-15次',
       description: '孤立训练肱二头肌的经典动作。',
       tips: ['保持大臂紧贴身体', '控制下放速度', '不要借力身体摆动'],
-      image: 'assets/images/capy_dumbbell_curl.png',
+      image: 'assets/images/capy_dumbbell_curl.webp',
     ),
     Exercise(
       id: '5',
@@ -230,7 +244,7 @@ class AppProvider extends ChangeNotifier {
       reps: '30分钟',
       description: '提升心肺功能，燃烧脂肪的有效运动。',
       tips: ['保持呼吸节奏', '落地轻盈', '注意摆臂'],
-      image: 'assets/images/capy_running.png',
+      image: 'assets/images/capy_running.webp',
     ),
     Exercise(
       id: '6',
@@ -243,7 +257,7 @@ class AppProvider extends ChangeNotifier {
       reps: '20分钟',
       description: '放松身心，提高身体柔韧性。',
       tips: ['配合呼吸', '切勿过度拉伸', '专注于身体感受'],
-      image: 'assets/images/capy_yoga.png',
+      image: 'assets/images/capy_yoga.webp',
     ),
   ];
 
@@ -267,34 +281,7 @@ class AppProvider extends ChangeNotifier {
   }
 
   int _calculateSmartCalorieGoal() {
-    // Mifflin-St Jeor Equation
-    double bmr;
-    if (_userProfile.gender == Gender.male) {
-      bmr =
-          (10 * _userProfile.weight) +
-          (6.25 * _userProfile.height) -
-          (5 * _userProfile.age) +
-          5;
-    } else {
-      bmr =
-          (10 * _userProfile.weight) +
-          (6.25 * _userProfile.height) -
-          (5 * _userProfile.age) -
-          161;
-    }
-
-    // Activity multiplier (Assuming Moderate Activity: 1.55)
-    double tdee = bmr * 1.55;
-
-    // Goal adjustment
-    switch (_userProfile.goal) {
-      case UserGoal.muscleGain:
-        return (tdee + 300).round();
-      case UserGoal.weightLoss:
-        return (tdee - 500).round();
-      case UserGoal.maintain:
-        return tdee.round();
-    }
+    return _userProfile.calculateRecommendedCalories();
   }
 
   double get carbGoal {

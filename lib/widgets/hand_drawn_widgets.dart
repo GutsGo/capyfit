@@ -8,7 +8,7 @@ class HandDrawnContainer extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double borderRadius;
-  final Color borderColor;
+  final Color? borderColor;
   final double borderWidth;
   final double? width;
   final double? height;
@@ -20,7 +20,7 @@ class HandDrawnContainer extends StatelessWidget {
     this.padding,
     this.margin,
     this.borderRadius = 12,
-    this.borderColor = AppColors.primary,
+    this.borderColor,
     this.borderWidth = 1.5,
     this.width,
     this.height,
@@ -28,23 +28,27 @@ class HandDrawnContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBorderColor =
+        borderColor ?? AppColors.getBorderColor(context);
+    final effectiveFillColor = color ?? AppColors.getCardColor(context);
+
     return Container(
       width: width,
       height: height,
       margin: margin,
       child: CustomPaint(
         painter: _HandDrawnBorderPainter(
-          color: borderColor,
+          color: effectiveBorderColor,
           width: borderWidth,
           borderRadius: borderRadius,
-          fillColor: color ?? Colors.white,
+          fillColor: effectiveFillColor,
           mode: _PainterMode.background,
         ),
         foregroundPainter: _HandDrawnBorderPainter(
-          color: borderColor,
+          color: effectiveBorderColor,
           width: borderWidth,
           borderRadius: borderRadius,
-          fillColor: color ?? Colors.white,
+          fillColor: effectiveFillColor,
           mode: _PainterMode.foreground,
         ),
         child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
@@ -365,8 +369,8 @@ class HandDrawnButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
   final IconData? icon;
-  final Color backgroundColor;
-  final Color textColor;
+  final Color? backgroundColor;
+  final Color? textColor;
   final double? width;
   final double? height;
 
@@ -375,20 +379,23 @@ class HandDrawnButton extends StatelessWidget {
     required this.onPressed,
     required this.label,
     this.icon,
-    this.backgroundColor = Colors.white,
-    this.textColor = AppColors.textMain,
+    this.backgroundColor,
+    this.textColor,
     this.width,
     this.height,
   });
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBgColor = backgroundColor ?? AppColors.getCardColor(context);
+    final effectiveTextColor = textColor ?? AppColors.getTextMainColor(context);
+
     return GestureDetector(
       onTap: onPressed,
       child: HandDrawnContainer(
         width: width,
         height: height,
-        color: backgroundColor,
+        color: effectiveBgColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         borderRadius: 16,
         child: Row(
@@ -396,13 +403,13 @@ class HandDrawnButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null) ...[
-              Icon(icon, color: textColor, size: 20),
+              Icon(icon, color: effectiveTextColor, size: 20),
               const SizedBox(width: 8),
             ],
             Text(
               label,
               style: TextStyle(
-                color: textColor,
+                color: effectiveTextColor,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -456,7 +463,7 @@ class HandDrawnTextField extends StatelessWidget {
   final String? hintText;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
-  final Color fillColor;
+  final Color? fillColor;
 
   const HandDrawnTextField({
     super.key,
@@ -464,28 +471,33 @@ class HandDrawnTextField extends StatelessWidget {
     this.hintText,
     this.keyboardType = TextInputType.text,
     this.validator,
-    this.fillColor = Colors.white,
+    this.fillColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final effectiveFillColor = fillColor ?? AppColors.getCardColor(context);
+    final effectiveTextColor = AppColors.getTextMainColor(context);
+    final effectiveHintColor = AppColors.getTextMutedColor(context);
+    final effectiveBorderColor = AppColors.getBorderColor(context);
+
     return HandDrawnContainer(
-      color: fillColor,
+      color: effectiveFillColor,
       borderRadius: 12,
-      borderColor: AppColors.primary,
+      borderColor: effectiveBorderColor,
       borderWidth: 1.5,
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
         validator: validator,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
-          color: AppColors.textMain,
+          color: effectiveTextColor,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: AppColors.textMuted),
+          hintStyle: TextStyle(color: effectiveHintColor),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,

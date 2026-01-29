@@ -67,7 +67,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
       isScrollControlled: true,
       builder: (context) {
         return HandDrawnContainer(
-          color: AppColors.background,
+          color: AppColors.getBackgroundColor(context),
           borderRadius: 32,
           margin: const EdgeInsets.all(12),
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
@@ -80,18 +80,18 @@ class _AddPlanPageState extends State<AddPlanPage> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.border,
+                    color: AppColors.getBorderColor(context),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 '选择动作库项目',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textMain,
+                  color: AppColors.getTextMainColor(context),
                 ),
               ),
               const SizedBox(height: 16),
@@ -112,7 +112,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         ),
                         subtitle: Text(
                           '${ex.calories} kcal/组 · ${ex.sets ?? 3}组',
-                          style: const TextStyle(color: AppColors.textMuted),
+                          style: TextStyle(
+                            color: AppColors.getTextMutedColor(context),
+                          ),
                         ),
                         trailing: const Icon(
                           LucideIcons.plusCircle,
@@ -141,7 +143,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         child: HandDrawnContainer(
-          color: AppColors.background,
+          color: AppColors.getBackgroundColor(context),
           borderRadius: 24,
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -160,9 +162,11 @@ class _AddPlanPageState extends State<AddPlanPage> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
+                    child: Text(
                       '取消',
-                      style: TextStyle(color: AppColors.textMuted),
+                      style: TextStyle(
+                        color: AppColors.getTextMutedColor(context),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -187,7 +191,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           '新增训练计划',
@@ -201,9 +205,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             LucideIcons.chevronLeft,
-            color: AppColors.textMain,
+            color: AppColors.getTextMainColor(context),
             size: 28,
           ),
           onPressed: () => context.pop(),
@@ -270,12 +274,14 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         child: Column(
                           children: [
                             if (_selectedExercises.isEmpty)
-                              const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
                                 child: Text(
                                   '暂无训练项目',
                                   style: TextStyle(
-                                    color: AppColors.textMuted,
+                                    color: AppColors.getTextMutedColor(context),
                                     fontSize: 16,
                                   ),
                                 ),
@@ -321,10 +327,14 @@ class _AddPlanPageState extends State<AddPlanPage> {
                               ),
 
                             if (_selectedExercises.isNotEmpty)
-                              const Divider(
+                              Divider(
                                 height: 24,
                                 thickness: 1,
-                                color: AppColors.borderLight,
+                                color:
+                                    Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.darkDivider
+                                    : AppColors.divider,
                               ),
 
                             Row(
@@ -336,7 +346,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                     icon: LucideIcons.library,
                                     backgroundColor:
                                         AppColors.accentMint, // Mint
-                                    textColor: AppColors.textMain,
+                                    textColor: AppColors.getTextMainColor(
+                                      context,
+                                    ),
                                     height: 48,
                                   ),
                                 ),
@@ -348,7 +360,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                     icon: LucideIcons.plus,
                                     backgroundColor:
                                         AppColors.accentPurple, // Purple
-                                    textColor: AppColors.textMain,
+                                    textColor: AppColors.getTextMainColor(
+                                      context,
+                                    ),
                                     height: 48,
                                   ),
                                 ),
@@ -441,7 +455,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       label: '返回',
                       icon: LucideIcons.arrowLeft,
                       backgroundColor: AppColors.accentOrange, // Beige/Orange
-                      textColor: AppColors.textMain,
+                      textColor: AppColors.getTextMainColor(context),
                       height: 56,
                     ),
                   ),
@@ -470,10 +484,10 @@ class _AddPlanPageState extends State<AddPlanPage> {
       padding: const EdgeInsets.only(bottom: 8.0, left: 4),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
-          color: AppColors.textMain,
+          color: AppColors.getTextMainColor(context),
         ),
       ),
     );
@@ -493,7 +507,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
           child: Text(
             label,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: AppColors.getTextMainColor(context),
               fontSize: 16,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             ),
@@ -517,7 +531,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.white : AppColors.textMain,
+              color: isSelected
+                  ? Colors.white
+                  : AppColors.getTextMainColor(context),
               fontSize: 16,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             ),

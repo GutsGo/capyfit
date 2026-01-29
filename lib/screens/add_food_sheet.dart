@@ -45,7 +45,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         .toList();
 
     return HandDrawnContainer(
-      color: AppColors.background,
+      color: AppColors.getBackgroundColor(context),
       borderRadius: 32,
       margin: const EdgeInsets.all(12),
       padding: EdgeInsets.only(
@@ -63,7 +63,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.border,
+                color: AppColors.getBorderColor(context),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -76,9 +76,10 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
                 widget.onlyAddToList
                     ? '新增自定义食物'
                     : (_isAddingCustom ? '自定义食物' : '新增记录'),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: AppColors.getTextMainColor(context),
                 ),
               ),
               IconButton(
@@ -109,16 +110,24 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
           children: [
             Expanded(
               child: HandDrawnContainer(
-                color: Colors.white,
+                color: AppColors.getCardColor(context),
                 borderRadius: 16,
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: TextField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: '搜索食物...',
-                    prefixIcon: Icon(LucideIcons.search, size: 20),
+                    hintStyle: TextStyle(
+                      color: AppColors.getTextMutedColor(context),
+                    ),
+                    prefixIcon: Icon(
+                      LucideIcons.search,
+                      size: 20,
+                      color: AppColors.getBorderColor(context),
+                    ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   ),
+                  style: TextStyle(color: AppColors.getTextMainColor(context)),
                   onChanged: (v) => setState(() => _searchQuery = v),
                 ),
               ),
@@ -128,7 +137,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
               onTap: () => setState(() => _isAddingCustom = true),
               child: HandDrawnContainer(
                 padding: const EdgeInsets.all(12),
-                color: Colors.white,
+                color: AppColors.getCardColor(context),
                 borderRadius: 16,
                 child: const Icon(
                   LucideIcons.plus,
@@ -151,8 +160,14 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
                 leading: food.emoji != null
                     ? Text(food.emoji!, style: const TextStyle(fontSize: 24))
                     : const Icon(LucideIcons.utensils, size: 20),
-                title: Text(food.name),
-                subtitle: Text('${food.caloriesPer100g.round()} kcal / 100g'),
+                title: Text(
+                  food.name,
+                  style: TextStyle(color: AppColors.getTextMainColor(context)),
+                ),
+                subtitle: Text(
+                  '${food.caloriesPer100g.round()} kcal / 100g',
+                  style: TextStyle(color: AppColors.getTextMutedColor(context)),
+                ),
                 onTap: () => setState(() => _selectedFood = food),
               );
             },
@@ -167,27 +182,41 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
       children: [
         Text(
           _selectedFood!.name,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.getTextMainColor(context),
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           '营养成分 (100g): ${_selectedFood!.caloriesPer100g.round()}kcal, 蛋白${_selectedFood!.proteinPer100g}g',
-          style: const TextStyle(color: AppColors.textMuted),
+          style: TextStyle(color: AppColors.getTextMutedColor(context)),
         ),
         const SizedBox(height: 24),
         HandDrawnContainer(
-          color: Colors.white,
+          color: AppColors.getCardColor(context),
           borderRadius: 16,
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: TextField(
             controller: _weightController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '摄入重量 (克)',
+              labelStyle: TextStyle(
+                color: AppColors.getTextMutedColor(context),
+              ),
               suffixText: 'g',
+              suffixStyle: TextStyle(
+                color: AppColors.getTextMutedColor(context),
+              ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
             ),
+            style: TextStyle(color: AppColors.getTextMainColor(context)),
           ),
         ),
         const SizedBox(height: 24),
@@ -287,7 +316,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
     bool isNum = false,
   }) {
     return HandDrawnContainer(
-      color: Colors.white,
+      color: AppColors.getCardColor(context),
       borderRadius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: TextField(
@@ -295,13 +324,18 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         keyboardType: isNum ? TextInputType.number : TextInputType.text,
         decoration: InputDecoration(
           labelText: label,
+          labelStyle: TextStyle(color: AppColors.getTextMutedColor(context)),
           hintText: hint,
+          hintStyle: TextStyle(
+            color: AppColors.getTextMutedColor(context).withValues(alpha: 0.5),
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 8,
           ),
         ),
+        style: TextStyle(color: AppColors.getTextMainColor(context)),
       ),
     );
   }
