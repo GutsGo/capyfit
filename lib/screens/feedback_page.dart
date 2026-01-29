@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../theme/app_colors.dart';
 import '../widgets/hand_drawn_widgets.dart';
 
@@ -14,6 +16,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   final TextEditingController _contactController = TextEditingController();
   int _selectedType = 0;
   final List<String> _types = ['功能建议', '系统问题', '内容报错', '其他'];
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -22,7 +25,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     super.dispose();
   }
 
-  void _submitFeedback() {
+  Future<void> _submitFeedback() async {
     if (_feedbackController.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -30,17 +33,84 @@ class _FeedbackPageState extends State<FeedbackPage> {
       return;
     }
 
-    // Mock submission
-    Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '感谢您的反馈！卡皮正在努力处理中...',
-          style: TextStyle(color: AppColors.getTextMainColor(context)),
-        ),
-        backgroundColor: AppColors.getCardColor(context),
-      ),
-    );
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      // GitHub API Configuration
+      // [IMPORTANT] Get token via: flutter run --dart-define=GITHUB_TOKEN=your_token
+      const String githubToken = String.fromEnvironment('GITHUB_TOKEN');
+      const String owner = 'GutsGo';
+      const String repo = 'capyfit';
+
+      if (githubToken.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('错误：未检测到 GITHUB_TOKEN。请联系开发者。'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+        setState(() => _isSubmitting = false);
+        return;
+      }
+
+      final response = await http.post(
+        Uri.parse('https://api.github.com/repos/$owner/$repo/dispatches'),
+        headers: {
+          'Authorization': 'Bearer $githubToken',
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'event_type': 'create_feedback_issue',
+          'client_payload': {
+            'type': _types[_selectedType],
+            'content': _feedbackController.text.trim(),
+            'contact': _contactController.text.trim(),
+          },
+        }),
+      );
+
+      if (mounted) {
+        if (response.statusCode == 204) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '感谢您的反馈！卡皮正在努力处理中...',
+                style: TextStyle(color: AppColors.getTextMainColor(context)),
+              ),
+              backgroundColor: AppColors.getCardColor(context),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('提交失败，请稍后重试 (${response.statusCode})'),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('网络错误: $e'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
   }
 
   @override
@@ -119,13 +189,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
             ),
             const SizedBox(height: 48),
             Center(
-              child: HandDrawnButton(
-                label: '提交反馈',
-                onPressed: _submitFeedback,
-                backgroundColor: AppColors.primary,
-                textColor: Colors.white,
-                width: double.infinity,
-              ),
+              child: _isSubmitting
+                  ? const CircularProgressIndicator(color: AppColors.primary)
+                  : HandDrawnButton(
+                      label: '提交反馈',
+                      onPressed: _submitFeedback,
+                      backgroundColor: AppColors.primary,
+                      textColor: Colors.white,
+                      width: double.infinity,
+                    ),
             ),
             const SizedBox(height: 24),
           ],

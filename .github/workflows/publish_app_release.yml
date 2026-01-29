@@ -34,7 +34,7 @@ jobs:
 
       # 打包 APK (不配置签名即为无签名版本，或使用默认 debug 签名)
       - name: Build APK
-        run: flutter build apk --split-per-abi
+        run: flutter build apk --split-per-abi --dart-define=GITHUB_TOKEN=${{ secrets.FEEDBACK_TOKEN }}
 
       # 获取版本信息（自动从 Git Tag 提取）
       - name: Get version from tag
