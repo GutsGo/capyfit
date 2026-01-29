@@ -87,7 +87,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '选择动作库项目',
+                '选择项目',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -197,7 +197,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
           '新增训练计划',
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 24,
+            fontSize: 20,
             letterSpacing: 1,
           ),
         ),
@@ -342,7 +342,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                 Expanded(
                                   child: HandDrawnButton(
                                     onPressed: _showExerciseLibrary,
-                                    label: '动作库选择',
+                                    label: '项目库',
                                     icon: LucideIcons.library,
                                     backgroundColor:
                                         AppColors.accentMint, // Mint
@@ -356,7 +356,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                 Expanded(
                                   child: HandDrawnButton(
                                     onPressed: _showCustomExerciseDialog,
-                                    label: '自定义动作',
+                                    label: '自定义',
                                     icon: LucideIcons.plus,
                                     backgroundColor:
                                         AppColors.accentPurple, // Purple
@@ -413,14 +413,6 @@ class _AddPlanPageState extends State<AddPlanPage> {
                               PlanMode.longTerm,
                               '长期计划',
                               AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildModeChip(
-                              PlanMode.timed,
-                              '时间计划',
-                              AppColors.accentMint,
                             ),
                           ),
                           const SizedBox(width: 12),

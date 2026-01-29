@@ -14,9 +14,18 @@ import 'screens/profile_page.dart';
 import 'screens/add_plan_page.dart';
 import 'screens/diet_library_page.dart';
 import 'screens/profile_settings_page.dart';
+import 'screens/onboarding_page.dart';
+import 'screens/reminders_page.dart';
+import 'screens/goals_page.dart';
+import 'screens/data_backup_page.dart';
+import 'screens/help_page.dart';
+import 'screens/feedback_page.dart';
 import 'widgets/main_scaffold.dart';
 
-void main() {
+late final GoRouter _router;
+late final AppProvider _appProvider;
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -27,9 +36,16 @@ void main() {
   );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
+  // Initialize AppProvider with Hive
+  _appProvider = AppProvider();
+  await _appProvider.init();
+
+  // Create router once with initial state
+  _router = _createRouter(_appProvider.hasUserProfile);
+
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AppProvider())],
+      providers: [ChangeNotifierProvider.value(value: _appProvider)],
       child: const MyApp(),
     ),
   );
@@ -37,79 +53,110 @@ void main() {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-final _router = GoRouter(
-  navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
-  routes: [
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return MainScaffold(
-          selectedIndex: navigationShell.currentIndex,
-          onItemSelected: (index) => navigationShell.goBranch(index),
-          child: navigationShell,
-        );
-      },
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(path: '/', builder: (context, state) => const HomePage()),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/plan',
-              builder: (context, state) => const PlanPage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/diet',
-              builder: (context, state) => const DietPage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/profile',
-              builder: (context, state) => const ProfilePage(),
-            ),
-          ],
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/plan/add',
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const AddPlanPage(),
-    ),
-    GoRoute(
-      path: '/exercise',
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const ExercisePage(),
-      routes: [
-        GoRoute(
-          path: 'detail',
-          builder: (context, state) =>
-              ExerciseDetailPage(exercise: state.extra as Exercise),
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/diet/library',
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const DietLibraryPage(),
-    ),
-    GoRoute(
-      path: '/profile/settings',
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const ProfileSettingsPage(),
-    ),
-  ],
-);
+GoRouter _createRouter(bool hasUserProfile) {
+  return GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: hasUserProfile ? '/' : '/onboarding',
+    routes: [
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingPage(),
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainScaffold(
+            selectedIndex: navigationShell.currentIndex,
+            onItemSelected: (index) => navigationShell.goBranch(index),
+            child: navigationShell,
+          );
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/', builder: (context, state) => const HomePage()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/plan',
+                builder: (context, state) => const PlanPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/diet',
+                builder: (context, state) => const DietPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfilePage(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/plan/add',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const AddPlanPage(),
+      ),
+      GoRoute(
+        path: '/exercise',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ExercisePage(),
+        routes: [
+          GoRoute(
+            path: 'detail',
+            builder: (context, state) =>
+                ExerciseDetailPage(exercise: state.extra as Exercise),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/diet/library',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const DietLibraryPage(),
+      ),
+      GoRoute(
+        path: '/profile/settings',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ProfileSettingsPage(),
+      ),
+      GoRoute(
+        path: '/profile/reminders',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const RemindersPage(),
+      ),
+      GoRoute(
+        path: '/profile/goals',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const GoalsPage(),
+      ),
+      GoRoute(
+        path: '/profile/backup',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const DataBackupPage(),
+      ),
+      GoRoute(
+        path: '/profile/help',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const HelpPage(),
+      ),
+      GoRoute(
+        path: '/profile/feedback',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const FeedbackPage(),
+      ),
+    ],
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -117,6 +164,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>();
+
     return MaterialApp.router(
       title: 'CapyFit',
       debugShowCheckedModeBanner: false,

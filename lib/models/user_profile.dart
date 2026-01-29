@@ -1,14 +1,40 @@
-enum UserGoal { muscleGain, weightLoss, maintain }
+import 'package:hive/hive.dart';
 
-enum Gender { male, female }
+part 'user_profile.g.dart';
 
-class UserProfile {
+@HiveType(typeId: 1)
+enum UserGoal {
+  @HiveField(0)
+  muscleGain,
+  @HiveField(1)
+  weightLoss,
+  @HiveField(2)
+  maintain,
+}
+
+@HiveType(typeId: 2)
+enum Gender {
+  @HiveField(0)
+  male,
+  @HiveField(1)
+  female,
+}
+
+@HiveType(typeId: 0)
+class UserProfile extends HiveObject {
+  @HiveField(0)
   final double height; // cm
+  @HiveField(1)
   final double weight; // kg
+  @HiveField(2)
   final Gender gender;
+  @HiveField(3)
   final int age;
+  @HiveField(4)
   final UserGoal goal;
+  @HiveField(5)
   final bool isSmartCalculation;
+  @HiveField(6)
   final int customCalorieGoal;
 
   UserProfile({

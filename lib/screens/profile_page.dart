@@ -221,7 +221,9 @@ class ProfilePage extends StatelessWidget {
                 title: '提醒设置',
                 iconBgColor: const Color(0xFFE3F1EC),
                 iconColor: const Color(0xFF7EB8A2),
-                onTap: () {},
+                onTap: () {
+                  context.push('/profile/reminders');
+                },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
@@ -230,7 +232,9 @@ class ProfilePage extends StatelessWidget {
                 title: '目标设置',
                 iconBgColor: const Color(0xFFFDF0E8),
                 iconColor: const Color(0xFFE8A87C),
-                onTap: () {},
+                onTap: () {
+                  context.push('/profile/goals');
+                },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
@@ -239,7 +243,9 @@ class ProfilePage extends StatelessWidget {
                 title: '数据备份',
                 iconBgColor: const Color(0xFFF1D7D2),
                 iconColor: const Color(0xFFA67C75),
-                onTap: () {},
+                onTap: () {
+                  context.push('/profile/backup');
+                },
               ),
               const SizedBox(height: 24),
 
@@ -261,7 +267,9 @@ class ProfilePage extends StatelessWidget {
                 title: '使用帮助',
                 iconBgColor: const Color(0xFFF1EFEC),
                 iconColor: const Color(0xFF8D8D8D),
-                onTap: () {},
+                onTap: () {
+                  context.push('/profile/help');
+                },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
@@ -270,7 +278,9 @@ class ProfilePage extends StatelessWidget {
                 title: '意见反馈',
                 iconBgColor: const Color(0xFFE3F1EC),
                 iconColor: const Color(0xFF7EB8A2),
-                onTap: () {},
+                onTap: () {
+                  context.push('/profile/feedback');
+                },
               ),
               const SizedBox(height: 48),
 

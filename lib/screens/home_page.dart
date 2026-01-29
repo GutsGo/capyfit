@@ -59,16 +59,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ? '午安'
         : '晚安';
 
+    final todayStr = today.toString().split(' ')[0];
     final todayPlans = appState.plans
-        .where((p) => p.date == today.toString().split(' ')[0])
+        .where((p) => p.date == todayStr || p.mode == PlanMode.longTerm)
+        .where((p) {
+          if (p.mode == PlanMode.oneTime) {
+            return p.date == todayStr;
+          } else {
+            return todayStr.compareTo(p.date) >= 0;
+          }
+        })
         .toList();
 
-    // Priority: oneTime (0) > timed (1) > longTerm (2)
-    final modePriority = {
-      PlanMode.oneTime: 0,
-      PlanMode.timed: 1,
-      PlanMode.longTerm: 2,
-    };
+    // Priority: oneTime (0) > longTerm (1)
+    final modePriority = {PlanMode.oneTime: 0, PlanMode.longTerm: 1};
 
     // Sort function for priority
     int comparePriority(WorkoutPlan a, WorkoutPlan b) {
@@ -78,8 +82,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
 
     final allSorted = List<WorkoutPlan>.from(todayPlans)..sort(comparePriority);
-    final uncompleted = allSorted.where((p) => !p.completed).toList();
-    final completed = allSorted.where((p) => p.completed).toList();
+    final uncompleted = allSorted
+        .where((p) => !p.isCompletedOn(todayStr))
+        .toList();
+    final completed = allSorted
+        .where((p) => p.isCompletedOn(todayStr))
+        .toList();
 
     final List<WorkoutPlan> candidates = [];
     candidates.addAll(uncompleted.take(2));
@@ -90,7 +98,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // Final sort to maintain stable order if no new plans were pulled in
     final visiblePlans = candidates..sort(comparePriority);
 
-    final completedCount = todayPlans.where((p) => p.completed).length;
+    final completedCount = todayPlans
+        .where((p) => p.isCompletedOn(todayStr))
+        .length;
     final progress = todayPlans.isEmpty
         ? 0.0
         : completedCount / todayPlans.length;
@@ -107,7 +117,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               const SizedBox(height: 24),
 
               // Stats Grid
-              _buildStatsGrid(stats, appState.todayConsumedCalories),
+              _buildStatsGrid(stats),
               const SizedBox(height: 24),
 
               // Today's Plan Section
@@ -211,7 +221,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildStatsGrid(UserStats stats, int todayCalories) {
+  Widget _buildStatsGrid(UserStats stats) {
     return AnimatedBuilder(
       animation: _countController,
       builder: (context, child) {
@@ -226,7 +236,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             _buildStatCardWithImage(
               LucideIcons.calendar,
-              (3 * val).round().toString(),
+              (stats.weeklyWorkoutCount * val).round().toString(),
               '次',
               '本周训练',
               'assets/images/icons/calendar.webp',
@@ -242,7 +252,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             _buildStatCardWithImage(
               LucideIcons.trendingUp,
-              (todayCalories * val).round().toString(),
+              (stats.todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
               'assets/images/icons/run.webp',
@@ -250,7 +260,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             _buildStatCardWithImage(
               LucideIcons.clock,
-              (4.5 * val).toStringAsFixed(1),
+              (stats.weeklyDurationHours * val).toStringAsFixed(1),
               'h',
               '训练时长',
               'assets/images/icons/clock.webp',
@@ -280,7 +290,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -354,12 +364,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final imagePath = isStrength
         ? 'assets/images/icons/strong.webp'
         : 'assets/images/icons/run.webp';
+    final todayStr = DateTime.now().toString().split(' ')[0];
+    final isCompleted = plan.isCompletedOn(todayStr);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: HandDrawnCard(
         onTap: () {
-          appState.togglePlanComplete(plan.id);
+          appState.togglePlanComplete(plan.id, forDate: todayStr);
           _countController.forward(from: 0);
         },
         child: Row(
@@ -368,7 +380,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: _getPlanTypeColor(plan.type).withOpacity(0.15),
+                color: _getPlanTypeColor(plan.type).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
@@ -389,10 +401,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
-                      decoration: plan.completed
+                      decoration: isCompleted
                           ? TextDecoration.lineThrough
                           : null,
-                      color: plan.completed
+                      color: isCompleted
                           ? AppColors.getTextMutedColor(context)
                           : AppColors.getTextMainColor(context),
                     ),
@@ -415,11 +427,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               height: 24,
               borderRadius: 12,
               borderWidth: 2,
-              borderColor: plan.completed
+              borderColor: isCompleted
                   ? AppColors.accentMint
                   : AppColors.getTextMutedColor(context),
-              color: plan.completed ? AppColors.accentMint : Colors.transparent,
-              child: plan.completed
+              color: isCompleted ? AppColors.accentMint : Colors.transparent,
+              child: isCompleted
                   ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
                   : const SizedBox(),
             ),
@@ -477,7 +489,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.15),
+                color: iconColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: iconColor, size: 18),

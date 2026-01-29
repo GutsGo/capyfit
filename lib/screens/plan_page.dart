@@ -57,7 +57,12 @@ class _PlanPageState extends State<PlanPage> {
       }
     }).toList();
 
-    final completedCount = dayPlans.where((p) => p.completed).length;
+    // Helper function to determine if plan should show as completed on selected date
+    bool isPlanCompleted(WorkoutPlan p) {
+      return p.isCompletedOn(selectedDateStr);
+    }
+
+    final completedCount = dayPlans.where((p) => isPlanCompleted(p)).length;
 
     final isToday = selectedDateStr == todayStr;
     final isHistory = selectedDateStr.compareTo(todayStr) < 0;
@@ -123,11 +128,15 @@ class _PlanPageState extends State<PlanPage> {
                         itemCount: dayPlans.length,
                         itemBuilder: (context, index) {
                           final plan = dayPlans[index];
+                          final isCompleted = isPlanCompleted(plan);
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: HandDrawnCard(
                               onTap: isToday
-                                  ? () => appState.togglePlanComplete(plan.id)
+                                  ? () => appState.togglePlanComplete(
+                                      plan.id,
+                                      forDate: selectedDateStr,
+                                    )
                                   : null,
                               child: Row(
                                 children: [
@@ -164,11 +173,11 @@ class _PlanPageState extends State<PlanPage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
-                                                  decoration: plan.completed
+                                                  decoration: isCompleted
                                                       ? TextDecoration
                                                             .lineThrough
                                                       : null,
-                                                  color: plan.completed
+                                                  color: isCompleted
                                                       ? AppColors.getTextMutedColor(
                                                           context,
                                                         )
@@ -275,13 +284,13 @@ class _PlanPageState extends State<PlanPage> {
                                       height: 28,
                                       borderRadius: 14,
                                       borderWidth: 2,
-                                      borderColor: plan.completed
+                                      borderColor: isCompleted
                                           ? AppColors.accentMint
                                           : AppColors.getBorderColor(context),
-                                      color: plan.completed
+                                      color: isCompleted
                                           ? AppColors.accentMint
                                           : Colors.transparent,
-                                      child: plan.completed
+                                      child: isCompleted
                                           ? const Icon(
                                               LucideIcons.check,
                                               size: 16,
@@ -296,11 +305,11 @@ class _PlanPageState extends State<PlanPage> {
                                         vertical: 4,
                                       ),
                                       child: Icon(
-                                        plan.completed
+                                        isCompleted
                                             ? LucideIcons.checkCircle2
                                             : LucideIcons.circle,
                                         size: 20,
-                                        color: plan.completed
+                                        color: isCompleted
                                             ? AppColors.accentMint
                                             : AppColors.getBorderColor(context),
                                       ),
