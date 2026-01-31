@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
-import '../models/exercise.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../models/exercise.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({super.key});
@@ -70,27 +70,16 @@ class _ExercisePageState extends State<ExercisePage> {
           // Search Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: HandDrawnContainer(
-              color: AppColors.getCardColor(context),
-              borderRadius: 16,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: TextField(
-                onChanged: (val) => setState(() => searchQuery = val),
-                decoration: InputDecoration(
-                  hintText: '搜索动作...',
-                  hintStyle: TextStyle(
-                    color: AppColors.getTextMutedColor(context),
-                  ),
-                  prefixIcon: Icon(
-                    LucideIcons.search,
-                    size: 20,
-                    color: AppColors.getBorderColor(context),
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                style: TextStyle(color: AppColors.getTextMainColor(context)),
+            child: HandDrawnTextField(
+              onChanged: (val) => setState(() => searchQuery = val),
+              hintText: '搜索动作...',
+              prefixIcon: Icon(
+                LucideIcons.search,
+                size: 20,
+                color: AppColors.getBorderColor(context),
               ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              style: TextStyle(color: AppColors.getTextMainColor(context)),
             ),
           ),
 

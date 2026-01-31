@@ -464,6 +464,15 @@ class HandDrawnTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final Color? fillColor;
+  final int? maxLines;
+  final TextStyle? style;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool obscureText;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onChanged;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final String? labelText;
 
   const HandDrawnTextField({
     super.key,
@@ -472,6 +481,15 @@ class HandDrawnTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.fillColor,
+    this.maxLines = 1,
+    this.style,
+    this.contentPadding,
+    this.obscureText = false,
+    this.textInputAction,
+    this.onChanged,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.labelText,
   });
 
   @override
@@ -490,19 +508,28 @@ class HandDrawnTextField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         validator: validator,
-        style: TextStyle(
-          fontSize: 16,
-          color: effectiveTextColor,
-          fontWeight: FontWeight.w500,
-        ),
+        maxLines: maxLines,
+        obscureText: obscureText,
+        textInputAction: textInputAction,
+        onChanged: onChanged,
+        style:
+            style ??
+            TextStyle(
+              fontSize: 16,
+              color: effectiveTextColor,
+              fontWeight: FontWeight.w500,
+            ),
         decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(color: effectiveHintColor),
           hintText: hintText,
           hintStyle: TextStyle(color: effectiveHintColor),
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          contentPadding:
+              contentPadding ??
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
     );

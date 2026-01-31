@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
-import '../widgets/floating_calendar.dart';
-import '../models/workout_plan.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../widgets/floating_calendar.dart';
+import '../../models/workout_plan.dart';
 
 class PlanPage extends StatefulWidget {
   const PlanPage({super.key});

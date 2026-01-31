@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../theme/app_colors.dart';
-import '../widgets/hand_drawn_widgets.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../utils/validators.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -12,6 +13,7 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class _FeedbackPageState extends State<FeedbackPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _feedbackController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
   int _selectedType = 0;
@@ -26,10 +28,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   Future<void> _submitFeedback() async {
-    if (_feedbackController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('请输入反馈内容')));
+    // 执行表单校验
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
@@ -48,7 +48,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('错误：未检测到 GITHUB_TOKEN。请联系开发者。'),
+              content: Text('错误：请联系开发者。'),
               backgroundColor: Colors.orange,
             ),
           );
@@ -126,81 +126,75 @@ class _FeedbackPageState extends State<FeedbackPage> {
         elevation: 0,
         foregroundColor: AppColors.getTextMainColor(context),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionTitle('反馈类型'),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: List.generate(_types.length, (index) {
-                final isSelected = _selectedType == index;
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedType = index),
-                  child: HandDrawnContainer(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.getCardColor(context),
-                    borderRadius: 20,
-                    child: Text(
-                      _types[index],
-                      style: TextStyle(
-                        color: isSelected
-                            ? Colors.white
-                            : AppColors.getTextMainColor(context),
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle('反馈类型'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(_types.length, (index) {
+                  final isSelected = _selectedType == index;
+                  return GestureDetector(
+                    onTap: () => setState(() => _selectedType = index),
+                    child: HandDrawnContainer(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.getCardColor(context),
+                      borderRadius: 20,
+                      child: Text(
+                        _types[index],
+                        style: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.getTextMainColor(context),
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(height: 24),
-            _buildSectionTitle('反馈详情'),
-            HandDrawnContainer(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              color: AppColors.getCardColor(context),
-              child: TextField(
+                  );
+                }),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle('反馈详情'),
+              HandDrawnTextField(
                 controller: _feedbackController,
                 maxLines: 6,
-                decoration: InputDecoration(
-                  hintText: '描述一下您遇到的问题或您的建议吧...',
-                  hintStyle: TextStyle(
-                    color: AppColors.getTextMutedColor(context),
-                  ),
-                  border: InputBorder.none,
-                ),
-                style: TextStyle(color: AppColors.getTextMainColor(context)),
+                validator: Validators.feedbackContent,
+                hintText: '描述一下您遇到的问题或您的建议吧（至少10个字符）...',
               ),
-            ),
-            const SizedBox(height: 24),
-            _buildSectionTitle('联系方式 (选填)'),
-            HandDrawnTextField(
-              controller: _contactController,
-              hintText: '留下邮箱或手机号，方便我们回复您',
-            ),
-            const SizedBox(height: 48),
-            Center(
-              child: _isSubmitting
-                  ? const CircularProgressIndicator(color: AppColors.primary)
-                  : HandDrawnButton(
-                      label: '提交反馈',
-                      onPressed: _submitFeedback,
-                      backgroundColor: AppColors.primary,
-                      textColor: Colors.white,
-                      width: double.infinity,
-                    ),
-            ),
-            const SizedBox(height: 24),
-          ],
+              const SizedBox(height: 24),
+              _buildSectionTitle('联系方式 (选填)'),
+              HandDrawnTextField(
+                controller: _contactController,
+                validator: Validators.contact,
+                hintText: '留下邮箱或手机号，方便我们回复您',
+              ),
+              const SizedBox(height: 48),
+              Center(
+                child: _isSubmitting
+                    ? const CircularProgressIndicator(color: AppColors.primary)
+                    : HandDrawnButton(
+                        label: '提交反馈',
+                        onPressed: _submitFeedback,
+                        backgroundColor: AppColors.primary,
+                        textColor: Colors.white,
+                        width: double.infinity,
+                      ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );

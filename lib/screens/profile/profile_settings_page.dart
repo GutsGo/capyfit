@@ -1,49 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:go_router/go_router.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../models/user_profile.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../models/user_profile.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../utils/validators.dart';
 
-class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key});
+class ProfileSettingsPage extends StatefulWidget {
+  const ProfileSettingsPage({super.key});
 
   @override
-  State<OnboardingPage> createState() => _OnboardingPageState();
+  State<ProfileSettingsPage> createState() => _ProfileSettingsPageState();
 }
 
-class _OnboardingPageState extends State<OnboardingPage> {
+class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
+  final _formKey = GlobalKey<FormState>();
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   late TextEditingController _ageController;
   late TextEditingController _customGoalController;
-  Gender _gender = Gender.male;
-  UserGoal _goal = UserGoal.maintain;
-  bool _isSmart = true;
+  late Gender _gender;
+  late UserGoal _goal;
+  late bool _isSmart;
 
   @override
   void initState() {
     super.initState();
-    _heightController = TextEditingController(text: '170');
-    _weightController = TextEditingController(text: '65');
-    _ageController = TextEditingController(text: '25');
-    _customGoalController = TextEditingController(text: '2000');
+    final profile = context.read<AppProvider>().userProfile;
+    _heightController = TextEditingController(text: profile.height.toString());
+    _weightController = TextEditingController(text: profile.weight.toString());
+    _ageController = TextEditingController(text: profile.age.toString());
+    _customGoalController = TextEditingController(
+      text: profile.customCalorieGoal.toString(),
+    );
+    _gender = profile.gender;
+    _goal = profile.goal;
+    _isSmart = profile.isSmartCalculation;
 
+    // Add listeners for real-time updates
     _heightController.addListener(_onInputChanged);
     _weightController.addListener(_onInputChanged);
     _ageController.addListener(_onInputChanged);
   }
 
   void _onInputChanged() {
-    setState(() {});
+    setState(() {
+      // Just trigger rebuild to update the "Current Recommended" display
+    });
   }
 
   int _calculateLiveRecommended() {
-    final height = double.tryParse(_heightController.text) ?? 170;
-    final weight = double.tryParse(_weightController.text) ?? 65;
+    final height = double.tryParse(_heightController.text) ?? 175;
+    final weight = double.tryParse(_weightController.text) ?? 70;
     final age = int.tryParse(_ageController.text) ?? 25;
 
     final tempProfile = UserProfile(
@@ -70,11 +80,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
     super.dispose();
   }
 
-  void _saveAndContinue() {
+  void _saveProfile() {
+    // 执行表单校验
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     final provider = context.read<AppProvider>();
     final newProfile = UserProfile(
-      height: double.tryParse(_heightController.text) ?? 170,
-      weight: double.tryParse(_weightController.text) ?? 65,
+      height: double.tryParse(_heightController.text) ?? 175,
+      weight: double.tryParse(_weightController.text) ?? 70,
       gender: _gender,
       age: int.tryParse(_ageController.text) ?? 25,
       goal: _goal,
@@ -82,50 +97,38 @@ class _OnboardingPageState extends State<OnboardingPage> {
       customCalorieGoal: int.tryParse(_customGoalController.text) ?? 2000,
     );
     provider.updateUserProfile(newProfile);
-    context.go('/');
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '个人资料已更新',
+          style: TextStyle(color: AppColors.getTextMainColor(context)),
+        ),
+        backgroundColor: AppColors.getCardColor(context),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
+      appBar: AppBar(
+        title: const Text(
+          '个人设置',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: AppColors.getTextMainColor(context),
+      ),
+      body: Form(
+        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/capy_running.webp',
-                      width: 120,
-                      height: 120,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      '欢迎使用 CapyFit',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextMainColor(context),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '让我们先了解一下你的身体状况',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.getTextMutedColor(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-
               _buildSectionTitle('身体数据'),
               HandDrawnCard(
                 padding: const EdgeInsets.all(16),
@@ -135,18 +138,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       '身高 (cm)',
                       _heightController,
                       TextInputType.number,
+                      Validators.height,
                     ),
                     const SizedBox(height: 16),
                     _buildInputField(
                       '体重 (kg)',
                       _weightController,
                       TextInputType.number,
+                      Validators.weight,
                     ),
                     const SizedBox(height: 16),
                     _buildInputField(
                       '年龄',
                       _ageController,
                       TextInputType.number,
+                      Validators.age,
                     ),
                   ],
                 ),
@@ -231,6 +237,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         '自定义每日热量目标 (kcal)',
                         _customGoalController,
                         TextInputType.number,
+                        Validators.dailyCalorieGoal,
                       ),
                     ],
                   ],
@@ -240,8 +247,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
               Center(
                 child: HandDrawnButton(
-                  label: '开始健身之旅 💪',
-                  onPressed: _saveAndContinue,
+                  label: '保存设置',
+                  onPressed: _saveProfile,
                   backgroundColor: AppColors.primary,
                   textColor: Colors.white,
                 ),
@@ -271,8 +278,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget _buildInputField(
     String label,
     TextEditingController controller,
-    TextInputType type,
-  ) {
+    TextInputType type, [
+    String? Function(String?)? validator,
+  ]) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,6 +295,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         HandDrawnTextField(
           controller: controller,
           keyboardType: type,
+          validator: validator,
           hintText: '请输入...',
         ),
       ],

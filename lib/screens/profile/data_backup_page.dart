@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
 
 class DataBackupPage extends StatefulWidget {
   const DataBackupPage({super.key});

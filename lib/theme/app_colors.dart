@@ -12,6 +12,9 @@ class AppColors {
   ); // --warm-orange (Vibrant)
   static const Color accentPink = Color(0xFFFFB7B2); // --soft-pink (Solid)
   static const Color accentPurple = Color(0xFFB39EB5); // --soft-purple (Solid)
+  static const Color accentBlue = Color(0xFF6B9ED8); // 蓝色
+  static const Color accentYellow = Color(0xFFF5D76E); // 黄色
+  static const Color accentGreen = Color(0xFF7EB8A2); // 绿色（同 accentMint）
 
   // Light Mode Colors
   static const Color background = Color(0xFFFDFBF6); // --cream-background

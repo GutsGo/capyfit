@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
-import '../models/workout_plan.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../models/workout_plan.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

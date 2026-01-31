@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../models/workout_plan.dart';
-import '../models/exercise.dart';
-import '../widgets/hand_drawn_widgets.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../models/workout_plan.dart';
+import '../../models/exercise.dart';
+import '../../utils/validators.dart';
+import '../../widgets/hand_drawn_widgets.dart';
 
 class AddPlanPage extends StatefulWidget {
   const AddPlanPage({super.key});
@@ -138,6 +139,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
 
   void _showCustomExerciseDialog() {
     final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -146,42 +149,51 @@ class _AddPlanPageState extends State<AddPlanPage> {
           color: AppColors.getBackgroundColor(context),
           borderRadius: 24,
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '自定义动作',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              HandDrawnTextField(controller: controller, hintText: '输入动作名称'),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                        color: AppColors.getTextMutedColor(context),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '自定义动作',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                HandDrawnTextField(
+                  controller: controller,
+                  hintText: '输入动作名称',
+                  validator: (val) => Validators.required(val, '动作名称'),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        '取消',
+                        style: TextStyle(
+                          color: AppColors.getTextMutedColor(context),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  HandDrawnButton(
-                    onPressed: () {
-                      _addCustomExercise(controller.text);
-                      Navigator.pop(context);
-                    },
-                    label: '添加',
-                    backgroundColor: AppColors.primary,
-                    textColor: Colors.white,
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 8),
+                    HandDrawnButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          _addCustomExercise(controller.text);
+                          Navigator.pop(context);
+                        }
+                      },
+                      label: '添加',
+                      backgroundColor: AppColors.primary,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -229,8 +241,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       HandDrawnTextField(
                         controller: _nameController,
                         hintText: '例如：胸部训练、早起跑步',
-                        validator: (val) =>
-                            (val == null || val.isEmpty) ? '请输入名称' : null,
+                        validator: (val) => Validators.required(val, '计划名称'),
                       ),
                       const SizedBox(height: 24),
 
@@ -245,6 +256,17 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                 HandDrawnTextField(
                                   controller: _durationController,
                                   keyboardType: TextInputType.number,
+                                  validator: (val) => Validators.compose(val, [
+                                    (v) => Validators.required(v, '时长'),
+                                    (v) => Validators.number(v, '时长'),
+                                    (v) => Validators.range(
+                                      v,
+                                      min: 1,
+                                      max: 600,
+                                      fieldName: '时长',
+                                      unit: '分钟',
+                                    ),
+                                  ]),
                                 ),
                               ],
                             ),
@@ -258,6 +280,16 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                 HandDrawnTextField(
                                   controller: _caloriesController,
                                   keyboardType: TextInputType.number,
+                                  validator: (val) => Validators.compose(val, [
+                                    (v) => Validators.number(v, '预估消耗'),
+                                    (v) => Validators.range(
+                                      v,
+                                      min: 0,
+                                      max: 5000,
+                                      fieldName: '预估消耗',
+                                      unit: 'kcal',
+                                    ),
+                                  ]),
                                 ),
                               ],
                             ),

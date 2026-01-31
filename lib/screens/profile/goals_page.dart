@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
-import '../providers/app_provider.dart';
-import '../models/user_profile.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../providers/app_provider.dart';
+import '../../models/user_profile.dart';
+import '../../utils/validators.dart';
 
 class GoalsPage extends StatefulWidget {
   const GoalsPage({super.key});
@@ -15,6 +16,7 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
+  final _formKey = GlobalKey<FormState>();
   late UserGoal _selectedGoal;
   late TextEditingController _weightGoalController;
   late TextEditingController _dailyStepsController;
@@ -38,6 +40,11 @@ class _GoalsPageState extends State<GoalsPage> {
   }
 
   void _saveGoals() {
+    // 执行表单校验
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     // In a real app, update the provider/database
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -64,98 +71,103 @@ class _GoalsPageState extends State<GoalsPage> {
         elevation: 0,
         foregroundColor: AppColors.getTextMainColor(context),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionTitle('长期目标'),
-            HandDrawnCard(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  _buildGoalOption(
-                    '减重瘦身',
-                    '减少体脂，塑造苗条身材',
-                    LucideIcons.trendingDown,
-                    UserGoal.weightLoss,
-                  ),
-                  const Divider(height: 24),
-                  _buildGoalOption(
-                    '保持平衡',
-                    '维持现状，追求健康生活',
-                    LucideIcons.scale,
-                    UserGoal.maintain,
-                  ),
-                  const Divider(height: 24),
-                  _buildGoalOption(
-                    '增肌强力',
-                    '增加肌肉，提升力量素质',
-                    LucideIcons
-                        .armchair, // Using similar icon if bicep is not available
-                    UserGoal.muscleGain,
-                  ),
-                ],
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle('长期目标'),
+              HandDrawnCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildGoalOption(
+                      '减重瘦身',
+                      '减少体脂，塑造苗条身材',
+                      LucideIcons.trendingDown,
+                      UserGoal.weightLoss,
+                    ),
+                    const Divider(height: 24),
+                    _buildGoalOption(
+                      '保持平衡',
+                      '维持现状，追求健康生活',
+                      LucideIcons.scale,
+                      UserGoal.maintain,
+                    ),
+                    const Divider(height: 24),
+                    _buildGoalOption(
+                      '增肌强力',
+                      '增加肌肉，提升力量素质',
+                      LucideIcons
+                          .armchair, // Using similar icon if bicep is not available
+                      UserGoal.muscleGain,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            _buildSectionTitle('具体指标'),
-            HandDrawnCard(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  _buildInputField(
-                    '目标体重 (kg)',
-                    _weightGoalController,
-                    TextInputType.number,
-                    LucideIcons.list,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildInputField(
-                    '每日步数目标',
-                    _dailyStepsController,
-                    TextInputType.number,
-                    LucideIcons.footprints,
-                  ),
-                ],
+              const SizedBox(height: 24),
+              _buildSectionTitle('具体指标'),
+              HandDrawnCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildInputField(
+                      '目标体重 (kg)',
+                      _weightGoalController,
+                      TextInputType.number,
+                      LucideIcons.list,
+                      Validators.targetWeight,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildInputField(
+                      '每日步数目标',
+                      _dailyStepsController,
+                      TextInputType.number,
+                      LucideIcons.footprints,
+                      Validators.dailySteps,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            HandDrawnContainer(
-              padding: const EdgeInsets.all(16),
-              color: AppColors.accentMint.withOpacity(0.1),
-              child: Row(
-                children: [
-                  const Icon(
-                    LucideIcons.info,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      '设置合理的目标有助于更好地坚持。建议每周减重不超过 0.5-1kg。',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.getTextMainColor(
-                          context,
-                        ).withOpacity(0.8),
+              const SizedBox(height: 24),
+              HandDrawnContainer(
+                padding: const EdgeInsets.all(16),
+                color: AppColors.accentMint.withOpacity(0.1),
+                child: Row(
+                  children: [
+                    const Icon(
+                      LucideIcons.info,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        '设置合理的目标有助于更好地坚持。建议每周减重不超过 0.5-1kg。',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.getTextMainColor(
+                            context,
+                          ).withOpacity(0.8),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            Center(
-              child: HandDrawnButton(
-                label: '设定目标',
-                onPressed: _saveGoals,
-                backgroundColor: AppColors.primary,
-                textColor: Colors.white,
+              const SizedBox(height: 40),
+              Center(
+                child: HandDrawnButton(
+                  label: '设定目标',
+                  onPressed: _saveGoals,
+                  backgroundColor: AppColors.primary,
+                  textColor: Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -254,8 +266,9 @@ class _GoalsPageState extends State<GoalsPage> {
     String label,
     TextEditingController controller,
     TextInputType type,
-    IconData icon,
-  ) {
+    IconData icon, [
+    String? Function(String?)? validator,
+  ]) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -276,6 +289,7 @@ class _GoalsPageState extends State<GoalsPage> {
         HandDrawnTextField(
           controller: controller,
           keyboardType: type,
+          validator: validator,
           hintText: '请输入...',
         ),
       ],

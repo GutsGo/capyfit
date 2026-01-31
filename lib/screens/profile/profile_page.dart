@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -166,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                     _buildAchievementItem(
                       context,
                       icon: LucideIcons.calendar,
-                      value: stats.joinedDays.toString(),
+                      value: stats.activeDays.toString(),
                       label: '坚持天数',
                       color: const Color(0xFFEBE1D8),
                       iconColor: const Color(0xFF8B6F5C),

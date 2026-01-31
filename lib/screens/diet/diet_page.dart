@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_colors.dart';
-import '../widgets/common_widgets.dart';
-import '../widgets/hand_drawn_widgets.dart';
-import '../widgets/floating_calendar.dart';
-import '../models/diet_entry.dart';
+import '../../providers/app_provider.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../widgets/floating_calendar.dart';
+import '../../models/diet_entry.dart';
 import 'add_food_sheet.dart';
 
 class DietPage extends StatefulWidget {

@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'models/exercise.dart';
 import 'providers/app_provider.dart';
 import 'theme/app_colors.dart';
-import 'screens/home_page.dart';
-import 'screens/plan_page.dart';
-import 'screens/diet_page.dart';
-import 'screens/exercise_page.dart';
-import 'screens/exercise_detail_page.dart';
-import 'screens/profile_page.dart';
-import 'screens/add_plan_page.dart';
-import 'screens/diet_library_page.dart';
-import 'screens/profile_settings_page.dart';
-import 'screens/onboarding_page.dart';
-import 'screens/reminders_page.dart';
-import 'screens/goals_page.dart';
-import 'screens/data_backup_page.dart';
-import 'screens/help_page.dart';
-import 'screens/feedback_page.dart';
+// Home module
+import 'screens/home/home_page.dart';
+// Diet module
+import 'screens/diet/diet_page.dart';
+import 'screens/diet/diet_library_page.dart';
+import 'screens/diet/food_detail_page.dart';
+// Exercise module
+import 'screens/exercise/exercise_page.dart';
+import 'screens/exercise/exercise_detail_page.dart';
+// Plan module
+import 'screens/plan/plan_page.dart';
+import 'screens/plan/add_plan_page.dart';
+// Profile module
+import 'screens/profile/profile_page.dart';
+import 'screens/profile/profile_settings_page.dart';
+import 'screens/profile/goals_page.dart';
+import 'screens/profile/reminders_page.dart';
+import 'screens/profile/data_backup_page.dart';
+// Settings module
+import 'screens/settings/help_page.dart';
+import 'screens/settings/feedback_page.dart';
+// Onboarding module
+import 'screens/onboarding/onboarding_page.dart';
+import 'models/food_database.dart';
 import 'widgets/main_scaffold.dart';
 
 late final GoRouter _router;
@@ -54,9 +64,11 @@ void main() async {
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter _createRouter(bool hasUserProfile) {
+  // 开发模式下每次启动都显示引导页，方便调试
+  final shouldShowOnboarding = kDebugMode || !hasUserProfile;
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: hasUserProfile ? '/' : '/onboarding',
+    initialLocation: shouldShowOnboarding ? '/onboarding' : '/',
     routes: [
       GoRoute(
         path: '/onboarding',
@@ -123,6 +135,12 @@ GoRouter _createRouter(bool hasUserProfile) {
         path: '/diet/library',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const DietLibraryPage(),
+      ),
+      GoRoute(
+        path: '/diet/food',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            FoodDetailPage(food: state.extra as FoodDatabaseItem),
       ),
       GoRoute(
         path: '/profile/settings',

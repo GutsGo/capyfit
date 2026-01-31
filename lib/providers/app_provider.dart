@@ -12,6 +12,7 @@ class UserStats {
   final int totalCalories;
   final int streakDays;
   final int joinedDays;
+  final int activeDays; // 累计有计划完成的天数
   final int weeklyWorkoutCount;
   final double weeklyDurationHours;
   final int todayCalories;
@@ -22,6 +23,7 @@ class UserStats {
     required this.totalCalories,
     required this.streakDays,
     required this.joinedDays,
+    required this.activeDays,
     required this.weeklyWorkoutCount,
     required this.weeklyDurationHours,
     required this.todayCalories,
@@ -315,12 +317,23 @@ class AppProvider extends ChangeNotifier {
       }
     }
 
+    // 计算累计活跃天数（唯一日期数）
+    final Set<String> activeDates = {};
+    for (var p in _plans) {
+      if (p.mode == PlanMode.oneTime) {
+        if (p.completed) activeDates.add(p.date);
+      } else {
+        if (p.completedDates != null) activeDates.addAll(p.completedDates!);
+      }
+    }
+
     return UserStats(
       totalWorkouts: totalWorkouts,
       totalDuration: totalDuration,
       totalCalories: totalCalories,
       streakDays: _calculateStreakDays(),
       joinedDays: _hiveService.joinedDays,
+      activeDays: activeDates.length,
       weeklyWorkoutCount: weeklyWorkoutCount,
       weeklyDurationHours: weeklyDurationHours,
       todayCalories: todayConsumedCalories,
