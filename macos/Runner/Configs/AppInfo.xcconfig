@@ -8,7 +8,7 @@
 PRODUCT_NAME = CapyFit
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.kapi.fit.kapiFitFlutter
+PRODUCT_BUNDLE_IDENTIFIER = com.capyfit.kapiFitFlutter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.kapi.fit. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.capyfit. All rights reserved.
