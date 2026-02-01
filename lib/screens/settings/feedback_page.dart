@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../theme/app_colors.dart';
 import '../../widgets/hand_drawn_widgets.dart';
 import '../../utils/validators.dart';
+import '../../utils/constants.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -38,11 +39,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
     });
 
     try {
-      // GitHub API Configuration
       // [IMPORTANT] Get token via: flutter run --dart-define=GITHUB_TOKEN=your_token
       const String githubToken = String.fromEnvironment('GITHUB_TOKEN');
-      const String owner = 'GutsGo';
-      const String repo = 'capyfit';
 
       if (githubToken.isEmpty) {
         if (mounted) {
@@ -58,7 +56,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       }
 
       final response = await http.post(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/dispatches'),
+        Uri.parse(GlobalConstants.githubDispatchesUrl),
         headers: {
           'Authorization': 'Bearer $githubToken',
           'Accept': 'application/vnd.github.v3+json',

@@ -22,7 +22,6 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       category: fields[2] as ExerciseCategory,
       difficulty: fields[3] as Difficulty,
       targetMuscles: (fields[4] as List).cast<String>(),
-      calories: fields[11] as int,
       sets: fields[5] as int?,
       reps: fields[6] as String?,
       duration: fields[7] as String?,
@@ -30,6 +29,7 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       tips: (fields[9] as List?)?.cast<String>(),
       steps: (fields[10] as List?)?.cast<String>(),
       image: fields[12] as String?,
+      met: (fields[13] as double?) ?? 5.0,
     );
   }
 
@@ -59,10 +59,10 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       ..write(obj.tips)
       ..writeByte(10)
       ..write(obj.steps)
-      ..writeByte(11)
-      ..write(obj.calories)
       ..writeByte(12)
-      ..write(obj.image);
+      ..write(obj.image)
+      ..writeByte(13)
+      ..write(obj.met);
   }
 
   @override

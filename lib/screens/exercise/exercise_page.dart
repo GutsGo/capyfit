@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/hand_drawn_widgets.dart';
 import '../../models/exercise.dart';
+import '../../services/exercise_database_service.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({super.key});
@@ -16,39 +18,125 @@ class ExercisePage extends StatefulWidget {
 }
 
 class _ExercisePageState extends State<ExercisePage> {
+  final ExerciseDatabaseService _exerciseService = ExerciseDatabaseService();
+  final ScrollController _scrollController = ScrollController();
+
+  List<Exercise> _exercises = [];
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
   List<String> selectedCategories = [];
   String searchQuery = '';
+  Timer? _debounceTimer;
+  final int _pageSize = 20;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExercises();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (searchQuery != query) {
+        searchQuery = query;
+        _loadExercises();
+      }
+    });
+  }
+
+  Future<void> _loadExercises() async {
+    setState(() {
+      _isLoading = true;
+      _hasMore = true;
+    });
+
+    final results = await _exerciseService.search(
+      searchQuery,
+      categories: selectedCategories,
+      limit: _pageSize,
+      offset: 0,
+    );
+
+    if (mounted) {
+      setState(() {
+        _exercises = results;
+        _isLoading = false;
+        if (results.length < _pageSize) {
+          _hasMore = false;
+        }
+      });
+    }
+  }
+
+  Future<void> _loadMoreExercises() async {
+    if (_isLoadingMore || !_hasMore) return;
+    setState(() => _isLoadingMore = true);
+
+    final results = await _exerciseService.search(
+      searchQuery,
+      categories: selectedCategories,
+      limit: _pageSize,
+      offset: _exercises.length,
+    );
+
+    if (mounted) {
+      setState(() {
+        if (results.isEmpty) {
+          _hasMore = false;
+        } else {
+          _exercises.addAll(results);
+          if (results.length < _pageSize) {
+            _hasMore = false;
+          }
+        }
+        _isLoadingMore = false;
+      });
+    }
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        !_isLoadingMore &&
+        _hasMore) {
+      _loadMoreExercises();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppProvider>();
-
-    // Dynamically get categories from existing exercises
-    final dynamicCategories = appState.exercises
-        .map((ex) => _getCategoryLabel(ex.category))
-        .toSet()
-        .toList();
-
-    final exercises = appState.exercises.where((ex) {
-      if (selectedCategories.isNotEmpty &&
-          !selectedCategories.contains(_getCategoryLabel(ex.category))) {
-        return false;
-      }
-      if (searchQuery.isNotEmpty &&
-          !ex.name.toLowerCase().contains(searchQuery.toLowerCase())) {
-        return false;
-      }
-      return true;
-    }).toList();
+    // Dynamically get categories from all exercises (for filter sheet)
+    // In a real DB we'd have a separate method, here we can use a fixed list or get once
+    final dynamicCategories = [
+      '胸部',
+      '背部',
+      '腿部',
+      '肩部',
+      '手臂',
+      '核心',
+      '有氧',
+      '瑜伽',
+      '其他',
+    ];
 
     // Split exercises into two columns for masonry-like adaptive height
     final leftColumnItems = <Exercise>[];
     final rightColumnItems = <Exercise>[];
-    for (var i = 0; i < exercises.length; i++) {
+    for (var i = 0; i < _exercises.length; i++) {
       if (i % 2 == 0) {
-        leftColumnItems.add(exercises[i]);
+        leftColumnItems.add(_exercises[i]);
       } else {
-        rightColumnItems.add(exercises[i]);
+        rightColumnItems.add(_exercises[i]);
       }
     }
 
@@ -71,7 +159,7 @@ class _ExercisePageState extends State<ExercisePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: HandDrawnTextField(
-              onChanged: (val) => setState(() => searchQuery = val),
+              onChanged: _onSearchChanged,
               hintText: '搜索动作...',
               prefixIcon: Icon(
                 LucideIcons.search,
@@ -85,41 +173,69 @@ class _ExercisePageState extends State<ExercisePage> {
 
           // Exercise List with Adaptive Height
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Left Column
-                  Expanded(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(16),
                     child: Column(
-                      children: leftColumnItems
-                          .map(
-                            (ex) => Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: _buildExerciseCard(ex),
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Left Column
+                            Expanded(
+                              child: Column(
+                                children: leftColumnItems
+                                    .map(
+                                      (ex) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 12,
+                                        ),
+                                        child: _buildExerciseCard(ex),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ),
-                          )
-                          .toList(),
+                            const SizedBox(width: 12),
+                            // Right Column
+                            Expanded(
+                              child: Column(
+                                children: rightColumnItems
+                                    .map(
+                                      (ex) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 12,
+                                        ),
+                                        child: _buildExerciseCard(ex),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (_hasMore)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: _isLoadingMore
+                                ? const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  )
+                                : Text(
+                                    '滑动加载更多',
+                                    style: TextStyle(
+                                      color: AppColors.getTextMutedColor(
+                                        context,
+                                      ),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                          ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  // Right Column
-                  Expanded(
-                    child: Column(
-                      children: rightColumnItems
-                          .map(
-                            (ex) => Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: _buildExerciseCard(ex),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
@@ -193,6 +309,7 @@ class _ExercisePageState extends State<ExercisePage> {
                             } else {
                               selectedCategories.remove(cat);
                             }
+                            _loadExercises();
                           });
                           setModalState(() {});
                         },
@@ -302,13 +419,20 @@ class _ExercisePageState extends State<ExercisePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '${ex.calories} kcal / 组',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.getTextMutedColor(context),
-                      fontStyle: FontStyle.italic,
-                    ),
+                  Builder(
+                    builder: (context) {
+                      final cals = context
+                          .read<AppProvider>()
+                          .calculateExerciseCalories(ex);
+                      return Text(
+                        '$cals kcal / 组',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.getTextMutedColor(context),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

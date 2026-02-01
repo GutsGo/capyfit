@@ -31,6 +31,8 @@ import 'screens/settings/feedback_page.dart';
 import 'screens/onboarding/onboarding_page.dart';
 import 'models/food_database.dart';
 import 'widgets/main_scaffold.dart';
+import 'utils/routes.dart';
+import 'utils/constants.dart';
 
 late final GoRouter _router;
 late final AppProvider _appProvider;
@@ -68,10 +70,12 @@ GoRouter _createRouter(bool hasUserProfile) {
   final shouldShowOnboarding = kDebugMode || !hasUserProfile;
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: shouldShowOnboarding ? '/onboarding' : '/',
+    initialLocation: shouldShowOnboarding
+        ? GlobalRoutes.onboarding
+        : GlobalRoutes.home,
     routes: [
       GoRoute(
-        path: '/onboarding',
+        path: GlobalRoutes.onboarding,
         builder: (context, state) => const OnboardingPage(),
       ),
       StatefulShellRoute.indexedStack(
@@ -85,13 +89,16 @@ GoRouter _createRouter(bool hasUserProfile) {
         branches: [
           StatefulShellBranch(
             routes: [
-              GoRoute(path: '/', builder: (context, state) => const HomePage()),
+              GoRoute(
+                path: GlobalRoutes.home,
+                builder: (context, state) => const HomePage(),
+              ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/plan',
+                path: GlobalRoutes.plan,
                 builder: (context, state) => const PlanPage(),
               ),
             ],
@@ -99,7 +106,7 @@ GoRouter _createRouter(bool hasUserProfile) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/diet',
+                path: GlobalRoutes.diet,
                 builder: (context, state) => const DietPage(),
               ),
             ],
@@ -107,7 +114,7 @@ GoRouter _createRouter(bool hasUserProfile) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/profile',
+                path: GlobalRoutes.profile,
                 builder: (context, state) => const ProfilePage(),
               ),
             ],
@@ -115,12 +122,12 @@ GoRouter _createRouter(bool hasUserProfile) {
         ],
       ),
       GoRoute(
-        path: '/plan/add',
+        path: GlobalRoutes.planAdd,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const AddPlanPage(),
       ),
       GoRoute(
-        path: '/exercise',
+        path: GlobalRoutes.exercise,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ExercisePage(),
         routes: [
@@ -132,43 +139,43 @@ GoRouter _createRouter(bool hasUserProfile) {
         ],
       ),
       GoRoute(
-        path: '/diet/library',
+        path: GlobalRoutes.dietLibrary,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const DietLibraryPage(),
       ),
       GoRoute(
-        path: '/diet/food',
+        path: GlobalRoutes.dietFoodDetail,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) =>
             FoodDetailPage(food: state.extra as FoodDatabaseItem),
       ),
       GoRoute(
-        path: '/profile/settings',
+        path: GlobalRoutes.profileSettings,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ProfileSettingsPage(),
       ),
       GoRoute(
-        path: '/profile/reminders',
+        path: GlobalRoutes.profileReminders,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const RemindersPage(),
       ),
       GoRoute(
-        path: '/profile/goals',
+        path: GlobalRoutes.profileGoals,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const GoalsPage(),
       ),
       GoRoute(
-        path: '/profile/backup',
+        path: GlobalRoutes.profileBackup,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const DataBackupPage(),
       ),
       GoRoute(
-        path: '/profile/help',
+        path: GlobalRoutes.profileHelp,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const HelpPage(),
       ),
       GoRoute(
-        path: '/profile/feedback',
+        path: GlobalRoutes.profileFeedback,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const FeedbackPage(),
       ),
@@ -184,7 +191,7 @@ class MyApp extends StatelessWidget {
     final appState = context.watch<AppProvider>();
 
     return MaterialApp.router(
-      title: 'CapyFit',
+      title: GlobalConstants.appNameEn,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       themeMode: appState.themeMode,

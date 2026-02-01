@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/user_profile.dart';
 import '../models/exercise.dart';
@@ -50,10 +52,17 @@ class HiveService {
     _workoutPlansBox = await Hive.openBox<WorkoutPlan>(workoutPlansBoxName);
     _settingsBox = await Hive.openBox(settingsBoxName);
 
-    // Initialize default data if first launch
-    if (_exercisesBox.isEmpty) {
+    // Initialize default data if first launch or version upgrade
+    final bool hasLoadedJson = _settingsBox.get(
+      'has_loaded_exercise_json_v3',
+      defaultValue: false,
+    );
+    if (!hasLoadedJson || _exercisesBox.isEmpty) {
+      await _exercisesBox.clear();
       await _initDefaultExercises();
+      await _settingsBox.put('has_loaded_exercise_json_v3', true);
     }
+
     if (_foodItemsBox.isEmpty) {
       await _initDefaultFoodItems();
     }
@@ -150,104 +159,78 @@ class HiveService {
 
   // ========== Default Data Initialization ==========
   Future<void> _initDefaultExercises() async {
-    final defaultExercises = [
-      Exercise(
-        id: '1',
-        name: '俯卧撑',
-        category: ExerciseCategory.chest,
-        difficulty: Difficulty.intermediate,
-        targetMuscles: ['胸大肌', '三角肌前束', '肱三头肌'],
-        calories: 12,
-        sets: 3,
-        reps: '8-12次',
-        description: '经典的上肢训练动作，主要锻炼胸部肌肉。',
-        tips: ['保持身体呈一条直线', '手肘与身体呈45度角', '下落时胸部接近地面'],
-        steps: ['双手略宽于肩支撑地面', '身体保持从头到脚呈直线', '屈肘下落至胸部接近地面', '发力推起回到起始位置'],
-        image: 'assets/images/capy_pushup.webp',
-      ),
-      Exercise(
-        id: '2',
-        name: '深蹲',
-        category: ExerciseCategory.legs,
-        difficulty: Difficulty.beginner,
-        targetMuscles: ['股四头肌', '臀大肌', '腘绳肌'],
-        calories: 15,
-        sets: 3,
-        reps: '12-15次',
-        description: '下肢训练之王，全面锻炼腿部肌肉。',
-        tips: ['膝盖不要超过脚尖', '背部保持挺直', '下蹲至大腿与地面平行'],
-        steps: [
-          '双脚与肩同宽站立',
-          '挺胸收腹，背部挺直',
-          '臀部后坐，像坐椅子一样下蹲',
-          '蹲至大腿与地面平行或略低',
-          '脚跟发力站起完成动作',
-        ],
-        image: 'assets/images/capy_squat.webp',
-      ),
-      Exercise(
-        id: '3',
-        name: '平板支撑',
-        category: ExerciseCategory.core,
-        difficulty: Difficulty.intermediate,
-        targetMuscles: ['腹直肌', '腹横肌', '核心肌群'],
-        calories: 5,
-        sets: 3,
-        reps: '30-60秒',
-        description: '静态核心训练动作，增强核心稳定性。',
-        tips: ['身体保持直线', '收紧核心', '不要塌腰 or 翘臀'],
-        steps: [
-          '双肘支撑在肩部正下方',
-          '双脚靠拢，脚尖点地',
-          '收紧核心，身体呈一条直线',
-          '保持匀速呼吸，不要憋气',
-          '在规定时间内保持稳定',
-        ],
-        image: 'assets/images/capy_plank.webp',
-      ),
-      Exercise(
-        id: '4',
-        name: '二头弯举',
-        category: ExerciseCategory.arms,
-        difficulty: Difficulty.beginner,
-        targetMuscles: ['肱二头肌'],
-        calories: 8,
-        sets: 3,
-        reps: '12-15次',
-        description: '孤立训练肱二头肌的经典动作。',
-        tips: ['保持大臂紧贴身体', '控制下放速度', '不要借力身体摆动'],
-        image: 'assets/images/capy_dumbbell_curl.webp',
-      ),
-      Exercise(
-        id: '5',
-        name: '快乐慢跑',
-        category: ExerciseCategory.cardio,
-        difficulty: Difficulty.beginner,
-        targetMuscles: ['全身', '心肺功能'],
-        calories: 100,
-        sets: 1,
-        reps: '30分钟',
-        description: '提升心肺功能，燃烧脂肪的有效运动。',
-        tips: ['保持呼吸节奏', '落地轻盈', '注意摆臂'],
-        image: 'assets/images/capy_running.webp',
-      ),
-      Exercise(
-        id: '6',
-        name: '舒缓瑜伽',
-        category: ExerciseCategory.yoga,
-        difficulty: Difficulty.beginner,
-        targetMuscles: ['全身', '柔韧性'],
-        calories: 50,
-        sets: 1,
-        reps: '20分钟',
-        description: '放松身心，提高身体柔韧性。',
-        tips: ['配合呼吸', '切勿过度拉伸', '专注于身体感受'],
-        image: 'assets/images/capy_yoga.webp',
-      ),
-    ];
+    try {
+      final String jsonString = await rootBundle.loadString(
+        'assets/data/exercise_db.json',
+      );
+      final List<dynamic> jsonData = json.decode(jsonString);
 
-    for (final exercise in defaultExercises) {
-      await _exercisesBox.put(exercise.id, exercise);
+      final List<Exercise> defaultExercises = jsonData.map((data) {
+        final String categoryStr = data['category'] ?? '其他';
+
+        // Map Chinese category to ExerciseCategory enum
+        ExerciseCategory category;
+        switch (categoryStr) {
+          case '胸部':
+            category = ExerciseCategory.chest;
+            break;
+          case '背部':
+            category = ExerciseCategory.back;
+            break;
+          case '腿部':
+            category = ExerciseCategory.legs;
+            break;
+          case '肩部':
+            category = ExerciseCategory.shoulders;
+            break;
+          case '手臂':
+            category = ExerciseCategory.arms;
+            break;
+          case '核心':
+            category = ExerciseCategory.core;
+            break;
+          case '有氧':
+            category = ExerciseCategory.cardio;
+            break;
+          case '瑜伽':
+            category = ExerciseCategory.yoga;
+            break;
+          default:
+            category = ExerciseCategory.other;
+        }
+
+        // Map difficulty
+        Difficulty difficulty;
+        int diffLevel = data['difficulty'] ?? 1;
+        if (diffLevel <= 1) {
+          difficulty = Difficulty.beginner;
+        } else if (diffLevel == 2) {
+          difficulty = Difficulty.intermediate;
+        } else {
+          difficulty = Difficulty.advanced;
+        }
+
+        return Exercise(
+          id: data['id'].toString(),
+          name: data['name'] ?? '未知动作',
+          category: category,
+          difficulty: difficulty,
+          targetMuscles: List<String>.from(data['targetMuscles'] ?? []),
+          met: (data['met'] ?? 5.0).toDouble(),
+          sets: data['sets'] ?? 3,
+          reps: data['reps'],
+          description: data['description'],
+          tips: List<String>.from(data['tips'] ?? []),
+          steps: List<String>.from(data['steps'] ?? []),
+          image: 'assets/images/${data['image']}',
+        );
+      }).toList();
+
+      for (final exercise in defaultExercises) {
+        await _exercisesBox.put(exercise.id, exercise);
+      }
+    } catch (e) {
+      print('Error loading default exercises: $e');
     }
   }
 

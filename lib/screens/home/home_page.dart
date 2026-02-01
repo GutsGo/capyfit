@@ -7,6 +7,10 @@ import '../../theme/app_colors.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/hand_drawn_widgets.dart';
 import '../../models/workout_plan.dart';
+import '../../utils/assets.dart';
+import '../../utils/constants.dart';
+import '../../utils/utils.dart';
+import '../../utils/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,14 +56,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     final stats = appState.userStats;
     final today = DateTime.now();
-    final dateStr = "${today.year}年${today.month}月${today.day}日";
-    final greeting = today.hour < 12
-        ? '早安'
-        : today.hour < 18
-        ? '午安'
-        : '晚安';
+    final dateStr = GlobalUtils.formatDate(today);
+    final greeting = GlobalUtils.getGreeting();
 
-    final todayStr = today.toString().split(' ')[0];
+    final todayStr = GlobalUtils.dateOnly(today);
     final todayPlans = appState.plans
         .where((p) => p.date == todayStr || p.mode == PlanMode.longTerm)
         .where((p) {
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               const SizedBox(height: 24),
 
               // Today's Plan Section
-              _buildSectionTitle('今日训练计划'),
+              _buildSectionTitle(GlobalConstants.homeTitle),
               const SizedBox(height: 12),
 
               HandDrawnCard(
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '今日完成进度',
+                          GlobalConstants.homeProgress,
                           style: TextStyle(
                             color: AppColors.getTextMutedColor(context),
                             fontSize: 14,
@@ -160,10 +160,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               const SizedBox(height: 24),
 
               // Quick Actions
-              _buildSectionTitle('快捷入口'),
+              _buildSectionTitle(GlobalConstants.homeQuickActions),
               const SizedBox(height: 12),
               _buildQuickActions(context, appState),
-              const SizedBox(height: 80),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -204,13 +204,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  '今天也要加油哦~',
+                  GlobalConstants.homeMotto,
                   style: TextStyle(color: AppColors.primary, fontSize: 14),
                 ),
               ],
             ),
             Image.asset(
-              'assets/images/capybara-mascot.webp',
+              GlobalAssets.capybaraMascot,
               width: 80,
               height: 80,
               fit: BoxFit.contain,
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.weeklyWorkoutCount * val).round().toString(),
               '次',
               '本周训练',
-              'assets/images/icons/calendar.webp',
+              GlobalAssets.iconCalendar,
               color: const Color(0xFF8B6B61),
             ),
             _buildStatCardWithImage(
@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.streakDays * val).round().toString(),
               '天',
               '连续打卡',
-              'assets/images/icons/strong.webp',
+              GlobalAssets.iconStrong,
               color: const Color(0xFFE57373),
             ),
             _buildStatCardWithImage(
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
-              'assets/images/icons/run.webp',
+              GlobalAssets.iconRun,
               color: const Color(0xFF81C784),
             ),
             _buildStatCardWithImage(
@@ -263,7 +263,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.weeklyDurationHours * val).toStringAsFixed(1),
               'h',
               '训练时长',
-              'assets/images/icons/clock.webp',
+              GlobalAssets.iconClock,
               color: const Color(0xFFA1887F),
             ),
           ],
@@ -362,9 +362,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _buildPlanItem(WorkoutPlan plan, AppProvider appState) {
     final isStrength = plan.type == WorkoutType.strength;
     final imagePath = isStrength
-        ? 'assets/images/icons/strong.webp'
-        : 'assets/images/icons/run.webp';
-    final todayStr = DateTime.now().toString().split(' ')[0];
+        ? GlobalAssets.iconStrong
+        : GlobalAssets.iconRun;
+    final todayStr = GlobalUtils.dateOnly(DateTime.now());
     final isCompleted = plan.isCompletedOn(todayStr);
 
     return Padding(
@@ -411,7 +411,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${plan.time} · ${plan.duration}分钟 · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}',
+                    '${plan.time} · ${GlobalUtils.formatDuration(plan.duration)} · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}',
                     style: TextStyle(
                       fontSize: 11,
                       color: AppColors.getTextMutedColor(context),
@@ -451,18 +451,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       childAspectRatio: 1.5,
       children: [
         _buildActionCardWithImage(
-          '动作库',
+          GlobalConstants.homeExerciseLibrary,
           '学习标准动作',
-          'assets/images/icons/weightlifting.webp',
-          () => context.push('/exercise'),
+          GlobalAssets.iconWeightlifting,
+          () => context.push(GlobalRoutes.exercise),
           icon: LucideIcons.dumbbell,
           iconColor: const Color(0xFF8B8B61),
         ),
         _buildActionCardWithImage(
-          '膳食库',
+          GlobalConstants.homeDietLibrary,
           '查看食物营养',
-          'assets/images/icons/eat.webp',
-          () => context.push('/diet/library'),
+          GlobalAssets.iconEat,
+          () => context.push(GlobalRoutes.dietLibrary),
           icon: LucideIcons.utensils,
           iconColor: const Color(0xFFC17D5C),
         ),
@@ -542,14 +542,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Center(
         child: Column(
           children: [
-            Image.asset(
-              'assets/images/icons/calendar.webp',
-              width: 80,
-              height: 80,
-            ),
+            Image.asset(GlobalAssets.iconCalendar, width: 80, height: 80),
             const SizedBox(height: 8),
             Text(
-              '今天还没有计划哦~',
+              GlobalConstants.homeEmptyPlans,
               style: TextStyle(
                 color: AppColors.getTextMutedColor(context),
                 fontSize: 14,
@@ -575,11 +571,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   String _getIntensityLabel(Intensity intensity) {
     switch (intensity) {
       case Intensity.high:
-        return '高强度';
+        return GlobalConstants.planHighIntensity;
       case Intensity.medium:
-        return '中等强度';
+        return GlobalConstants.planMediumIntensity;
       case Intensity.low:
-        return '低强度';
+        return GlobalConstants.planLowIntensity;
     }
   }
 }

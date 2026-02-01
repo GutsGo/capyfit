@@ -39,7 +39,11 @@ class _AddPlanPageState extends State<AddPlanPage> {
   void _addExerciseFromLibrary(Exercise exercise) {
     setState(() {
       _selectedExercises.add(exercise.name);
-      _totalCalories += (exercise.calories * (exercise.sets ?? 3));
+      // 使用科学算法进行计算
+      final int exerciseCals = context
+          .read<AppProvider>()
+          .calculateExerciseCalories(exercise);
+      _totalCalories += (exerciseCals * (exercise.sets ?? 3));
       _caloriesController.text = _totalCalories.toString();
 
       // Auto-set type if it's the first exercise
@@ -62,76 +66,140 @@ class _AddPlanPageState extends State<AddPlanPage> {
 
   void _showExerciseLibrary() {
     final allExercises = context.read<AppProvider>().exercises;
+    String searchQuery = '';
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
-        return HandDrawnContainer(
-          color: AppColors.getBackgroundColor(context),
-          borderRadius: 32,
-          margin: const EdgeInsets.all(12),
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.getBorderColor(context),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '选择项目',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.getTextMainColor(context),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 400,
-                child: ListView.separated(
-                  itemCount: allExercises.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final ex = allExercises[index];
-                    return HandDrawnContainer(
-                      padding: const EdgeInsets.all(12),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          ex.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          '${ex.calories} kcal/组 · ${ex.sets ?? 3}组',
-                          style: TextStyle(
-                            color: AppColors.getTextMutedColor(context),
-                          ),
-                        ),
-                        trailing: const Icon(
-                          LucideIcons.plusCircle,
-                          color: AppColors.primary,
-                        ),
-                        onTap: () {
-                          _addExerciseFromLibrary(ex);
-                          Navigator.pop(context);
-                        },
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final filteredExercises = allExercises.where((ex) {
+              final query = searchQuery.toLowerCase();
+              return ex.name.toLowerCase().contains(query) ||
+                  ex.targetMuscles.any((m) => m.toLowerCase().contains(query));
+            }).toList();
+
+            return HandDrawnContainer(
+              color: AppColors.getBackgroundColor(context),
+              borderRadius: 32,
+              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.getBorderColor(context),
+                        borderRadius: BorderRadius.circular(2),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '项目库 (${filteredExercises.length})',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextMainColor(context),
+                        ),
+                      ),
+                      if (searchQuery.isNotEmpty)
+                        IconButton(
+                          icon: const Icon(LucideIcons.xCircle, size: 20),
+                          onPressed: () =>
+                              setModalState(() => searchQuery = ''),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  HandDrawnTextField(
+                    hintText: '搜索动作或部位...',
+                    onChanged: (val) => setModalState(() => searchQuery = val),
+                    prefixIcon: const Icon(LucideIcons.search, size: 20),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: ListView.builder(
+                      itemCount: filteredExercises.length,
+                      itemBuilder: (context, index) {
+                        final ex = filteredExercises[index];
+                        final calPerSet = context
+                            .read<AppProvider>()
+                            .calculateExerciseCalories(ex);
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: HandDrawnContainer(
+                            padding: const EdgeInsets.all(4),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.asset(
+                                  ex.image ?? '',
+                                  width: 44,
+                                  height: 44,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      width: 44,
+                                      height: 44,
+                                      color: AppColors.accentMint.withOpacity(
+                                        0.2,
+                                      ),
+                                      child: const Icon(
+                                        LucideIcons.dumbbell,
+                                        color: AppColors.primary,
+                                        size: 20,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              title: Text(
+                                ex.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '$calPerSet kcal/组 · ${ex.sets ?? 3}组',
+                                style: TextStyle(
+                                  color: AppColors.getTextMutedColor(context),
+                                  fontSize: 13,
+                                ),
+                              ),
+                              trailing: const Icon(
+                                LucideIcons.plusCircle,
+                                color: AppColors.primary,
+                                size: 24,
+                              ),
+                              onTap: () {
+                                _addExerciseFromLibrary(ex);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

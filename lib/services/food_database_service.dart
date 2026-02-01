@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/food_database.dart';
+import '../utils/assets.dart';
 
 /// 食物数据库服务
 /// 提供懒加载、缓存和高效搜索功能
@@ -32,9 +33,7 @@ class FoodDatabaseService {
 
     _isLoading = true;
     try {
-      final jsonString = await rootBundle.loadString(
-        'assets/data/food_db.json',
-      );
+      final jsonString = await rootBundle.loadString(GlobalAssets.foodDb);
       // 使用 compute 在后台线程解析 JSON
       _cachedData = await compute(_parseJson, jsonString);
       return _cachedData!;
@@ -55,21 +54,32 @@ class FoodDatabaseService {
   /// 搜索食物
   /// [query] 搜索关键词
   /// [limit] 返回结果数量限制，默认50
-  Future<List<FoodDatabaseItem>> search(String query, {int limit = 50}) async {
+  /// [offset] 起始位置，用于分页
+  Future<List<FoodDatabaseItem>> search(
+    String query, {
+    int limit = 50,
+    int offset = 0,
+  }) async {
     final allFoods = await getAllFoods();
 
     if (query.isEmpty) {
-      // 返回常用食物（前 limit 条）
-      return allFoods.take(limit).toList();
+      // 分页返回所有食物
+      final end = (offset + limit).clamp(0, allFoods.length);
+      if (offset >= allFoods.length) return [];
+      return allFoods.sublist(offset, end);
     }
 
     final lowerQuery = query.toLowerCase();
     final results = <FoodDatabaseItem>[];
+    int matchCount = 0;
 
     for (final food in allFoods) {
       if (food.foodName.toLowerCase().contains(lowerQuery)) {
-        results.add(food);
-        if (results.length >= limit) break;
+        if (matchCount >= offset) {
+          results.add(food);
+          if (results.length >= limit) break;
+        }
+        matchCount++;
       }
     }
 

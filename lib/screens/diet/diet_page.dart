@@ -193,9 +193,9 @@ class _DietPageState extends State<DietPage> {
                       return CircularProgressIndicator(
                         value: value,
                         strokeWidth: 10,
-                        backgroundColor: AppColors.getBorderColor(
-                          context,
-                        ).withValues(alpha: 0.5),
+                        backgroundColor: AppColors.primary.withValues(
+                          alpha: 0.3,
+                        ),
                         valueColor: const AlwaysStoppedAnimation<Color>(
                           AppColors.primary,
                         ),
@@ -284,7 +284,7 @@ class _DietPageState extends State<DietPage> {
         Container(
           height: 6,
           decoration: BoxDecoration(
-            color: AppColors.getBorderColor(context).withValues(alpha: 0.5),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(3),
           ),
           child: TweenAnimationBuilder<double>(
@@ -306,12 +306,23 @@ class _DietPageState extends State<DietPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: AppColors.getTextMutedColor(context),
-            fontSize: 12,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: AppColors.getTextMutedColor(context),
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ],
     );

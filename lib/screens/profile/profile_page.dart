@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/app_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/hand_drawn_widgets.dart';
+import '../../services/update_service.dart';
+import '../../utils/assets.dart';
+import '../../utils/constants.dart';
+import '../../utils/utils.dart';
+import '../../utils/routes.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,7 +25,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          '个人中心',
+          GlobalConstants.profileTitle,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -38,7 +45,7 @@ class ProfilePage extends StatelessWidget {
               color: AppColors.getTextMainColor(context),
             ),
             onPressed: appState.toggleThemeMode,
-            tooltip: '切换主题模式',
+            tooltip: GlobalConstants.profileThemeToggle,
           ),
           const SizedBox(width: 8),
         ],
@@ -63,9 +70,7 @@ class ProfilePage extends StatelessWidget {
                         color: const Color(0xFFF5E6D3),
                         border: Border.all(color: Colors.white, width: 3),
                         image: const DecorationImage(
-                          image: AssetImage(
-                            'assets/images/capybara-mascot.webp',
-                          ),
+                          image: AssetImage(GlobalAssets.capybaraMascot),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -76,7 +81,7 @@ class ProfilePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '健身达人',
+                            GlobalConstants.profileUserDefaultName,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -85,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '加入卡皮健身第 ${stats.joinedDays} 天',
+                            GlobalUtils.formatJoinedDays(stats.joinedDays),
                             style: TextStyle(
                               fontSize: 14,
                               color: AppColors.getTextMutedColor(context),
@@ -147,7 +152,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
-                  '我的成就',
+                  GlobalConstants.profileAchievements,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -157,8 +162,8 @@ class ProfilePage extends StatelessWidget {
               ),
               HandDrawnCard(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 16,
+                  vertical: 20,
+                  horizontal: 12,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -167,7 +172,7 @@ class ProfilePage extends StatelessWidget {
                       context,
                       icon: LucideIcons.calendar,
                       value: stats.activeDays.toString(),
-                      label: '坚持天数',
+                      label: GlobalConstants.profileAchievementActiveDays,
                       color: const Color(0xFFEBE1D8),
                       iconColor: const Color(0xFF8B6F5C),
                     ),
@@ -175,7 +180,7 @@ class ProfilePage extends StatelessWidget {
                       context,
                       icon: LucideIcons.medal,
                       value: stats.totalWorkouts.toString(),
-                      label: '完成训练',
+                      label: GlobalConstants.profileAchievementTotalWorkouts,
                       color: const Color(0xFFE3F1EC),
                       iconColor: const Color(0xFF7EB8A2),
                     ),
@@ -183,7 +188,7 @@ class ProfilePage extends StatelessWidget {
                       context,
                       icon: LucideIcons.clock,
                       value: (stats.totalDuration / 60).toStringAsFixed(0),
-                      label: '训练小时',
+                      label: GlobalConstants.profileAchievementTotalHours,
                       color: const Color(0xFFFDF0E8),
                       iconColor: const Color(0xFFE8A87C),
                     ),
@@ -196,7 +201,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
-                  '设置',
+                  GlobalConstants.profileSettingsHeader,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -207,44 +212,44 @@ class ProfilePage extends StatelessWidget {
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.user,
-                title: '个人资料',
+                title: GlobalConstants.profileSettings,
                 iconBgColor: const Color(0xFFF5E6D3),
                 iconColor: const Color(0xFF8B6F5C),
                 onTap: () {
-                  context.push('/profile/settings');
+                  context.push(GlobalRoutes.profileSettings);
                 },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.bell,
-                title: '提醒设置',
+                title: GlobalConstants.profileReminders,
                 iconBgColor: const Color(0xFFE3F1EC),
                 iconColor: const Color(0xFF7EB8A2),
                 onTap: () {
-                  context.push('/profile/reminders');
+                  context.push(GlobalRoutes.profileReminders);
                 },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.target,
-                title: '目标设置',
+                title: GlobalConstants.profileGoals,
                 iconBgColor: const Color(0xFFFDF0E8),
                 iconColor: const Color(0xFFE8A87C),
                 onTap: () {
-                  context.push('/profile/goals');
+                  context.push(GlobalRoutes.profileGoals);
                 },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.database,
-                title: '数据备份',
+                title: GlobalConstants.profileBackup,
                 iconBgColor: const Color(0xFFF1D7D2),
                 iconColor: const Color(0xFFA67C75),
                 onTap: () {
-                  context.push('/profile/backup');
+                  context.push(GlobalRoutes.profileBackup);
                 },
               ),
               const SizedBox(height: 24),
@@ -253,7 +258,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 4, bottom: 12),
                 child: Text(
-                  '关于',
+                  GlobalConstants.profileAboutHeader,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -264,23 +269,32 @@ class ProfilePage extends StatelessWidget {
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.helpCircle,
-                title: '使用帮助',
+                title: GlobalConstants.profileHelp,
                 iconBgColor: const Color(0xFFF1EFEC),
                 iconColor: const Color(0xFF8D8D8D),
                 onTap: () {
-                  context.push('/profile/help');
+                  context.push(GlobalRoutes.profileHelp);
                 },
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
                 icon: LucideIcons.messageSquare,
-                title: '意见反馈',
+                title: GlobalConstants.profileFeedback,
                 iconBgColor: const Color(0xFFE3F1EC),
                 iconColor: const Color(0xFF7EB8A2),
                 onTap: () {
-                  context.push('/profile/feedback');
+                  context.push(GlobalRoutes.profileFeedback);
                 },
+              ),
+              const SizedBox(height: 12),
+              _buildSettingsItem(
+                context,
+                icon: LucideIcons.download,
+                title: GlobalConstants.profileUpdate,
+                iconBgColor: const Color(0xFFE3F1EC),
+                iconColor: const Color(0xFF7EB8A2),
+                onTap: () => _handleCheckUpdate(context),
               ),
               const SizedBox(height: 48),
 
@@ -289,7 +303,7 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '卡皮健身 v1.0.0',
+                      GlobalConstants.profileVersion,
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.getTextMutedColor(context),
@@ -297,7 +311,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '非商用版本 · 仅供学习交流',
+                      GlobalConstants.profileDisclaimer,
                       style: TextStyle(
                         fontSize: 10,
                         color: AppColors.getTextMutedColor(
@@ -309,7 +323,7 @@ class ProfilePage extends StatelessWidget {
                     Opacity(
                       opacity: 0.5,
                       child: Image.asset(
-                        'assets/images/capy_running.webp',
+                        GlobalAssets.capybaraRunning,
                         width: 40,
                         height: 40,
                       ),
@@ -318,6 +332,173 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleCheckUpdate(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      builder: (context) => const Center(
+        child: HandDrawnCard(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF7EB8A2)),
+              ),
+              SizedBox(height: 16),
+              Text('正在检查更新...'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    try {
+      final updateService = UpdateService();
+      final updateInfo = await updateService.checkUpdate();
+
+      if (!context.mounted) return;
+      // 使用 rootNavigator: true 确保只关闭当前的 dialog
+      Navigator.of(context, rootNavigator: true).pop();
+
+      if (updateInfo.hasUpdate) {
+        _showUpdateDialog(context, updateInfo);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('当前已是最新版本'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      // 使用 rootNavigator: true 确保只关闭当前的 dialog
+      Navigator.of(context, rootNavigator: true).pop();
+      _showErrorDialog(context, '检查更新失败', e.toString());
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: HandDrawnContainer(
+          color: AppColors.getBackgroundColor(context),
+          borderRadius: 24,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(LucideIcons.alertCircle, color: Colors.redAccent),
+                  const SizedBox(width: 8),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                style: TextStyle(color: AppColors.getTextMainColor(context)),
+              ),
+              const SizedBox(height: 24),
+              Align(
+                alignment: Alignment.centerRight,
+                child: HandDrawnButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  label: '确定',
+                  backgroundColor: AppColors.primary,
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context, UpdateInfo info) {
+    showDialog(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: HandDrawnContainer(
+          color: AppColors.getBackgroundColor(context),
+          borderRadius: 24,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '发现新版本 ${info.latestVersion}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '更新日志：',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: SingleChildScrollView(child: Text(info.releaseNotes)),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
+                    child: const Text(
+                      '以后再说',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  HandDrawnButton(
+                    onPressed: () async {
+                      final url = Uri.parse(info.downloadUrl);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                      if (context.mounted) {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      }
+                    },
+                    label: '立即下载',
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -346,7 +527,7 @@ class ProfilePage extends StatelessWidget {
           ),
           child: Icon(icon, color: iconColor, size: 28),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         Text(
           value,
           style: TextStyle(
@@ -376,7 +557,7 @@ class ProfilePage extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return HandDrawnCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       onTap: onTap,
       child: Row(
         children: [

@@ -5,6 +5,8 @@ import '../../models/user_profile.dart';
 import '../../widgets/hand_drawn_widgets.dart';
 import '../../widgets/common_widgets.dart';
 import '../../utils/validators.dart';
+import '../../utils/constants.dart';
+import '../../utils/assets.dart';
 
 /// 步骤1：欢迎页面
 class WelcomeStep extends StatelessWidget {
@@ -20,14 +22,10 @@ class WelcomeStep extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Image.asset(
-            'assets/images/capy_running.webp',
-            width: 160,
-            height: 160,
-          ),
+          Image.asset(GlobalAssets.capybaraRunning, width: 160, height: 160),
           const SizedBox(height: 32),
           Text(
-            '欢迎使用 CapyFit',
+            GlobalConstants.onboardingWelcomeTitle,
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -36,7 +34,7 @@ class WelcomeStep extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '你的专属健身与饮食伙伴',
+            GlobalConstants.onboardingWelcomeSubtitle,
             style: TextStyle(
               fontSize: 18,
               color: AppColors.getTextMutedColor(context),
@@ -44,7 +42,7 @@ class WelcomeStep extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '让我们花几分钟设置你的个人资料\n以便为你提供更精准的建议',
+            GlobalConstants.onboardingWelcomeDesc,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -54,7 +52,7 @@ class WelcomeStep extends StatelessWidget {
           ),
           const Spacer(),
           HandDrawnButton(
-            label: '开始设置 →',
+            label: GlobalConstants.onboardingStart,
             onPressed: onNext,
             backgroundColor: AppColors.primary,
             textColor: Colors.white,
@@ -93,7 +91,12 @@ class BodyDataStep extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              _buildHeader(context, '📏', '身体数据', '这些数据帮助我们计算你的每日所需热量'),
+              _buildHeader(
+                context,
+                '📏',
+                GlobalConstants.onboardingBodyDataTitle,
+                GlobalConstants.onboardingBodyDataSubtitle,
+              ),
               const SizedBox(height: 32),
               HandDrawnCard(
                 padding: const EdgeInsets.all(20),

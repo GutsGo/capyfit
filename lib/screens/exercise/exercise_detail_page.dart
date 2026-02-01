@@ -91,13 +91,20 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                       AppColors.accentOrange,
                     ),
                     const Spacer(),
-                    Text(
-                      '${widget.exercise.calories} kcal / 组',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextMainColor(context),
-                      ),
+                    Builder(
+                      builder: (context) {
+                        final cals = context
+                            .read<AppProvider>()
+                            .calculateExerciseCalories(widget.exercise);
+                        return Text(
+                          '$cals kcal / 组',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.getTextMainColor(context),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -296,7 +303,10 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
     }
 
     final sets = widget.exercise.sets ?? 3;
-    final calories = widget.exercise.calories * sets;
+    final calPerSet = context.read<AppProvider>().calculateExerciseCalories(
+      widget.exercise,
+    );
+    final calories = calPerSet * sets;
 
     final plan = WorkoutPlan(
       id: DateTime.now().millisecondsSinceEpoch.toString(),

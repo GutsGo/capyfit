@@ -58,10 +58,10 @@ class Exercise extends HiveObject {
   final List<String>? tips;
   @HiveField(10)
   final List<String>? steps;
-  @HiveField(11)
-  final int calories;
   @HiveField(12)
   final String? image;
+  @HiveField(13)
+  final double met;
 
   Exercise({
     required this.id,
@@ -69,7 +69,7 @@ class Exercise extends HiveObject {
     required this.category,
     required this.difficulty,
     required this.targetMuscles,
-    required this.calories,
+    required this.met,
     this.sets,
     this.reps,
     this.duration,

@@ -20,30 +20,48 @@ class DietLibraryPage extends StatefulWidget {
 class _DietLibraryPageState extends State<DietLibraryPage> {
   final FoodDatabaseService _foodService = FoodDatabaseService();
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   List<FoodDatabaseItem> _foods = [];
   bool _isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
   String _searchQuery = '';
   Timer? _debounceTimer;
+  final int _pageSize = 50;
 
   @override
   void initState() {
     super.initState();
     _loadFoods();
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     _debounceTimer?.cancel();
     super.dispose();
   }
 
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        !_isLoadingMore &&
+        _hasMore) {
+      _loadMoreFoods();
+    }
+  }
+
   Future<void> _loadFoods() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _hasMore = true;
+    });
 
     // 获取数据库食物
-    final dbFoods = await _foodService.search(_searchQuery, limit: 100);
+    final dbFoods = await _foodService.search(_searchQuery, limit: _pageSize);
 
     // 获取自定义食物并转换为 FoodDatabaseItem
     final appProvider = Provider.of<AppProvider>(context, listen: false);
@@ -72,6 +90,47 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
         // 自定义食物显示在前面
         _foods = [...customFoods, ...dbFoods];
         _isLoading = false;
+        if (dbFoods.length < _pageSize) {
+          _hasMore = false;
+        }
+      });
+    }
+  }
+
+  Future<void> _loadMoreFoods() async {
+    if (_isLoadingMore || !_hasMore) return;
+
+    setState(() => _isLoadingMore = true);
+
+    // 计算当前数据库食物的偏移量
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+    final customCount = appProvider.foodPresets
+        .where(
+          (food) =>
+              _searchQuery.isEmpty ||
+              food.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .length;
+
+    final dbOffset = _foods.length - customCount;
+
+    final moreFoods = await _foodService.search(
+      _searchQuery,
+      limit: _pageSize,
+      offset: dbOffset,
+    );
+
+    if (mounted) {
+      setState(() {
+        if (moreFoods.isEmpty) {
+          _hasMore = false;
+        } else {
+          _foods.addAll(moreFoods);
+          if (moreFoods.length < _pageSize) {
+            _hasMore = false;
+          }
+        }
+        _isLoadingMore = false;
       });
     }
   }
@@ -168,11 +227,32 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
                     ),
                   )
                 : ListView.separated(
+                    controller: _scrollController,
                     padding: const EdgeInsets.all(16),
-                    itemCount: _foods.length,
+                    itemCount: _foods.length + (_hasMore ? 1 : 0),
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 12),
                     itemBuilder: (context, index) {
+                      if (index == _foods.length) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: _isLoadingMore
+                                ? const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  )
+                                : Text(
+                                    '滑动加载更多',
+                                    style: TextStyle(
+                                      color: AppColors.getTextMutedColor(
+                                        context,
+                                      ),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                          ),
+                        );
+                      }
                       final food = _foods[index];
                       return _buildFoodCard(food);
                     },

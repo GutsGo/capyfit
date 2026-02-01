@@ -118,6 +118,18 @@ class AppProvider extends ChangeNotifier {
     return userProfile.calculateRecommendedCalories();
   }
 
+  /// 科学算法：(身高 + 体重 + MET)
+  /// 用于计算单组动作的预估消耗
+  int calculateExerciseCalories(Exercise exercise) {
+    final double height = userProfile.height;
+    final double weight = userProfile.weight;
+    final double met = exercise.met;
+
+    // 公式：(身高 + 体重 + MET)
+    // 注意：这个结果通常为一个较大的定值，代表该动作对该个体的强度基数
+    return (height + weight + met).round();
+  }
+
   double get carbGoal {
     int totalCals = calorieGoal;
     switch (userProfile.goal) {
