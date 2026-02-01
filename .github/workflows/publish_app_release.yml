@@ -56,6 +56,15 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
+      # 重命名 APK 文件以符合发布规范
+      - name: Rename APKs
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          cd build/app/outputs/flutter-apk/
+          mv app-armeabi-v7a-release.apk capyfit-$VERSION-armeabi-v7a.apk
+          mv app-arm64-v8a-release.apk capyfit-$VERSION-arm64-v8a.apk
+          mv app-x86_64-release.apk capyfit-$VERSION-x86_64.apk
+
       # 上传至 Release
       - name: Upload Release
         uses: softprops/action-gh-release@v2
@@ -66,9 +75,9 @@ jobs:
           prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            build/app/outputs/flutter-apk/app-x86_64-release.apk
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-armeabi-v7a.apk
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-arm64-v8a.apk
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-x86_64.apk
       
       # 完成
       - run: echo "🍏 Build and Release job's status is ${{ job.status }}."
