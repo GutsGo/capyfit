@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-02-03
+
+### Added
+- 新增等级系统（Level System），在个人中心动态展示用户等级与勋章。
+- 新增“关于我们”页面，提供版本信息、等级系统说明及站点链接。
+- 引入 Webview 功能，支持在应用内直接查看《用户协议》与《隐私政策》。
+- 上线官方 Web 落地页及合规法律文档。
+
+### Changed
+- 完善引导页（Onboarding）合规流程，新增隐私政策勾选及确认机制。
+- 统一品牌名称为“猛练卡皮”，更新多处文案与图标路径。
+- 重构个人中心（Profile）页面布局，优化交互体验。
+- 优化“关于”页面检查更新的弹窗视觉效果。
+
+### Fixed
+- 修复了部分组件在暗色模式下的颜色对比度问题。
+- 统一了手绘组件的使用规范，使用 `HandDrawnContainer` 替代部分不一致的 `HandDrawnCard` 实现。
+
 ## [1.2.0] - 2026-02-02
 
 ### Added
