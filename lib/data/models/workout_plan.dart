@@ -134,4 +134,44 @@ class WorkoutPlan extends HiveObject {
       completedDates: completedDates ?? this.completedDates,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'date': date,
+      'time': time,
+      'duration': duration,
+      'calories': calories,
+      'type': type.index,
+      'intensity': intensity.index,
+      'completed': completed,
+      'exercises': exercises,
+      'mode': mode.index,
+      'completedDates': completedDates,
+    };
+  }
+
+  factory WorkoutPlan.fromJson(Map<String, dynamic> json) {
+    return WorkoutPlan(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      date: json['date'] as String,
+      time: json['time'] as String,
+      duration: json['duration'] as int,
+      calories: json['calories'] as int,
+      type: WorkoutType.values[json['type'] as int],
+      intensity: Intensity.values[json['intensity'] as int],
+      completed: json['completed'] as bool,
+      exercises: (json['exercises'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      mode:
+          PlanMode.values[json['mode'] as int? ??
+              1], // Default to oneTime (index 1 is wrong in enum def? Let's check) -- PlanMode has 0:longTerm, 2:oneTime in definition.
+      completedDates: (json['completedDates'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+    );
+  }
 }

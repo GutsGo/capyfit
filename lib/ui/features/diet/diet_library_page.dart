@@ -26,6 +26,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  bool _showBackToTop = false;
   String _searchQuery = '';
   Timer? _debounceTimer;
   final int _pageSize = 50;
@@ -52,6 +53,23 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
         _hasMore) {
       _loadMoreFoods();
     }
+
+    // 显示/隐藏回到顶部按钮
+    final showBtn =
+        _scrollController.offset > MediaQuery.of(context).size.height;
+    if (showBtn != _showBackToTop) {
+      setState(() {
+        _showBackToTop = showBtn;
+      });
+    }
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   Future<void> _loadFoods() async {
@@ -150,14 +168,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          '膳食库',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
+        title: const Text('膳食库'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -260,6 +271,18 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
           ),
         ],
       ),
+      floatingActionButton: _showBackToTop
+          ? HandDrawnFAB(
+              onPressed: _scrollToTop,
+              backgroundColor: AppColors.primary,
+              size: 44,
+              child: const Icon(
+                LucideIcons.chevronUp,
+                color: Colors.white,
+                size: 18,
+              ),
+            )
+          : null,
     );
   }
 

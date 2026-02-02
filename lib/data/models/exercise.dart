@@ -78,4 +78,41 @@ class Exercise extends HiveObject {
     this.steps,
     this.image,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category.index,
+      'difficulty': difficulty.index,
+      'targetMuscles': targetMuscles,
+      'sets': sets,
+      'reps': reps,
+      'duration': duration,
+      'description': description,
+      'tips': tips,
+      'steps': steps,
+      'image': image,
+      'met': met,
+    };
+  }
+
+  factory Exercise.fromJson(Map<String, dynamic> json) {
+    return Exercise(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      category: ExerciseCategory.values[json['category'] as int],
+      difficulty: Difficulty.values[json['difficulty'] as int],
+      targetMuscles: List<String>.from(json['targetMuscles'] as List),
+      met: (json['met'] as num).toDouble(),
+      sets: json['sets'] as int?,
+      reps: json['reps'] as String?,
+      duration: json['duration'] as String?,
+      description: json['description'] as String?,
+      tips: (json['tips'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      steps: (json['steps'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      image: json['image'] as String?,
+    );
+  }
 }

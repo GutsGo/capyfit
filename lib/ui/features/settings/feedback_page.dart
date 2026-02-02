@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:capyfit/ui/common/theme/app_colors.dart';
+import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/data/utils/constants.dart';
@@ -44,12 +45,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
       if (githubToken.isEmpty) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('错误：请联系开发者。'),
-              backgroundColor: Colors.orange,
-            ),
-          );
+          showHandDrawnSnackBar(context, '错误：请联系开发者。', type: ToastType.error);
         }
         setState(() => _isSubmitting = false);
         return;
@@ -75,32 +71,18 @@ class _FeedbackPageState extends State<FeedbackPage> {
       if (mounted) {
         if (response.statusCode == 204) {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '感谢您的反馈！卡皮正在努力处理中...',
-                style: TextStyle(color: AppColors.getTextMainColor(context)),
-              ),
-              backgroundColor: AppColors.getCardColor(context),
-            ),
-          );
+          showHandDrawnSnackBar(context, '感谢您的反馈！卡皮正在努力处理中...');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('提交失败，请稍后重试 (${response.statusCode})'),
-              backgroundColor: Colors.redAccent,
-            ),
+          showHandDrawnSnackBar(
+            context,
+            '提交失败，请稍后重试 (${response.statusCode})',
+            type: ToastType.error,
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('网络错误: $e'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
+        showHandDrawnSnackBar(context, '网络错误: $e', type: ToastType.error);
       }
     } finally {
       if (mounted) {

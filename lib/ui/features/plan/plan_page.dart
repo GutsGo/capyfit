@@ -1,3 +1,4 @@
+import 'package:capyfit/data/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -9,6 +10,7 @@ import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/ui/common/widgets/floating_calendar.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
+import 'package:capyfit/data/utils/routes.dart';
 
 class PlanPage extends StatefulWidget {
   const PlanPage({super.key});
@@ -64,19 +66,11 @@ class _PlanPageState extends State<PlanPage> {
 
     final completedCount = dayPlans.where((p) => isPlanCompleted(p)).length;
 
-    final isToday = selectedDateStr == todayStr;
     final isHistory = selectedDateStr.compareTo(todayStr) < 0;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '训练计划',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
+        title: const Text('训练计划'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -132,12 +126,10 @@ class _PlanPageState extends State<PlanPage> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: HandDrawnCard(
-                              onTap: isToday
-                                  ? () => appState.togglePlanComplete(
-                                      plan.id,
-                                      forDate: selectedDateStr,
-                                    )
-                                  : null,
+                              onTap: () => context.push(
+                                GlobalRoutes.planDetail,
+                                extra: {'plan': plan, 'date': selectedDateStr},
+                              ),
                               child: Row(
                                 children: [
                                   Container(
@@ -266,55 +258,6 @@ class _PlanPageState extends State<PlanPage> {
                                       ],
                                     ),
                                   ),
-                                  if (isToday) ...[
-                                    IconButton(
-                                      icon: const Icon(
-                                        LucideIcons.trash2,
-                                        size: 18,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () => _confirmDelete(
-                                        context,
-                                        appState,
-                                        plan,
-                                      ),
-                                    ),
-                                    HandDrawnContainer(
-                                      width: 28,
-                                      height: 28,
-                                      borderRadius: 14,
-                                      borderWidth: 2,
-                                      borderColor: isCompleted
-                                          ? AppColors.accentMint
-                                          : AppColors.getBorderColor(context),
-                                      color: isCompleted
-                                          ? AppColors.accentMint
-                                          : Colors.transparent,
-                                      child: isCompleted
-                                          ? const Icon(
-                                              LucideIcons.check,
-                                              size: 16,
-                                              color: Colors.white,
-                                            )
-                                          : const SizedBox(),
-                                    ),
-                                  ] else if (isHistory)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      child: Icon(
-                                        isCompleted
-                                            ? LucideIcons.checkCircle2
-                                            : LucideIcons.circle,
-                                        size: 20,
-                                        color: isCompleted
-                                            ? AppColors.accentMint
-                                            : AppColors.getBorderColor(context),
-                                      ),
-                                    ),
-                                  // if isFuture, show no status and no operations as requested ("无状态和操作")
                                 ],
                               ),
                             ),
@@ -352,7 +295,7 @@ class _PlanPageState extends State<PlanPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/capybara-mascot.webp',
+            GlobalAssets.iconNoPlan,
             width: 150,
             height: 150,
             fit: BoxFit.contain,
@@ -402,76 +345,5 @@ class _PlanPageState extends State<PlanPage> {
       case Intensity.low:
         return '低强度';
     }
-  }
-
-  void _confirmDelete(
-    BuildContext context,
-    AppProvider state,
-    WorkoutPlan plan,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: HandDrawnContainer(
-          color: AppColors.getBackgroundColor(context),
-          borderRadius: 24,
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '确认删除',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.getTextMainColor(context),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '确定要删除计划 "${plan.name}" 吗？',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.getTextMainColor(context),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                        color: AppColors.getTextMutedColor(context),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  HandDrawnButton(
-                    onPressed: () {
-                      state.deletePlan(plan.id);
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('计划已删除'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    label: '删除',
-                    backgroundColor: Colors.redAccent,
-                    textColor: Colors.white,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

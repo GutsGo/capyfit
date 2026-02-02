@@ -4,6 +4,15 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/data/services/hive_service.dart';
+import 'package:intl/intl.dart';
+
+import 'package:capyfit/data/services/backup_service.dart';
+import 'package:provider/provider.dart';
+import 'package:capyfit/providers/app_provider.dart';
+import 'package:capyfit/ui/features/home/home_vm.dart';
+import 'package:capyfit/ui/features/diet/diet_vm.dart';
+import 'package:capyfit/ui/features/plan/plan_vm.dart';
+import 'package:capyfit/ui/features/exercise/exercise_vm.dart';
 
 class DataBackupPage extends StatefulWidget {
   const DataBackupPage({super.key});
@@ -14,22 +23,64 @@ class DataBackupPage extends StatefulWidget {
 
 class _DataBackupPageState extends State<DataBackupPage> {
   bool _isBackingUp = false;
+  bool _isImporting = false;
 
   void _handleBackup() async {
+    if (_isBackingUp) return;
     setState(() => _isBackingUp = true);
-    // Simulate backup process
-    await Future.delayed(const Duration(seconds: 2));
-    if (mounted) {
-      setState(() => _isBackingUp = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '备份完成！数据已安全存至本地。',
-            style: TextStyle(color: AppColors.getTextMainColor(context)),
-          ),
-          backgroundColor: AppColors.getCardColor(context),
-        ),
-      );
+    try {
+      final message = await BackupService().exportData();
+      if (mounted) {
+        showHandDrawnSnackBar(context, message);
+      }
+    } catch (e) {
+      if (mounted) {
+        showHandDrawnSnackBar(context, e.toString(), type: ToastType.error);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isBackingUp = false);
+      }
+    }
+  }
+
+  void _handleImport() async {
+    if (_isImporting) return;
+    setState(() => _isImporting = true);
+    try {
+      final message = await BackupService().importData();
+      if (!mounted) return;
+
+      // 1. 获取所有 Provider 实例 (同步操作，不需要在 await 后检查 mounted)
+      final appProvider = context.read<AppProvider>();
+      final homeVm = context.read<HomeViewModel>();
+      final planVm = context.read<PlanViewModel>();
+      final dietVm = context.read<DietViewModel>();
+      final exerciseVm = context.read<ExerciseViewModel>();
+
+      // 2. 执行数据刷新
+      // 先刷新 AppProvider 以确保全局状态(如 UserProfile)是最新的
+      await appProvider.init();
+
+      // 并行刷新其他业务模块
+      await Future.wait([
+        homeVm.init(),
+        planVm.init(),
+        dietVm.init(),
+        exerciseVm.init(),
+      ]);
+
+      // 3. 显示成功提示
+      if (!mounted) return;
+      showHandDrawnSnackBar(context, message);
+    } catch (e) {
+      if (mounted) {
+        showHandDrawnSnackBar(context, e.toString(), type: ToastType.error);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isImporting = false);
+      }
     }
   }
 
@@ -71,7 +122,7 @@ class _DataBackupPageState extends State<DataBackupPage> {
                         size: 60,
                         color: AppColors.primary,
                       ),
-                      if (_isBackingUp)
+                      if (_isBackingUp || _isImporting)
                         const SizedBox(
                           width: 130,
                           height: 130,
@@ -122,9 +173,7 @@ class _DataBackupPageState extends State<DataBackupPage> {
                     '导入数据',
                     '选择备份文件并恢复数据',
                     LucideIcons.upload,
-                    onTap: () {
-                      // Implement import logic
-                    },
+                    onTap: _isImporting ? null : _handleImport,
                   ),
                 ],
               ),
@@ -144,7 +193,7 @@ class _DataBackupPageState extends State<DataBackupPage> {
                     ),
                   ),
                   Text(
-                    '2026-01-29 10:30',
+                    _getLastBackupTimeStr(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -270,5 +319,13 @@ class _DataBackupPageState extends State<DataBackupPage> {
         ),
       ),
     );
+  }
+
+  String _getLastBackupTimeStr() {
+    final lastBackup = HiveService().lastBackupTime;
+    if (lastBackup == null) {
+      return '从未备份';
+    }
+    return DateFormat('yyyy-MM-dd HH:mm').format(lastBackup);
   }
 }

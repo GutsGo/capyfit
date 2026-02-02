@@ -144,6 +144,23 @@ class ExerciseDbService {
     return filtered.sublist(offset, end);
   }
 
+  /// 根据名称列表批量获取动作（返回 Map<Name, Exercise>）
+  Future<Map<String, Exercise>> getExercisesByNames(List<String> names) async {
+    final all = await getAllExercises();
+    final Map<String, Exercise> result = {};
+    final uniqueNames = names.toSet();
+
+    for (final name in uniqueNames) {
+      try {
+        final match = all.firstWhere((e) => e.name == name);
+        result[name] = match;
+      } catch (_) {
+        // Not found in this DB
+      }
+    }
+    return result;
+  }
+
   String _getCategoryLabel(ExerciseCategory cat) {
     switch (cat) {
       case ExerciseCategory.chest:

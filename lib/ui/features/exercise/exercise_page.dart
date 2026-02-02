@@ -25,6 +25,7 @@ class _ExercisePageState extends State<ExercisePage> {
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  bool _showBackToTop = false;
   List<String> selectedCategories = [];
   String searchQuery = '';
   Timer? _debounceTimer;
@@ -111,6 +112,23 @@ class _ExercisePageState extends State<ExercisePage> {
         _hasMore) {
       _loadMoreExercises();
     }
+
+    // 显示/隐藏回到顶部按钮
+    final showBtn =
+        _scrollController.offset > MediaQuery.of(context).size.height;
+    if (showBtn != _showBackToTop) {
+      setState(() {
+        _showBackToTop = showBtn;
+      });
+    }
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -142,14 +160,7 @@ class _ExercisePageState extends State<ExercisePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '动作库',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
+        title: const Text('动作库'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -261,6 +272,18 @@ class _ExercisePageState extends State<ExercisePage> {
           ),
         ],
       ),
+      floatingActionButton: _showBackToTop
+          ? HandDrawnFAB(
+              onPressed: _scrollToTop,
+              backgroundColor: AppColors.primary,
+              size: 44,
+              child: const Icon(
+                LucideIcons.chevronUp,
+                color: Colors.white,
+                size: 18,
+              ),
+            )
+          : null,
     );
   }
 

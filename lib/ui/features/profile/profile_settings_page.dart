@@ -7,6 +7,9 @@ import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
+import 'package:capyfit/data/utils/constants.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
@@ -21,23 +24,30 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   late TextEditingController _weightController;
   late TextEditingController _ageController;
   late TextEditingController _customGoalController;
+  late TextEditingController _nicknameController;
   late Gender _gender;
-  late UserGoal _goal;
   late bool _isSmart;
+  String? _avatarPath;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     final profile = context.read<AppProvider>().userProfile;
-    _heightController = TextEditingController(text: profile.height.toString());
-    _weightController = TextEditingController(text: profile.weight.toString());
-    _ageController = TextEditingController(text: profile.age.toString());
+    _heightController = TextEditingController(
+      text: profile.height?.toString() ?? '',
+    );
+    _weightController = TextEditingController(
+      text: profile.weight?.toString() ?? '',
+    );
+    _ageController = TextEditingController(text: profile.age?.toString() ?? '');
     _customGoalController = TextEditingController(
       text: profile.customCalorieGoal.toString(),
     );
+    _nicknameController = TextEditingController(text: profile.nickname);
     _gender = profile.gender;
-    _goal = profile.goal;
     _isSmart = profile.isSmartCalculation;
+    _avatarPath = profile.avatarPath;
 
     // Add listeners for real-time updates
     _heightController.addListener(_onInputChanged);
@@ -52,17 +62,16 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   }
 
   int _calculateLiveRecommended() {
-    final height = double.tryParse(_heightController.text) ?? 175;
-    final weight = double.tryParse(_weightController.text) ?? 70;
-    final age = int.tryParse(_ageController.text) ?? 25;
-
+    // Build a temporary profile to use its calculation logic
     final tempProfile = UserProfile(
-      height: height,
-      weight: weight,
+      height: double.tryParse(_heightController.text),
+      weight: double.tryParse(_weightController.text),
       gender: _gender,
-      age: age,
-      goal: _goal,
+      age: int.tryParse(_ageController.text),
+      goal: context.read<AppProvider>().userProfile.goal,
       isSmartCalculation: _isSmart,
+      nickname: _nicknameController.text,
+      avatarPath: _avatarPath,
     );
 
     return tempProfile.calculateRecommendedCalories();
@@ -77,6 +86,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _weightController.dispose();
     _ageController.dispose();
     _customGoalController.dispose();
+    _nicknameController.dispose();
     super.dispose();
   }
 
@@ -88,25 +98,19 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
     final provider = context.read<AppProvider>();
     final newProfile = UserProfile(
-      height: double.tryParse(_heightController.text) ?? 175,
-      weight: double.tryParse(_weightController.text) ?? 70,
+      height: double.tryParse(_heightController.text),
+      weight: double.tryParse(_weightController.text),
       gender: _gender,
-      age: int.tryParse(_ageController.text) ?? 25,
-      goal: _goal,
+      age: int.tryParse(_ageController.text),
+      goal: provider.userProfile.goal,
       isSmartCalculation: _isSmart,
       customCalorieGoal: int.tryParse(_customGoalController.text) ?? 2000,
+      nickname: _nicknameController.text,
+      avatarPath: _avatarPath,
     );
     provider.updateUserProfile(newProfile);
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '个人资料已更新',
-          style: TextStyle(color: AppColors.getTextMainColor(context)),
-        ),
-        backgroundColor: AppColors.getCardColor(context),
-      ),
-    );
+    showHandDrawnSnackBar(context, '个人资料已更新');
   }
 
   @override
@@ -129,6 +133,26 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildAvatarSection(),
+              const SizedBox(height: 24),
+              _buildSectionTitle('基本资料'),
+              HandDrawnCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildInputField(
+                      '昵称',
+                      _nicknameController,
+                      TextInputType.text,
+                      (v) => Validators.required(v, '昵称'),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildGenderPicker(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
               _buildSectionTitle('身体数据'),
               HandDrawnCard(
                 padding: const EdgeInsets.all(16),
@@ -154,19 +178,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       TextInputType.number,
                       Validators.age,
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              _buildSectionTitle('基本资料'),
-              HandDrawnCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildGenderPicker(),
-                    const Divider(height: 32),
-                    _buildGoalPicker(),
                   ],
                 ),
               ),
@@ -203,7 +214,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                         Switch(
                           value: _isSmart,
                           onChanged: (val) => setState(() => _isSmart = val),
-                          activeColor: AppColors.primary,
+                          activeThumbColor: AppColors.primary,
                         ),
                       ],
                     ),
@@ -243,8 +254,44 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-
+              const SizedBox(height: 32),
+              // 数据隐私说明
+              Center(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          LucideIcons.shieldCheck,
+                          size: 14,
+                          color: AppColors.getTextMutedColor(context),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '隐私保护',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.getTextMutedColor(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '您的所有个人数据均仅存储在本地设备中，\n不会上传至任何云端服务器。',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.getTextMutedColor(context),
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
               Center(
                 child: HandDrawnButton(
                   label: '保存设置',
@@ -253,7 +300,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   textColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -302,6 +349,85 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
   }
 
+  Widget _buildAvatarSection() {
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: AppColors.getCardColor(context),
+            backgroundImage: _getAvatarImage(),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  LucideIcons.camera,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ImageProvider _getAvatarImage() {
+    if (_avatarPath == null) {
+      return const AssetImage(GlobalConstants.profileDefaultAvatar);
+    }
+    if (_avatarPath!.startsWith('assets/')) {
+      return AssetImage(_avatarPath!);
+    }
+    return FileImage(File(_avatarPath!));
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        final File file = File(image.path);
+        final int fileSize = await file.length();
+        const int maxFileSize = GlobalConstants.maxAvatarSize;
+
+        if (fileSize > maxFileSize) {
+          if (mounted) {
+            showHandDrawnSnackBar(
+              context,
+              '图片大小不能超过 3MB',
+              type: ToastType.error,
+            );
+          }
+          return;
+        }
+
+        setState(() {
+          _avatarPath = image.path;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        showHandDrawnSnackBar(context, '选择图片失败', type: ToastType.error);
+      }
+    }
+  }
+
   Widget _buildGenderPicker() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -326,43 +452,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               '女',
               _gender == Gender.female,
               () => setState(() => _gender = Gender.female),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGoalPicker() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '健身期望',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildChoiceChip(
-              '减重',
-              _goal == UserGoal.weightLoss,
-              () => setState(() => _goal = UserGoal.weightLoss),
-            ),
-            _buildChoiceChip(
-              '匀称',
-              _goal == UserGoal.maintain,
-              () => setState(() => _goal = UserGoal.maintain),
-            ),
-            _buildChoiceChip(
-              '增肌',
-              _goal == UserGoal.muscleGain,
-              () => setState(() => _goal = UserGoal.muscleGain),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,14 +25,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          GlobalConstants.profileTitle,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
+        title: Text(GlobalConstants.profileTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -69,8 +63,10 @@ class ProfilePage extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: const Color(0xFFF5E6D3),
                         border: Border.all(color: Colors.white, width: 3),
-                        image: const DecorationImage(
-                          image: AssetImage(GlobalAssets.capybaraMascot),
+                        image: DecorationImage(
+                          image: _getAvatarImage(
+                            appState.userProfile.avatarPath,
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -81,7 +77,8 @@ class ProfilePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            GlobalConstants.profileUserDefaultName,
+                            appState.userProfile.nickname ??
+                                GlobalConstants.profileUserDefaultName,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -222,17 +219,6 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
-                icon: LucideIcons.bell,
-                title: GlobalConstants.profileReminders,
-                iconBgColor: const Color(0xFFE3F1EC),
-                iconColor: const Color(0xFF7EB8A2),
-                onTap: () {
-                  context.push(GlobalRoutes.profileReminders);
-                },
-              ),
-              const SizedBox(height: 12),
-              _buildSettingsItem(
-                context,
                 icon: LucideIcons.target,
                 title: GlobalConstants.profileGoals,
                 iconBgColor: const Color(0xFFFDF0E8),
@@ -241,6 +227,21 @@ class ProfilePage extends StatelessWidget {
                   context.push(GlobalRoutes.profileGoals);
                 },
               ),
+              // TODO: 暂时隐藏提醒功能。方案：
+              // 1. 本地提醒。
+              // 2. 日历提醒
+              // 3. 付费提醒方案
+              // const SizedBox(height: 12),
+              // _buildSettingsItem(
+              //   context,
+              //   icon: LucideIcons.bell,
+              //   title: GlobalConstants.profileReminders,
+              //   iconBgColor: const Color(0xFFE3F1EC),
+              //   iconColor: const Color(0xFF7EB8A2),
+              //   onTap: () {
+              //     context.push(GlobalRoutes.profileReminders);
+              //   },
+              // ),
               const SizedBox(height: 12),
               _buildSettingsItem(
                 context,
@@ -292,8 +293,8 @@ class ProfilePage extends StatelessWidget {
                 context,
                 icon: LucideIcons.download,
                 title: GlobalConstants.profileUpdate,
-                iconBgColor: const Color(0xFFE3F1EC),
-                iconColor: const Color(0xFF7EB8A2),
+                iconBgColor: const Color(0xFFE8F0FD),
+                iconColor: const Color(0xFF5C7BCF),
                 onTap: () => _handleCheckUpdate(context),
               ),
               const SizedBox(height: 48),
@@ -323,7 +324,7 @@ class ProfilePage extends StatelessWidget {
                     Opacity(
                       opacity: 0.5,
                       child: Image.asset(
-                        GlobalAssets.capybaraRunning,
+                        GlobalAssets.capyRunning,
                         width: 40,
                         height: 40,
                       ),
@@ -596,5 +597,15 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ImageProvider _getAvatarImage(String? avatarPath) {
+    if (avatarPath == null) {
+      return const AssetImage(GlobalAssets.capybaraMascot);
+    }
+    if (avatarPath.startsWith('assets/')) {
+      return AssetImage(avatarPath);
+    }
+    return FileImage(File(avatarPath));
   }
 }

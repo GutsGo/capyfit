@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
+import 'package:capyfit/data/models/workout_plan.dart';
 // Home module
 import 'package:capyfit/ui/features/home/home.dart';
 // Diet module
@@ -16,8 +17,10 @@ import 'package:capyfit/ui/features/diet/food_detail_page.dart';
 import 'package:capyfit/ui/features/exercise/exercise_page.dart';
 import 'package:capyfit/ui/features/exercise/exercise_detail_page.dart';
 // Plan module
-import 'package:capyfit/ui/features/plan/plan.dart';
+import 'package:capyfit/ui/features/plan/plan_page.dart';
 import 'package:capyfit/ui/features/plan/add_plan_page.dart';
+import 'package:capyfit/ui/features/plan/plan_detail_page.dart';
+import 'package:capyfit/ui/features/plan/plan_timer_page.dart';
 // Profile module
 import 'package:capyfit/ui/features/profile/profile.dart';
 import 'package:capyfit/ui/features/profile/profile_settings_page.dart';
@@ -78,7 +81,6 @@ void main() async {
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter _createRouter(bool hasUserProfile) {
-  // 开发模式下每次启动都显示引导页，方便调试
   final shouldShowOnboarding = !hasUserProfile;
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -136,7 +138,28 @@ GoRouter _createRouter(bool hasUserProfile) {
       GoRoute(
         path: GlobalRoutes.planAdd,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const AddPlanPage(),
+        builder: (context, state) =>
+            AddPlanPage(initialPlan: state.extra as WorkoutPlan?),
+      ),
+      GoRoute(
+        path: GlobalRoutes.planDetail,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          if (state.extra is Map<String, dynamic>) {
+            final data = state.extra as Map<String, dynamic>;
+            return PlanDetailPage(
+              plan: data['plan'] as WorkoutPlan,
+              date: data['date'] as String?,
+            );
+          }
+          return PlanDetailPage(plan: state.extra as WorkoutPlan);
+        },
+      ),
+      GoRoute(
+        path: GlobalRoutes.planTimer,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            PlanTimerPage(plan: state.extra as WorkoutPlan),
       ),
       GoRoute(
         path: GlobalRoutes.exercise,
@@ -145,8 +168,20 @@ GoRouter _createRouter(bool hasUserProfile) {
         routes: [
           GoRoute(
             path: 'detail',
-            builder: (context, state) =>
-                ExerciseDetailPage(exercise: state.extra as Exercise),
+            builder: (context, state) {
+              if (state.extra is Exercise) {
+                return ExerciseDetailPage(exercise: state.extra as Exercise);
+              } else if (state.extra is Map<String, dynamic>) {
+                final map = state.extra as Map<String, dynamic>;
+                return ExerciseDetailPage(
+                  exercise: map['exercise'] as Exercise,
+                  showCreatePlanButton:
+                      map['showCreatePlanButton'] as bool? ?? true,
+                );
+              }
+              // Fallback or error handling if needed, though usually extra is provided
+              return ExerciseDetailPage(exercise: state.extra as Exercise);
+            },
           ),
         ],
       ),
@@ -207,6 +242,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       themeMode: appState.themeMode,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('zh', 'CN'), Locale('en', 'US')],
+      locale: const Locale('zh', 'CN'),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -219,8 +261,14 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           centerTitle: false,
           elevation: 0,
+          scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
+          titleTextStyle: TextStyle(
+            color: AppColors.textMain,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         fontFamily: '.SF Pro Text', // System font on Mac/iOS
       ),
@@ -236,8 +284,14 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           centerTitle: false,
           elevation: 0,
+          scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.light,
+          titleTextStyle: TextStyle(
+            color: AppColors.darkTextMain,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         fontFamily: '.SF Pro Text',
       ),

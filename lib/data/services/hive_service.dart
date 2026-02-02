@@ -25,7 +25,10 @@ class HiveService {
   late Box<WorkoutPlan> _workoutPlansBox;
   late Box _settingsBox;
 
+  bool _isInitialized = false;
+
   Future<void> init() async {
+    if (_isInitialized) return;
     await Hive.initFlutter();
 
     // Register adapters
@@ -50,6 +53,8 @@ class HiveService {
     _dietEntriesBox = await Hive.openBox<DietEntry>(dietEntriesBoxName);
     _workoutPlansBox = await Hive.openBox<WorkoutPlan>(workoutPlansBoxName);
     _settingsBox = await Hive.openBox(settingsBoxName);
+
+    _isInitialized = true;
   }
 
   // ========== User Profile ==========
@@ -87,6 +92,19 @@ class HiveService {
     final joined = joinedDate;
     if (joined == null) return 0;
     return DateTime.now().difference(joined).inDays + 1; // +1 to include today
+  }
+
+  // ========== Backup Stats ==========
+  DateTime? get lastBackupTime {
+    final timestamp = _settingsBox.get('lastBackupTime');
+    if (timestamp != null) {
+      return DateTime.fromMillisecondsSinceEpoch(timestamp);
+    }
+    return null;
+  }
+
+  Future<void> saveLastBackupTime(DateTime date) async {
+    await _settingsBox.put('lastBackupTime', date.millisecondsSinceEpoch);
   }
 
   // ========== Exercises ==========

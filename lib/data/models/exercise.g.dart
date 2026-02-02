@@ -22,6 +22,7 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       category: fields[2] as ExerciseCategory,
       difficulty: fields[3] as Difficulty,
       targetMuscles: (fields[4] as List).cast<String>(),
+      met: fields[13] as double,
       sets: fields[5] as int?,
       reps: fields[6] as String?,
       duration: fields[7] as String?,
@@ -29,7 +30,6 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       tips: (fields[9] as List?)?.cast<String>(),
       steps: (fields[10] as List?)?.cast<String>(),
       image: fields[12] as String?,
-      met: (fields[13] as double?) ?? 5.0,
     );
   }
 

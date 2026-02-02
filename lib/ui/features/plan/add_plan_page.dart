@@ -8,9 +8,11 @@ import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:capyfit/ui/features/plan/widgets/exercise_selection_sheet.dart';
 
 class AddPlanPage extends StatefulWidget {
-  const AddPlanPage({super.key});
+  final WorkoutPlan? initialPlan;
+  const AddPlanPage({super.key, this.initialPlan});
 
   @override
   State<AddPlanPage> createState() => _AddPlanPageState();
@@ -24,9 +26,25 @@ class _AddPlanPageState extends State<AddPlanPage> {
 
   WorkoutType _type = WorkoutType.strength;
   PlanMode _mode = PlanMode.longTerm;
-  final Intensity _intensity = Intensity.medium;
+  Intensity _intensity = Intensity.medium;
   final List<String> _selectedExercises = [];
   int _totalCalories = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPlan != null) {
+      final plan = widget.initialPlan!;
+      _nameController.text = plan.name;
+      _durationController.text = plan.duration.toString();
+      _caloriesController.text = plan.calories.toString();
+      _type = plan.type;
+      _mode = plan.mode;
+      _intensity = plan.intensity;
+      _selectedExercises.addAll(plan.exercises ?? []);
+      _totalCalories = plan.calories;
+    }
+  }
 
   @override
   void dispose() {
@@ -65,140 +83,15 @@ class _AddPlanPageState extends State<AddPlanPage> {
   }
 
   void _showExerciseLibrary() {
-    final allExercises = context.read<AppProvider>().exercises;
-    String searchQuery = '';
-
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            final filteredExercises = allExercises.where((ex) {
-              final query = searchQuery.toLowerCase();
-              return ex.name.toLowerCase().contains(query) ||
-                  ex.targetMuscles.any((m) => m.toLowerCase().contains(query));
-            }).toList();
-
-            return HandDrawnContainer(
-              color: AppColors.getBackgroundColor(context),
-              borderRadius: 32,
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: AppColors.getBorderColor(context),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '项目库 (${filteredExercises.length})',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.getTextMainColor(context),
-                        ),
-                      ),
-                      if (searchQuery.isNotEmpty)
-                        IconButton(
-                          icon: const Icon(LucideIcons.xCircle, size: 20),
-                          onPressed: () =>
-                              setModalState(() => searchQuery = ''),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  HandDrawnTextField(
-                    hintText: '搜索动作或部位...',
-                    onChanged: (val) => setModalState(() => searchQuery = val),
-                    prefixIcon: const Icon(LucideIcons.search, size: 20),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: ListView.builder(
-                      itemCount: filteredExercises.length,
-                      itemBuilder: (context, index) {
-                        final ex = filteredExercises[index];
-                        final calPerSet = context
-                            .read<AppProvider>()
-                            .calculateExerciseCalories(ex);
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: HandDrawnContainer(
-                            padding: const EdgeInsets.all(4),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  ex.image ?? '',
-                                  width: 44,
-                                  height: 44,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      width: 44,
-                                      height: 44,
-                                      color: AppColors.accentMint.withOpacity(
-                                        0.2,
-                                      ),
-                                      child: const Icon(
-                                        LucideIcons.dumbbell,
-                                        color: AppColors.primary,
-                                        size: 20,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              title: Text(
-                                ex.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                '$calPerSet kcal/组 · ${ex.sets ?? 3}组',
-                                style: TextStyle(
-                                  color: AppColors.getTextMutedColor(context),
-                                  fontSize: 13,
-                                ),
-                              ),
-                              trailing: const Icon(
-                                LucideIcons.plusCircle,
-                                color: AppColors.primary,
-                                size: 24,
-                              ),
-                              onTap: () {
-                                _addExerciseFromLibrary(ex);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
+        return ExerciseSelectionSheet(
+          onSelect: (ex) {
+            _addExerciseFromLibrary(ex);
+            Navigator.pop(context);
           },
         );
       },
@@ -273,14 +166,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          '新增训练计划',
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-            letterSpacing: 1,
-          ),
-        ),
+        title: Text('${widget.initialPlan == null ? "新增" : "编辑"}训练计划'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -546,7 +432,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       onPressed: () => context.pop(),
                       label: '返回',
                       icon: LucideIcons.arrowLeft,
-                      backgroundColor: AppColors.accentOrange, // Beige/Orange
+                      backgroundColor: AppColors.getCardColor(context),
                       textColor: AppColors.getTextMainColor(context),
                       height: 56,
                     ),
@@ -591,7 +477,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
       onTap: () => setState(() => _type = type),
       child: HandDrawnContainer(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        color: isSelected ? color : Colors.white,
+        color: isSelected ? color : AppColors.getCardColor(context),
         borderRadius: 12,
         borderColor: AppColors.primary,
         borderWidth: 1.5,
@@ -599,7 +485,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
           child: Text(
             label,
             style: TextStyle(
-              color: AppColors.getTextMainColor(context),
+              color: isSelected
+                  ? Colors.white
+                  : AppColors.getTextMainColor(context),
               fontSize: 16,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             ),
@@ -615,7 +503,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
       onTap: () => setState(() => _mode = mode),
       child: HandDrawnContainer(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        color: isSelected ? color : Colors.white,
+        color: isSelected ? color : AppColors.getCardColor(context),
         borderRadius: 12,
         borderColor: AppColors.primary,
         borderWidth: 1.5,
@@ -637,20 +525,30 @@ class _AddPlanPageState extends State<AddPlanPage> {
 
   void _savePlan() {
     if (_formKey.currentState!.validate()) {
-      final plan = WorkoutPlan(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: _nameController.text,
-        date: DateTime.now().toString().split(' ')[0],
-        time:
-            '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
-        duration: int.tryParse(_durationController.text) ?? 30,
-        calories: int.tryParse(_caloriesController.text) ?? 0,
-        type: _type,
-        intensity: _intensity,
-        completed: false,
-        exercises: _selectedExercises,
-        mode: _mode,
-      );
+      final plan =
+          widget.initialPlan?.copyWith(
+            name: _nameController.text,
+            duration: int.tryParse(_durationController.text) ?? 30,
+            calories: int.tryParse(_caloriesController.text) ?? 0,
+            type: _type,
+            intensity: _intensity,
+            exercises: _selectedExercises,
+            mode: _mode,
+          ) ??
+          WorkoutPlan(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            name: _nameController.text,
+            date: DateTime.now().toString().split(' ')[0],
+            time:
+                '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+            duration: int.tryParse(_durationController.text) ?? 30,
+            calories: int.tryParse(_caloriesController.text) ?? 0,
+            type: _type,
+            intensity: _intensity,
+            completed: false,
+            exercises: _selectedExercises,
+            mode: _mode,
+          );
       context.read<AppProvider>().addPlan(plan);
       context.pop();
     }

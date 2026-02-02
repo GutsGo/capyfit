@@ -23,28 +23,34 @@ enum Gender {
 @HiveType(typeId: 0)
 class UserProfile extends HiveObject {
   @HiveField(0)
-  final double height; // cm
+  final double? height; // cm
   @HiveField(1)
-  final double weight; // kg
+  final double? weight; // kg
   @HiveField(2)
   final Gender gender;
   @HiveField(3)
-  final int age;
+  final int? age;
   @HiveField(4)
   final UserGoal goal;
   @HiveField(5)
   final bool isSmartCalculation;
   @HiveField(6)
   final int customCalorieGoal;
+  @HiveField(7)
+  final String? nickname;
+  @HiveField(8)
+  final String? avatarPath;
 
   UserProfile({
-    required this.height,
-    required this.weight,
+    this.height,
+    this.weight,
     required this.gender,
-    required this.age,
+    this.age,
     required this.goal,
     this.isSmartCalculation = true,
     this.customCalorieGoal = 2000,
+    this.nickname,
+    this.avatarPath,
   });
 
   UserProfile copyWith({
@@ -55,6 +61,8 @@ class UserProfile extends HiveObject {
     UserGoal? goal,
     bool? isSmartCalculation,
     int? customCalorieGoal,
+    String? nickname,
+    String? avatarPath,
   }) {
     return UserProfile(
       height: height ?? this.height,
@@ -64,16 +72,24 @@ class UserProfile extends HiveObject {
       goal: goal ?? this.goal,
       isSmartCalculation: isSmartCalculation ?? this.isSmartCalculation,
       customCalorieGoal: customCalorieGoal ?? this.customCalorieGoal,
+      nickname: nickname ?? this.nickname,
+      avatarPath: avatarPath ?? this.avatarPath,
     );
   }
 
   int calculateRecommendedCalories() {
     // Mifflin-St Jeor Equation
     double bmr;
+
+    // Fallback to defaults if data is missing
+    final h = height ?? 170.0;
+    final w = weight ?? 65.0;
+    final a = age ?? 25;
+
     if (gender == Gender.male) {
-      bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+      bmr = (10 * w) + (6.25 * h) - (5 * a) + 5;
     } else {
-      bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+      bmr = (10 * w) + (6.25 * h) - (5 * a) - 161;
     }
 
     // Activity multiplier (Assuming Moderate Activity: 1.55)
@@ -88,5 +104,32 @@ class UserProfile extends HiveObject {
       case UserGoal.maintain:
         return tdee.round();
     }
+  }
+
+  // Privacy-aware backup serialization
+  Map<String, dynamic> toJsonForBackup() {
+    return {
+      'goal': goal.index,
+      'isSmartCalculation': isSmartCalculation,
+      'customCalorieGoal': customCalorieGoal,
+      'nickname': nickname,
+      'avatarPath': avatarPath,
+      // Exclude height, weight, gender, age for privacy
+    };
+  }
+
+  factory UserProfile.fromJsonForBackup(Map<String, dynamic> json) {
+    return UserProfile(
+      // Default values for sensitive data
+      height: 170.0,
+      weight: 65.0,
+      gender: Gender.values[0], // Default to male if missing (user will update)
+      age: 25,
+      goal: UserGoal.values[json['goal'] as int? ?? 1],
+      isSmartCalculation: json['isSmartCalculation'] as bool? ?? true,
+      customCalorieGoal: json['customCalorieGoal'] as int? ?? 2000,
+      nickname: json['nickname'] as String?,
+      avatarPath: json['avatarPath'] as String?,
+    );
   }
 }

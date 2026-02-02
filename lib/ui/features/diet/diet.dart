@@ -52,10 +52,7 @@ class _DietPageState extends State<DietPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          '饮食记录',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
+        title: const Text('饮食记录'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -97,7 +94,7 @@ class _DietPageState extends State<DietPage> {
                         '早餐',
                         LucideIcons.coffee,
                         const Color(0xFFFFEFD5),
-                        const Color(0xFFD2691E),
+                        AppColors.primary,
                         selectedDateStr,
                         isToday,
                         isFuture,
@@ -483,7 +480,9 @@ class _AddButton extends StatelessWidget {
         child: Icon(
           LucideIcons.plus,
           size: 18,
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.primaryLight
+              : Theme.of(context).primaryColor,
         ),
       ),
     );

@@ -76,4 +76,32 @@ class DietEntry extends HiveObject {
       date: date ?? this.date,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'meal': meal.index,
+      'name': name,
+      'calories': calories,
+      'protein': protein,
+      'carbs': carbs,
+      'fat': fat,
+      'time': time,
+      'date': date,
+    };
+  }
+
+  factory DietEntry.fromJson(Map<String, dynamic> json) {
+    return DietEntry(
+      id: json['id'] as String,
+      meal: MealType.values[json['meal'] as int],
+      name: json['name'] as String,
+      calories: json['calories'] as int,
+      protein: (json['protein'] as num).toDouble(),
+      carbs: (json['carbs'] as num).toDouble(),
+      fat: (json['fat'] as num).toDouble(),
+      time: json['time'] as String,
+      date: json['date'] as String,
+    );
+  }
 }

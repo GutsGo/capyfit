@@ -10,8 +10,13 @@ import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 
 class ExerciseDetailPage extends StatefulWidget {
   final Exercise exercise;
+  final bool showCreatePlanButton;
 
-  const ExerciseDetailPage({super.key, required this.exercise});
+  const ExerciseDetailPage({
+    super.key,
+    required this.exercise,
+    this.showCreatePlanButton = true,
+  });
 
   @override
   State<ExerciseDetailPage> createState() => _ExerciseDetailPageState();
@@ -263,21 +268,23 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
               ],
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 30,
-            child: Center(
-              child: HandDrawnButton(
-                onPressed: _createOneClickPlan,
-                label: '一键创建训练计划',
-                icon: LucideIcons.zap,
-                backgroundColor: AppColors.primary,
-                textColor: Colors.white,
-                height: 56,
+          if (widget.showCreatePlanButton)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom:
+                  30, // Or whatever the original bottom value was, assuming 30 based on context
+              child: Center(
+                child: HandDrawnButton(
+                  onPressed: _createOneClickPlan,
+                  label: '一键创建训练计划',
+                  icon: LucideIcons.zap,
+                  backgroundColor: AppColors.primary,
+                  textColor: Colors.white,
+                  height: 56,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -310,7 +317,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
 
     final plan = WorkoutPlan(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: '训练：${widget.exercise.name}',
+      name: widget.exercise.name,
       date: dateStr,
       time: timeStr,
       duration: 30, // Default duration
@@ -324,37 +331,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
 
     context.read<AppProvider>().addPlan(plan);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: HandDrawnContainer(
-          color: Theme.of(context).primaryColor,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              const Icon(
-                LucideIcons.checkCircle2,
-                color: Colors.white,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  '已成功创建今天 ($dateStr) 的训练计划！',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    showHandDrawnSnackBar(context, '已成功创建今天 ($dateStr) 的训练计划！');
   }
 
   Widget _buildImagePlaceholder() {

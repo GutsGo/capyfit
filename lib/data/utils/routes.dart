@@ -3,6 +3,8 @@ class GlobalRoutes {
   static const String onboarding = '/onboarding';
   static const String plan = '/plan';
   static const String planAdd = '/plan/add';
+  static const String planDetail = '/plan/detail';
+  static const String planTimer = '/plan/timer';
   static const String diet = '/diet';
   static const String dietLibrary = '/diet/library';
   static const String dietFoodDetail = '/diet/food';

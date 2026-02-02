@@ -1,5 +1,6 @@
 /// 食物数据库模型
 /// 完整映射 food_db.json 的数据结构
+library;
 import 'food_item.dart';
 
 class FoodDatabaseItem {

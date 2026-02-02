@@ -4,6 +4,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/providers/app_provider.dart';
+import 'package:capyfit/data/utils/constants.dart';
+import 'package:capyfit/data/utils/routes.dart';
 
 import 'hand_drawn_widgets.dart';
 
@@ -30,6 +32,12 @@ class _MainScaffoldState extends State<MainScaffold> {
       context,
     ).routeInformationProvider.value.uri.path;
     final bool showBottomBar = !location.contains('/detail');
+    final appState = context.watch<AppProvider>();
+    final bool showProfileReminder =
+        showBottomBar &&
+        (appState.userProfile.height == null ||
+            appState.userProfile.weight == null ||
+            appState.userProfile.age == null);
 
     return Scaffold(
       body: widget.child,
@@ -48,6 +56,50 @@ class _MainScaffoldState extends State<MainScaffold> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (showProfileReminder)
+                    GestureDetector(
+                      onTap: () => context.push(GlobalRoutes.profileSettings),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.accentOrange.withOpacity(0.1),
+                          border: Border(
+                            bottom: BorderSide(
+                              color: AppColors.accentOrange.withOpacity(0.2),
+                              width: 0.5,
+                            ),
+                          ),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              LucideIcons.info,
+                              color: AppColors.accentOrange,
+                              size: 16,
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                GlobalConstants.homeProfileReminder,
+                                style: TextStyle(
+                                  color: AppColors.accentOrange,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              LucideIcons.chevronRight,
+                              color: AppColors.accentOrange,
+                              size: 14,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   SizedBox(
                     height: 2,
                     width: double.infinity,

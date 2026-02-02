@@ -27,8 +27,8 @@ class _GoalsPageState extends State<GoalsPage> {
     final profile = context.read<AppProvider>().userProfile;
     _selectedGoal = profile.goal;
     _weightGoalController = TextEditingController(
-      text: profile.weight.toString(),
-    ); // Placeholder logic
+      text: profile.weight?.toString() ?? '',
+    );
     _dailyStepsController = TextEditingController(text: '10000');
   }
 
@@ -47,15 +47,7 @@ class _GoalsPageState extends State<GoalsPage> {
 
     // In a real app, update the provider/database
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '目标设置已成功更新！',
-          style: TextStyle(color: AppColors.getTextMainColor(context)),
-        ),
-        backgroundColor: AppColors.getCardColor(context),
-      ),
-    );
+    showHandDrawnSnackBar(context, '目标设置已成功更新！');
   }
 
   @override

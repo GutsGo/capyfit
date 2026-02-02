@@ -16,14 +16,7 @@ class FoodDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          '食物详情',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.getTextMainColor(context),
-          ),
-        ),
+        title: const Text('食物详情'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

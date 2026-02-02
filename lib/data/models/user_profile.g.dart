@@ -17,20 +17,22 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserProfile(
-      height: fields[0] as double,
-      weight: fields[1] as double,
+      height: fields[0] as double?,
+      weight: fields[1] as double?,
       gender: fields[2] as Gender,
-      age: fields[3] as int,
+      age: fields[3] as int?,
       goal: fields[4] as UserGoal,
       isSmartCalculation: fields[5] as bool,
       customCalorieGoal: fields[6] as int,
+      nickname: fields[7] as String?,
+      avatarPath: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProfile obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.height)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       ..writeByte(5)
       ..write(obj.isSmartCalculation)
       ..writeByte(6)
-      ..write(obj.customCalorieGoal);
+      ..write(obj.customCalorieGoal)
+      ..writeByte(7)
+      ..write(obj.nickname)
+      ..writeByte(8)
+      ..write(obj.avatarPath);
   }
 
   @override

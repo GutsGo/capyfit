@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Welcome Header
-              _buildHeader(dateStr, greeting),
+              _buildHeader(dateStr, greeting, appState),
               const SizedBox(height: 24),
 
               // Stats Grid
@@ -123,35 +123,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               // Today's Plan Section
               _buildSectionTitle(GlobalConstants.homeTitle),
               const SizedBox(height: 12),
-
-              HandDrawnCard(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          GlobalConstants.homeProgress,
-                          style: TextStyle(
-                            color: AppColors.getTextMutedColor(context),
-                            fontSize: 14,
+              if (todayPlans.isNotEmpty) ...[
+                HandDrawnCard(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            GlobalConstants.homeProgress,
+                            style: TextStyle(
+                              color: AppColors.getTextMutedColor(context),
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '$completedCount/${todayPlans.length}',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            '$completedCount/${todayPlans.length}',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    CustomProgressBar(progress: progress),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomProgressBar(progress: progress),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 12),
+              ],
 
               // Plan List
               ...visiblePlans.map((plan) => _buildPlanItem(plan, appState)),
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildHeader(String date, String greeting) {
+  Widget _buildHeader(String date, String greeting, AppProvider appState) {
     return FadeTransition(
       opacity: _fadeController,
       child: SlideTransition(
@@ -195,7 +196,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '$greeting，健身达人！',
+                  '$greeting，${appState.userProfile.nickname ?? GlobalConstants.profileUserDefaultName}！',
                   style: TextStyle(
                     color: AppColors.getTextMainColor(context),
                     fontSize: 24,
@@ -210,7 +211,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
             Image.asset(
-              GlobalAssets.capybaraMascot,
+              GlobalAssets.capybaraDance,
               width: 80,
               height: 80,
               fit: BoxFit.contain,
@@ -239,7 +240,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.weeklyWorkoutCount * val).round().toString(),
               '次',
               '本周训练',
-              GlobalAssets.iconCalendar,
+              GlobalAssets.iconTrain,
               color: const Color(0xFF8B6B61),
             ),
             _buildStatCardWithImage(
@@ -247,7 +248,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.streakDays * val).round().toString(),
               '天',
               '连续打卡',
-              GlobalAssets.iconStrong,
+              GlobalAssets.iconCheckin,
               color: const Color(0xFFE57373),
             ),
             _buildStatCardWithImage(
@@ -255,7 +256,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
-              GlobalAssets.iconRun,
+              GlobalAssets.iconKcal,
               color: const Color(0xFF81C784),
             ),
             _buildStatCardWithImage(
@@ -263,7 +264,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               (stats.weeklyDurationHours * val).toStringAsFixed(1),
               'h',
               '训练时长',
-              GlobalAssets.iconClock,
+              GlobalAssets.iconDuration,
               color: const Color(0xFFA1887F),
             ),
           ],
@@ -370,10 +371,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: HandDrawnCard(
-        onTap: () {
-          appState.togglePlanComplete(plan.id, forDate: todayStr);
-          _countController.forward(from: 0);
-        },
+        onTap: () => context.push(
+          GlobalRoutes.planDetail,
+          extra: {'plan': plan, 'date': todayStr},
+        ),
         child: Row(
           children: [
             Container(
@@ -421,20 +422,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
             Image.asset(imagePath, width: 48, height: 48, fit: BoxFit.contain),
-            const SizedBox(width: 8),
-            HandDrawnContainer(
-              width: 24,
-              height: 24,
-              borderRadius: 12,
-              borderWidth: 2,
-              borderColor: isCompleted
-                  ? AppColors.accentMint
-                  : AppColors.getTextMutedColor(context),
-              color: isCompleted ? AppColors.accentMint : Colors.transparent,
-              child: isCompleted
-                  ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
-                  : const SizedBox(),
-            ),
           ],
         ),
       ),
@@ -453,7 +440,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _buildActionCardWithImage(
           GlobalConstants.homeExerciseLibrary,
           '学习标准动作',
-          GlobalAssets.iconWeightlifting,
+          GlobalAssets.iconExerciseLib,
           () => context.push(GlobalRoutes.exercise),
           icon: LucideIcons.dumbbell,
           iconColor: const Color(0xFF8B8B61),
@@ -461,7 +448,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _buildActionCardWithImage(
           GlobalConstants.homeDietLibrary,
           '查看食物营养',
-          GlobalAssets.iconEat,
+          GlobalAssets.iconDietLib,
           () => context.push(GlobalRoutes.dietLibrary),
           icon: LucideIcons.utensils,
           iconColor: const Color(0xFFC17D5C),
@@ -542,7 +529,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Center(
         child: Column(
           children: [
-            Image.asset(GlobalAssets.iconCalendar, width: 80, height: 80),
+            Image.asset(GlobalAssets.iconNoPlan, width: 80, height: 80),
             const SizedBox(height: 8),
             Text(
               GlobalConstants.homeEmptyPlans,

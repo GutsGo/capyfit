@@ -22,16 +22,21 @@ class _RemindersPageState extends State<RemindersPage> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: isWorkout ? _workoutTime : _dietTime,
+      initialEntryMode: TimePickerEntryMode.inputOnly,
       builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              onSurface: AppColors.getTextMainColor(context),
+        return Localizations.override(
+          context: context,
+          locale: const Locale('zh', 'CN'),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: AppColors.primary,
+                onPrimary: Colors.white,
+                onSurface: AppColors.getTextMainColor(context),
+              ),
             ),
+            child: child!,
           ),
-          child: child!,
         );
       },
     );
@@ -117,17 +122,7 @@ class _RemindersPageState extends State<RemindersPage> {
                 label: '保存设置',
                 onPressed: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        '提醒设置已保存',
-                        style: TextStyle(
-                          color: AppColors.getTextMainColor(context),
-                        ),
-                      ),
-                      backgroundColor: AppColors.getCardColor(context),
-                    ),
-                  );
+                  showHandDrawnSnackBar(context, '提醒设置已保存');
                 },
                 backgroundColor: AppColors.primary,
                 textColor: Colors.white,
@@ -200,7 +195,7 @@ class _RemindersPageState extends State<RemindersPage> {
             Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
           ],
         ),
@@ -260,7 +255,7 @@ class _RemindersPageState extends State<RemindersPage> {
             Switch(
               value: value,
               onChanged: (val) => setState(() => value = val),
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
           ],
         );

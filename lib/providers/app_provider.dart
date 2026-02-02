@@ -5,6 +5,7 @@ import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
 import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/services/hive_service.dart';
+import 'package:capyfit/data/utils/constants.dart';
 
 class UserStats {
   final int totalWorkouts;
@@ -96,6 +97,8 @@ class AppProvider extends ChangeNotifier {
         age: 25,
         goal: UserGoal.maintain,
         isSmartCalculation: true,
+        nickname: GlobalConstants.profileUserDefaultName,
+        avatarPath: GlobalConstants.profileDefaultAvatar,
       );
 
   int get calorieGoal => userProfile.isSmartCalculation
@@ -121,8 +124,8 @@ class AppProvider extends ChangeNotifier {
   /// 科学算法：(身高 + 体重 + MET)
   /// 用于计算单组动作的预估消耗
   int calculateExerciseCalories(Exercise exercise) {
-    final double height = userProfile.height;
-    final double weight = userProfile.weight;
+    final double height = userProfile.height ?? 170.0;
+    final double weight = userProfile.weight ?? 65.0;
     final double met = exercise.met;
 
     // 公式：(身高 + 体重 + MET)
@@ -188,9 +191,23 @@ class AppProvider extends ChangeNotifier {
   }
 
   void addPlan(WorkoutPlan plan) {
-    _plans.add(plan);
-    _hiveService.saveWorkoutPlan(plan);
-    notifyListeners();
+    final index = _plans.indexWhere((p) => p.id == plan.id);
+    if (index != -1) {
+      updatePlan(plan);
+    } else {
+      _plans.add(plan);
+      _hiveService.saveWorkoutPlan(plan);
+      notifyListeners();
+    }
+  }
+
+  void updatePlan(WorkoutPlan plan) {
+    final index = _plans.indexWhere((p) => p.id == plan.id);
+    if (index != -1) {
+      _plans[index] = plan;
+      _hiveService.saveWorkoutPlan(plan);
+      notifyListeners();
+    }
   }
 
   void togglePlanComplete(String id, {String? forDate}) {

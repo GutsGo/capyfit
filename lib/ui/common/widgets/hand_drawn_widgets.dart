@@ -77,15 +77,25 @@ class _HandDrawnBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final sizeFactor = min(size.width, size.height);
+    final scale = (sizeFactor / 80).clamp(0.2, 1.0);
     final random = Random(rect.hashCode);
 
     if (mode == _PainterMode.background) {
       // Layer 1: Soft diffuse shadow
+      final shadowBlur = 6.0 * scale;
       final softShadowPaint = Paint()
         ..color = color.withValues(alpha: 0.04)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, shadowBlur);
+
+      final shadowOffset = Offset(2 * scale, 2 * scale);
       canvas.drawPath(
-        _createWobblyPath(rect.shift(const Offset(2, 2)), borderRadius, random),
+        _createWobblyPath(
+          rect.shift(shadowOffset),
+          borderRadius,
+          random,
+          scale: scale,
+        ),
         softShadowPaint,
       );
 
@@ -94,10 +104,12 @@ class _HandDrawnBorderPainter extends CustomPainter {
         ..color = color.withValues(alpha: 0.12)
         ..style = PaintingStyle.fill;
 
+      final sketchShadowOffset = Offset(4 * scale, 4 * scale);
       final shadowPath = _createWobblyPath(
-        rect.shift(const Offset(4, 4)),
+        rect.shift(sketchShadowOffset),
         borderRadius,
         random,
+        scale: scale,
       );
       canvas.drawPath(shadowPath, sketchShadowPaint);
 
@@ -105,7 +117,12 @@ class _HandDrawnBorderPainter extends CustomPainter {
       final fillPaint = Paint()
         ..color = fillColor
         ..style = PaintingStyle.fill;
-      final wobblyPath = _createWobblyPath(rect, borderRadius, random);
+      final wobblyPath = _createWobblyPath(
+        rect,
+        borderRadius,
+        random,
+        scale: scale,
+      );
       canvas.drawPath(wobblyPath, fillPaint);
     } else {
       // Draw sketchy border (multiple passes for that hand-drawn feel)
@@ -117,7 +134,14 @@ class _HandDrawnBorderPainter extends CustomPainter {
         ..strokeJoin = StrokeJoin.round;
 
       // First pass: Main border
-      _drawSketchyBorder(canvas, rect, borderRadius, borderPaint, random);
+      _drawSketchyBorder(
+        canvas,
+        rect,
+        borderRadius,
+        borderPaint,
+        random,
+        scale: scale,
+      );
 
       // Second pass: Slight offset/lighter for sketch effect
       final sketchPaint = Paint()
@@ -133,14 +157,20 @@ class _HandDrawnBorderPainter extends CustomPainter {
         borderRadius,
         sketchPaint,
         Random(rect.hashCode + 1),
+        scale: scale,
       );
     }
   }
 
-  Path _createWobblyPath(Rect rect, double radius, Random random) {
+  Path _createWobblyPath(
+    Rect rect,
+    double radius,
+    Random random, {
+    double scale = 1.0,
+  }) {
     final path = Path();
 
-    double wobble() => (random.nextDouble() - 0.5) * 2.0;
+    double wobble() => (random.nextDouble() - 0.5) * 2.0 * scale;
 
     // Corners with slight irregularity
     final tr = Radius.circular(radius + wobble());
@@ -167,19 +197,20 @@ class _HandDrawnBorderPainter extends CustomPainter {
     Rect rect,
     double radius,
     Paint paint,
-    Random random,
-  ) {
+    Random random, {
+    double scale = 1.0,
+  }) {
     // Helper for wobbly points
     Offset wobble(Offset p, double amount) =>
         p +
         Offset(
-          (random.nextDouble() - 0.5) * amount,
-          (random.nextDouble() - 0.5) * amount,
+          (random.nextDouble() - 0.5) * amount * scale,
+          (random.nextDouble() - 0.5) * amount * scale,
         );
 
     // We draw 4 separate lines with overshoots
-    const overshoot = 4.0;
-    final amount = 1.5;
+    final overshoot = (4.0 + random.nextDouble() * 2.0) * scale;
+    final amount = 2.4 * scale;
 
     // Top edge
     _drawWobblyLine(
@@ -190,6 +221,7 @@ class _HandDrawnBorderPainter extends CustomPainter {
       random,
       overshootStart: overshoot,
       overshootEnd: overshoot,
+      scale: scale,
     );
 
     // Right edge
@@ -277,6 +309,7 @@ class _HandDrawnBorderPainter extends CustomPainter {
       90,
       paint,
       random,
+      scale: scale,
     );
   }
 
@@ -288,6 +321,7 @@ class _HandDrawnBorderPainter extends CustomPainter {
     Random random, {
     double overshootStart = 0,
     double overshootEnd = 0,
+    double scale = 1.0,
   }) {
     final path = Path();
 
@@ -304,7 +338,7 @@ class _HandDrawnBorderPainter extends CustomPainter {
     path.moveTo(s.dx, s.dy);
 
     // Add wobbly segments
-    final segments = (len / 10).clamp(2, 10).toInt();
+    final segments = (len / 8).clamp(3, 15).toInt();
     for (int i = 1; i <= segments; i++) {
       final t = i / segments;
       final px = s.dx + (e.dx - s.dx) * t;
@@ -314,8 +348,9 @@ class _HandDrawnBorderPainter extends CustomPainter {
       final midX = s.dx + (e.dx - s.dx) * (t - 0.5 / segments);
       final midY = s.dy + (e.dy - s.dy) * (t - 0.5 / segments);
 
-      final wobbleX = (random.nextDouble() - 0.5) * 1.2;
-      final wobbleY = (random.nextDouble() - 0.5) * 1.2;
+      final wobbleFactor = 2.2 * scale;
+      final wobbleX = (random.nextDouble() - 0.5) * wobbleFactor;
+      final wobbleY = (random.nextDouble() - 0.5) * wobbleFactor;
 
       path.quadraticBezierTo(midX + wobbleX, midY + wobbleY, px, py);
     }
@@ -329,8 +364,9 @@ class _HandDrawnBorderPainter extends CustomPainter {
     double startAngleDeg,
     double sweepAngleDeg,
     Paint paint,
-    Random random,
-  ) {
+    Random random, {
+    double scale = 1.0,
+  }) {
     final path = Path();
     final startAngle = startAngleDeg * pi / 180;
     final sweepAngle = sweepAngleDeg * pi / 180;
@@ -339,10 +375,11 @@ class _HandDrawnBorderPainter extends CustomPainter {
     final radiusX = rect.width / 2;
     final radiusY = rect.height / 2;
 
-    for (int i = 0; i <= 8; i++) {
-      final t = i / 8;
+    final steps = (radiusX.clamp(5, 12)).toInt();
+    for (int i = 0; i <= steps; i++) {
+      final t = i / steps;
       final angle = startAngle + sweepAngle * t;
-      final wobbleRadius = (random.nextDouble() - 0.5) * 1.0;
+      final wobbleRadius = (random.nextDouble() - 0.5) * 1.2 * scale;
 
       final px = center.dx + (radiusX + wobbleRadius) * cos(angle);
       final py = center.dy + (radiusY + wobbleRadius) * sin(angle);
@@ -365,7 +402,7 @@ class _HandDrawnBorderPainter extends CustomPainter {
   }
 }
 
-class HandDrawnButton extends StatelessWidget {
+class HandDrawnButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String label;
   final IconData? icon;
@@ -386,35 +423,51 @@ class HandDrawnButton extends StatelessWidget {
   });
 
   @override
+  State<HandDrawnButton> createState() => _HandDrawnButtonState();
+}
+
+class _HandDrawnButtonState extends State<HandDrawnButton> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    final effectiveBgColor = backgroundColor ?? AppColors.getCardColor(context);
-    final effectiveTextColor = textColor ?? AppColors.getTextMainColor(context);
+    final effectiveBgColor =
+        widget.backgroundColor ?? AppColors.getCardColor(context);
+    final effectiveTextColor =
+        widget.textColor ?? AppColors.getTextMainColor(context);
 
     return GestureDetector(
-      onTap: onPressed,
-      child: HandDrawnContainer(
-        width: width,
-        height: height,
-        color: effectiveBgColor,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        borderRadius: 16,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, color: effectiveTextColor, size: 20),
-              const SizedBox(width: 8),
-            ],
-            Text(
-              label,
-              style: TextStyle(
-                color: effectiveTextColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: widget.onPressed,
+      child: AnimatedScale(
+        scale: _isPressed ? 0.96 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        child: HandDrawnContainer(
+          width: widget.width,
+          height: widget.height,
+          color: effectiveBgColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          borderRadius: 16,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.icon != null) ...[
+                Icon(widget.icon, color: effectiveTextColor, size: 20),
+                const SizedBox(width: 8),
+              ],
+              Text(
+                widget.label,
+                style: TextStyle(
+                  color: effectiveTextColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -426,6 +479,7 @@ class HandDrawnFAB extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
   final String? heroTag;
+  final double size;
 
   const HandDrawnFAB({
     super.key,
@@ -433,6 +487,7 @@ class HandDrawnFAB extends StatelessWidget {
     required this.child,
     this.backgroundColor = AppColors.primary,
     this.heroTag,
+    this.size = 56,
   });
 
   @override
@@ -447,9 +502,9 @@ class HandDrawnFAB extends StatelessWidget {
       splashColor: Colors.transparent,
       heroTag: heroTag,
       child: HandDrawnContainer(
-        width: 56,
-        height: 56,
-        borderRadius: 28, // Circle
+        width: size,
+        height: size,
+        borderRadius: size / 2, // Circle
         color: backgroundColor,
         padding: EdgeInsets.zero,
         child: Center(child: child),
@@ -565,27 +620,31 @@ class HandDrawnLinePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
+    final scale = (min(size.width, size.height) / 80).clamp(0.2, 1.0);
+
     if (axis == Axis.horizontal) {
       final start = Offset(0, size.height / 2);
       final end = Offset(size.width, size.height / 2);
-      _drawWobblyLine(canvas, start, end, paint, random);
+      _drawWobblyLine(canvas, start, end, paint, random, scale: scale);
       _drawWobblyLine(
         canvas,
         start + const Offset(0, 0.5),
         end + const Offset(0, 0.5),
         sketchPaint,
         Random(color.hashCode + 1),
+        scale: scale,
       );
     } else {
       final start = Offset(size.width / 2, 0);
       final end = Offset(size.width / 2, size.height);
-      _drawWobblyLine(canvas, start, end, paint, random);
+      _drawWobblyLine(canvas, start, end, paint, random, scale: scale);
       _drawWobblyLine(
         canvas,
         start + const Offset(0.5, 0),
         end + const Offset(0.5, 0),
         sketchPaint,
         Random(color.hashCode + 1),
+        scale: scale,
       );
     }
   }
@@ -595,8 +654,9 @@ class HandDrawnLinePainter extends CustomPainter {
     Offset start,
     Offset end,
     Paint paint,
-    Random random,
-  ) {
+    Random random, {
+    double scale = 1.0,
+  }) {
     final path = Path();
     final dx = end.dx - start.dx;
     final dy = end.dy - start.dy;
@@ -604,7 +664,7 @@ class HandDrawnLinePainter extends CustomPainter {
 
     path.moveTo(start.dx, start.dy);
 
-    final segments = (len / 15).clamp(2, 20).toInt();
+    final segments = (len / 10).clamp(3, 20).toInt();
     for (int i = 1; i <= segments; i++) {
       final t = i / segments;
       final px = start.dx + dx * t;
@@ -613,8 +673,9 @@ class HandDrawnLinePainter extends CustomPainter {
       final midX = start.dx + dx * (t - 0.5 / segments);
       final midY = start.dy + dy * (t - 0.5 / segments);
 
-      final wobbleX = (random.nextDouble() - 0.5) * 1.5;
-      final wobbleY = (random.nextDouble() - 0.5) * 1.5;
+      final wobbleFactor = 2.5 * scale;
+      final wobbleX = (random.nextDouble() - 0.5) * wobbleFactor;
+      final wobbleY = (random.nextDouble() - 0.5) * wobbleFactor;
 
       path.quadraticBezierTo(midX + wobbleX, midY + wobbleY, px, py);
     }
