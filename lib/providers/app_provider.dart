@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/workout_plan.dart';
-import '../models/diet_entry.dart';
-import '../models/exercise.dart';
-import '../models/food_item.dart';
-import '../models/user_profile.dart';
-import '../services/hive_service.dart';
+import 'package:capyfit/data/models/workout_plan.dart';
+import 'package:capyfit/data/models/diet_entry.dart';
+import 'package:capyfit/data/models/exercise.dart';
+import 'package:capyfit/data/models/food_item.dart';
+import 'package:capyfit/data/models/user_profile.dart';
+import 'package:capyfit/data/services/hive_service.dart';
 
 class UserStats {
   final int totalWorkouts;

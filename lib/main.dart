@@ -3,36 +3,42 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'models/exercise.dart';
-import 'providers/app_provider.dart';
-import 'theme/app_colors.dart';
+import 'package:capyfit/data/models/exercise.dart';
+import 'package:capyfit/providers/app_provider.dart';
+import 'package:capyfit/ui/common/theme/app_colors.dart';
 // Home module
-import 'screens/home/home_page.dart';
+import 'package:capyfit/ui/features/home/home.dart';
 // Diet module
-import 'screens/diet/diet_page.dart';
-import 'screens/diet/diet_library_page.dart';
-import 'screens/diet/food_detail_page.dart';
+import 'package:capyfit/ui/features/diet/diet.dart';
+import 'package:capyfit/ui/features/diet/diet_library_page.dart';
+import 'package:capyfit/ui/features/diet/food_detail_page.dart';
 // Exercise module
-import 'screens/exercise/exercise_page.dart';
-import 'screens/exercise/exercise_detail_page.dart';
+import 'package:capyfit/ui/features/exercise/exercise_page.dart';
+import 'package:capyfit/ui/features/exercise/exercise_detail_page.dart';
 // Plan module
-import 'screens/plan/plan_page.dart';
-import 'screens/plan/add_plan_page.dart';
+import 'package:capyfit/ui/features/plan/plan.dart';
+import 'package:capyfit/ui/features/plan/add_plan_page.dart';
 // Profile module
-import 'screens/profile/profile_page.dart';
-import 'screens/profile/profile_settings_page.dart';
-import 'screens/profile/goals_page.dart';
-import 'screens/profile/reminders_page.dart';
-import 'screens/profile/data_backup_page.dart';
+import 'package:capyfit/ui/features/profile/profile.dart';
+import 'package:capyfit/ui/features/profile/profile_settings_page.dart';
+import 'package:capyfit/ui/features/profile/goals_page.dart';
+import 'package:capyfit/ui/features/profile/reminders_page.dart';
+import 'package:capyfit/ui/features/profile/data_backup_page.dart';
 // Settings module
-import 'screens/settings/help_page.dart';
-import 'screens/settings/feedback_page.dart';
+import 'package:capyfit/ui/features/settings/help.dart';
+import 'package:capyfit/ui/features/settings/feedback_page.dart';
 // Onboarding module
-import 'screens/onboarding/onboarding_page.dart';
-import 'models/food_database.dart';
-import 'widgets/main_scaffold.dart';
-import 'utils/routes.dart';
-import 'utils/constants.dart';
+import 'package:capyfit/ui/features/onboarding/onboarding.dart';
+import 'package:capyfit/data/models/food_database.dart';
+import 'package:capyfit/ui/common/widgets/main_scaffold.dart';
+import 'package:capyfit/data/utils/routes.dart';
+import 'package:capyfit/data/utils/constants.dart';
+
+// ViewModels
+import 'package:capyfit/ui/features/home/home_vm.dart';
+import 'package:capyfit/ui/features/diet/diet_vm.dart';
+import 'package:capyfit/ui/features/exercise/exercise_vm.dart';
+import 'package:capyfit/ui/features/plan/plan_vm.dart';
 
 late final GoRouter _router;
 late final AppProvider _appProvider;
@@ -57,7 +63,13 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: _appProvider)],
+      providers: [
+        ChangeNotifierProvider.value(value: _appProvider),
+        ChangeNotifierProvider(create: (_) => HomeViewModel()..init()),
+        ChangeNotifierProvider(create: (_) => DietViewModel()..init()),
+        ChangeNotifierProvider(create: (_) => ExerciseViewModel()..init()),
+        ChangeNotifierProvider(create: (_) => PlanViewModel()..init()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -67,7 +79,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter _createRouter(bool hasUserProfile) {
   // 开发模式下每次启动都显示引导页，方便调试
-  final shouldShowOnboarding = kDebugMode || !hasUserProfile;
+  final shouldShowOnboarding = !hasUserProfile;
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: shouldShowOnboarding
