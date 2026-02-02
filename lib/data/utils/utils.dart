@@ -38,6 +38,6 @@ class GlobalUtils {
 
   /// 格式化加入天数
   static String formatJoinedDays(int days) {
-    return '加入卡皮健身第 $days 天';
+    return '加入猛练卡皮第 $days 天';
   }
 }

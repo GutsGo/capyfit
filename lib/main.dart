@@ -32,6 +32,9 @@ import 'package:capyfit/ui/features/settings/help.dart';
 import 'package:capyfit/ui/features/settings/feedback_page.dart';
 // Onboarding module
 import 'package:capyfit/ui/features/onboarding/onboarding.dart';
+import 'package:capyfit/ui/features/profile/about_us_page.dart';
+import 'package:capyfit/ui/features/profile/level_system_page.dart';
+import 'package:capyfit/ui/common/widgets/webview_page.dart';
 import 'package:capyfit/data/models/food_database.dart';
 import 'package:capyfit/ui/common/widgets/main_scaffold.dart';
 import 'package:capyfit/data/utils/routes.dart';
@@ -225,6 +228,32 @@ GoRouter _createRouter(bool hasUserProfile) {
         path: GlobalRoutes.profileFeedback,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const FeedbackPage(),
+      ),
+      GoRoute(
+        path: GlobalRoutes.profileAbout,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const AboutUsPage(),
+      ),
+      GoRoute(
+        path: GlobalRoutes.profileLevelSystem,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const LevelSystemPage(),
+      ),
+      GoRoute(
+        path: GlobalRoutes.terms,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const WebviewPage(
+          title: GlobalConstants.profileTerms,
+          url: GlobalConstants.termsUrl,
+        ),
+      ),
+      GoRoute(
+        path: GlobalRoutes.privacy,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const WebviewPage(
+          title: GlobalConstants.profilePrivacy,
+          url: GlobalConstants.privacyUrl,
+        ),
       ),
     ],
   );

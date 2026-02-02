@@ -7,12 +7,21 @@ import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/data/utils/constants.dart';
 import 'package:capyfit/data/utils/assets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:capyfit/data/utils/routes.dart';
 
 /// 步骤1：欢迎页面
 class WelcomeStep extends StatelessWidget {
   final VoidCallback onNext;
+  final bool isAgreed;
+  final ValueChanged<bool> onAgreedChanged;
 
-  const WelcomeStep({super.key, required this.onNext});
+  const WelcomeStep({
+    super.key,
+    required this.onNext,
+    required this.isAgreed,
+    required this.onAgreedChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +66,78 @@ class WelcomeStep extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 12),
+          // 协议勾选
+          Row(
+            children: [
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: Checkbox(
+                  value: isAgreed,
+                  onChanged: (v) => onAgreedChanged(v ?? false),
+                  activeColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => onAgreedChanged(!isAgreed),
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.getTextMutedColor(context),
+                      ),
+                      children: [
+                        const TextSpan(text: '我已阅读并同意 '),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: GestureDetector(
+                            onTap: () => context.push(GlobalRoutes.terms),
+                            child: const Text(
+                              '《用户协议》',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const TextSpan(text: ' 和 '),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: GestureDetector(
+                            onTap: () => context.push(GlobalRoutes.privacy),
+                            child: const Text(
+                              '《隐私政策》',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 24),
           HandDrawnButton(
             key: const ValueKey('onboarding_start_button'),
             label: GlobalConstants.onboardingStart,
-            onPressed: onNext,
+            onPressed: isAgreed ? onNext : () {},
             width: double.infinity,
-            backgroundColor: AppColors.primary,
-            textColor: Colors.white,
+            backgroundColor: isAgreed
+                ? AppColors.primary
+                : Colors.grey.shade300,
+            textColor: isAgreed ? Colors.white : Colors.grey.shade600,
           ),
           const SizedBox(height: 24),
         ],

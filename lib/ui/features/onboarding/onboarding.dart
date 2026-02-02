@@ -31,6 +31,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // 状态
   Gender _gender = Gender.male;
   UserGoal _goal = UserGoal.maintain;
+  bool _isAgreed = false;
 
   @override
   void initState() {
@@ -212,7 +213,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   },
                   children: [
                     // 步骤0: 欢迎页
-                    WelcomeStep(onNext: _nextStep),
+                    WelcomeStep(
+                      onNext: _nextStep,
+                      isAgreed: _isAgreed,
+                      onAgreedChanged: (v) => setState(() => _isAgreed = v),
+                    ),
                     // 步骤1: 身体数据 + 性别
                     BodyDataStep(
                       heightController: _heightController,

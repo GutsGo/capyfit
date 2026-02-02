@@ -17,4 +17,8 @@ class GlobalRoutes {
   static const String profileBackup = '/profile/backup';
   static const String profileHelp = '/profile/help';
   static const String profileFeedback = '/profile/feedback';
+  static const String profileAbout = '/profile/about';
+  static const String profileLevelSystem = '/profile/level-system';
+  static const String terms = '/terms';
+  static const String privacy = '/privacy';
 }

@@ -14,6 +14,10 @@ class GlobalConstants {
   static const String githubLatestReleaseHtmlUrl =
       '$githubRepoUrl/releases/latest';
 
+  // --- URLs ---
+  static const String termsUrl = 'https://capyfit.brace.fun/terms.html';
+  static const String privacyUrl = 'https://capyfit.brace.fun/privacy.html';
+
   // --- UI 字符串 ---
   // App Name
   static const String appName = '猛练卡皮';
@@ -66,8 +70,11 @@ class GlobalConstants {
   static const String profileHelp = '使用帮助';
   static const String profileFeedback = '意见反馈';
   static const String profileUpdate = '检查更新';
-  static const String profileVersion = '卡皮健身 v1.0.0';
-  static const String profileDisclaimer = '非商用版本 · 仅供学习交流';
+  static const String profileAbout = '关于我们';
+  static const String profileTerms = '用户协议';
+  static const String profilePrivacy = '隐私政策';
+  static const String profileLevelSystem = '等级系统说明';
+  static const String profileVersion = '猛练卡皮 v1.2.0';
   static const int maxAvatarSize = 3 * 1024 * 1024; // 3MB
 
   // Onboarding
