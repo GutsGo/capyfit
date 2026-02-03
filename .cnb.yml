@@ -1,0 +1,78 @@
+main:
+  push:
+    - name: App Release Build
+      runner:
+        # 使用 arm64 架构构建节点
+        tags: cnb:arch:arm64:v8
+        # 指定资源配额
+        cpus: 16
+      docker:
+        # 使用预装 Flutter 环境的镜像
+        image: ghcr.io/cirruslabs/flutter:latest
+      imports:
+        - https://cnb.cool/bytebites.ai/secrets/-/blob/main/env.prod.yml
+      stages:
+        - name: 环境准备
+          script: |
+            if [ -z "$KEYSTORE_BASE64" ]; then
+              echo "Error: KEYSTORE_BASE64 未设置。请在 CNB 环境变量中配置。"
+              exit 1
+            fi
+            
+            # 创建 android/keystore.jks
+            echo "$KEYSTORE_BASE64" | base64 -d > android/keystore.jks
+            
+            # 创建 key.properties 用于签名
+            echo "storeFile=keystore.jks" > android/key.properties
+            echo "storePassword=$STORE_PASSWORD" >> android/key.properties
+            echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+            echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+            
+        - name: 安装依赖
+          script: flutter pub get
+
+        - name: 打包构建 (IOS)
+          script: |
+            flutter build ios --release --no-codesign --dart-define=GITHUB_TOKEN=$FEEDBACK_TOKEN
+
+        - name: 创建未签名ipa
+          script: |
+            mkdir -p build/ios/iphoneos/Payload
+            cp -R build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/Runner.app
+            cd build/ios/iphoneos/
+            zip -q -r ios_no_sign.ipa Payload
+            cd ../../..
+          
+        - name: 打包构建 (APK)
+          # 使用 --split-per-abi 减小体积，并注入 GITHUB_TOKEN (即 FEEDBACK_TOKEN)
+          script: flutter build apk --split-per-abi --dart-define=GITHUB_TOKEN=$FEEDBACK_TOKEN
+          
+        - name: 文件重命名
+          script: |
+            # CNB_BRANCH 在 tag_push 事件中指向 Tag 名称
+            VERSION=$CNB_BRANCH
+            cd build/app/outputs/flutter-apk/
+            mv app-armeabi-v7a-release.apk capyfit-$VERSION-armeabi-v7a.apk
+            mv app-arm64-v8a-release.apk capyfit-$VERSION-arm64-v8a.apk
+            mv app-x86_64-release.apk capyfit-$VERSION-x86_64.apk
+            
+        - name: 创建发布记录 (Release)
+          image: cnbcool/release:latest
+          settings:
+            title: $CNB_BRANCH
+            body: "自动发布版本 $CNB_BRANCH"
+            draft: false
+            prerelease: false
+            
+        - name: 上传 构建产物
+          image: cnbcool/attachments:latest
+          settings:
+            attachments:
+              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-armeabi-v7a.apk
+              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-arm64-v8a.apk
+              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-x86_64.apk
+              - build/ios/iphoneos/ios_no_sign.ipa
+
+        # 完成
+        - name: 完成
+          script: echo "🍏 Build and Release job completed successfully."
