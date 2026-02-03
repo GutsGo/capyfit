@@ -11,9 +11,21 @@ main:
         image: ghcr.io/cirruslabs/flutter:latest
       imports:
         - https://cnb.cool/bytebites.ai/secrets/-/blob/main/env.prod.yml
+      # 缓存配置以加速构建
+      volumes:
+        - /root/.gradle:cache
+        - /root/.pub-cache:cache
       stages:
+        - name: 环境检查
+          script: |
+            java -version
+            flutter doctor -v
+            
         - name: 环境准备
           script: |
+            # 接受 Android 协议
+            yes | flutter doctor --android-licenses || true
+            
             if [ -z "$KEYSTORE_BASE64" ]; then
               echo "Error: KEYSTORE_BASE64 未设置。请在 CNB 环境变量中配置。"
               exit 1
@@ -37,18 +49,26 @@ main:
           
         - name: 文件重命名
           script: |
-            # CNB_BRANCH 在 tag_push 事件中指向 Tag 名称
-            VERSION=$CNB_BRANCH
+            # 从 pubspec.yaml 提取版本号，避免 main 分支下 VERSION 为 "main"
+            VERSION=$(grep '^version: ' pubspec.yaml | sed 's/version: //')
+            # 这里的 VERSION 可能包含 + 号，处理一下
+            VERSION_NAME=$(echo $VERSION | cut -d '+' -f 1)
+            
+            echo "Building version: $VERSION_NAME"
+            
             cd build/app/outputs/flutter-apk/
-            mv app-armeabi-v7a-release.apk capyfit-$VERSION-armeabi-v7a.apk
-            mv app-arm64-v8a-release.apk capyfit-$VERSION-arm64-v8a.apk
-            mv app-x86_64-release.apk capyfit-$VERSION-x86_64.apk
+            mv app-armeabi-v7a-release.apk capyfit-$VERSION_NAME-armeabi-v7a.apk
+            mv app-arm64-v8a-release.apk capyfit-$VERSION_NAME-arm64-v8a.apk
+            mv app-x86_64-release.apk capyfit-$VERSION_NAME-x86_64.apk
+            
+            # 将变量导出供后续阶段使用
+            echo "APP_VERSION=$VERSION_NAME" >> $CNB_ENV
             
         - name: 创建发布记录 (Release)
           image: cnbcool/release:latest
           settings:
-            title: $CNB_BRANCH
-            body: "自动发布版本 $CNB_BRANCH"
+            title: $APP_VERSION
+            body: "自动发布版本 $APP_VERSION"
             draft: false
             prerelease: false
             
@@ -56,10 +76,9 @@ main:
           image: cnbcool/attachments:latest
           settings:
             attachments:
-              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-armeabi-v7a.apk
-              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-arm64-v8a.apk
-              - build/app/outputs/flutter-apk/capyfit-$CNB_BRANCH-x86_64.apk
-              - build/ios/iphoneos/ios_no_sign.ipa
+              - build/app/outputs/flutter-apk/capyfit-$APP_VERSION-armeabi-v7a.apk
+              - build/app/outputs/flutter-apk/capyfit-$APP_VERSION-arm64-v8a.apk
+              - build/app/outputs/flutter-apk/capyfit-$APP_VERSION-x86_64.apk
 
         # 完成
         - name: 完成
