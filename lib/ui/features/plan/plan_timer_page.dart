@@ -25,6 +25,12 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
   bool _isRunning = true;
   bool _canPop = false;
 
+  // 长按完成相关
+  double _longPressProgress = 0.0;
+  Timer? _longPressTimer;
+  static const int _longPressDurationMs = 1200; // 1.2秒完成
+  static const int _tickMs = 50; // 每50ms更新一次进度
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +65,28 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
         _timer?.cancel();
       }
     });
+  }
+
+  void _startLongPress() {
+    _longPressTimer?.cancel();
+    setState(() => _longPressProgress = 0.0);
+    _longPressTimer = Timer.periodic(const Duration(milliseconds: _tickMs), (
+      timer,
+    ) {
+      setState(() {
+        _longPressProgress += _tickMs / _longPressDurationMs;
+        if (_longPressProgress >= 1.0) {
+          _longPressProgress = 1.0;
+          _longPressTimer?.cancel();
+          _onComplete();
+        }
+      });
+    });
+  }
+
+  void _stopLongPress() {
+    _longPressTimer?.cancel();
+    setState(() => _longPressProgress = 0.0);
   }
 
   void _onComplete() {
@@ -221,8 +249,8 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                         const SizedBox(height: 48),
                         // Timer Circle with semi-transparent background
                         Container(
-                          width: 280,
-                          height: 280,
+                          width: 240,
+                          height: 240,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white.withValues(alpha: 0.15),
@@ -242,7 +270,7 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                             child: Text(
                               _formatTime(_remainingSeconds),
                               style: const TextStyle(
-                                fontSize: 64,
+                                fontSize: 56,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white,
                                 letterSpacing: 2,
@@ -250,7 +278,7 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 64),
+                        const SizedBox(height: 100),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -263,11 +291,10 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                               color: Colors.white.withValues(alpha: 0.2),
                               iconColor: Colors.white,
                             ),
-                            const SizedBox(width: 32),
-                            _buildActionButton(
+                            const SizedBox(width: 52),
+                            _buildLongPressActionButton(
                               icon: LucideIcons.check,
-                              label: '完成',
-                              onTap: _onComplete,
+                              label: '提前完成',
                               color: AppColors.accentMint,
                               iconColor: Colors.white,
                             ),
@@ -322,6 +349,64 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                 size: 32,
               ),
             ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLongPressActionButton({
+    required IconData icon,
+    required String label,
+    Color color = Colors.white,
+    Color? iconColor,
+  }) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTapDown: (_) => _startLongPress(),
+          onTapUp: (_) => _stopLongPress(),
+          onTapCancel: () => _stopLongPress(),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // 进度圆环
+              SizedBox(
+                width: 84,
+                height: 84,
+                child: CircularProgressIndicator(
+                  value: _longPressProgress,
+                  strokeWidth: 4,
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              // 按钮主体
+              HandDrawnContainer(
+                width: 72,
+                height: 72,
+                borderRadius: 36,
+                color: color,
+                child: Center(
+                  child: Transform.scale(
+                    scale: 1.0 + (_longPressProgress * 0.1), // 压下时轻微放大
+                    child: Icon(
+                      icon,
+                      color: iconColor ?? Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 8),

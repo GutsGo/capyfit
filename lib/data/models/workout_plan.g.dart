@@ -29,13 +29,18 @@ class WorkoutPlanAdapter extends TypeAdapter<WorkoutPlan> {
       exercises: (fields[9] as List?)?.cast<String>(),
       mode: fields[10] as PlanMode,
       completedDates: (fields[11] as List?)?.cast<String>(),
+      endDate: fields[12] as String?,
+      isDeleted: fields[13] as bool?,
+      repeatDays: (fields[14] as List?)?.cast<int>(),
+      isChinaHolidayPlan: fields[15] == null ? false : fields[15] as bool,
+      isChinaWorkdayPlan: fields[16] == null ? false : fields[16] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkoutPlan obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +64,17 @@ class WorkoutPlanAdapter extends TypeAdapter<WorkoutPlan> {
       ..writeByte(10)
       ..write(obj.mode)
       ..writeByte(11)
-      ..write(obj.completedDates);
+      ..write(obj.completedDates)
+      ..writeByte(12)
+      ..write(obj.endDate)
+      ..writeByte(13)
+      ..write(obj.isDeleted)
+      ..writeByte(14)
+      ..write(obj.repeatDays)
+      ..writeByte(15)
+      ..write(obj.isChinaHolidayPlan)
+      ..writeByte(16)
+      ..write(obj.isChinaWorkdayPlan);
   }
 
   @override

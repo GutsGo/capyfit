@@ -133,155 +133,129 @@ class _ExerciseSelectionSheetState extends State<ExerciseSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return HandDrawnContainer(
-      color: AppColors.getBackgroundColor(context),
-      borderRadius: 32,
-      margin: const EdgeInsets.all(12),
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        top: 12,
-        left: 20,
-        right: 20,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.getBorderColor(context),
-                borderRadius: BorderRadius.circular(2),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '项目库',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.getTextMainColor(context),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '项目库',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.getTextMainColor(context),
-                ),
+            if (_searchQuery.isNotEmpty)
+              IconButton(
+                icon: const Icon(LucideIcons.xCircle, size: 20),
+                onPressed: () {
+                  _searchController.clear();
+                  _onSearchChanged('');
+                },
               ),
-              if (_searchQuery.isNotEmpty)
-                IconButton(
-                  icon: const Icon(LucideIcons.xCircle, size: 20),
-                  onPressed: () {
-                    _searchController.clear();
-                    _onSearchChanged('');
-                  },
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          HandDrawnTextField(
-            controller: _searchController,
-            hintText: '搜索动作或部位...',
-            onChanged: _onSearchChanged,
-            prefixIcon: const Icon(LucideIcons.search, size: 20),
-          ),
-          const SizedBox(height: 4),
-          Container(
-            constraints: const BoxConstraints(maxHeight: 300),
-            child: _exercises.isEmpty && !_isLoading
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        '未找到相关动作',
-                        style: TextStyle(
-                          color: AppColors.getTextMutedColor(context),
-                        ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        HandDrawnTextField(
+          controller: _searchController,
+          hintText: '搜索动作或部位...',
+          onChanged: _onSearchChanged,
+          prefixIcon: const Icon(LucideIcons.search, size: 20),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          constraints: const BoxConstraints(maxHeight: 300),
+          child: _exercises.isEmpty && !_isLoading
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      '未找到相关动作',
+                      style: TextStyle(
+                        color: AppColors.getTextMutedColor(context),
                       ),
                     ),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    shrinkWrap: true,
-                    itemCount: _exercises.length + (_hasMore ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == _exercises.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Center(
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          ),
-                        );
-                      }
-
-                      final ex = _exercises[index];
-                      final calPerSet = context
-                          .read<AppProvider>()
-                          .calculateExerciseCalories(ex);
-
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: HandDrawnContainer(
-                          padding: const EdgeInsets.all(4),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                            ),
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                ex.image ?? '',
-                                width: 44,
-                                height: 44,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 44,
-                                    height: 44,
-                                    color: AppColors.accentMint.withOpacity(
-                                      0.2,
-                                    ),
-                                    child: const Icon(
-                                      LucideIcons.dumbbell,
-                                      color: AppColors.primary,
-                                      size: 20,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            title: Text(
-                              ex.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '$calPerSet kcal/组 · ${ex.sets ?? 3}组',
-                              style: TextStyle(
-                                color: AppColors.getTextMutedColor(context),
-                                fontSize: 13,
-                              ),
-                            ),
-                            trailing: const Icon(
-                              LucideIcons.plusCircle,
-                              color: AppColors.primary,
-                              size: 24,
-                            ),
-                            onTap: () => widget.onSelect(ex),
+                  ),
+                )
+              : ListView.builder(
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  itemCount: _exercises.length + (_hasMore ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == _exercises.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           ),
                         ),
                       );
-                    },
-                  ),
-          ),
-        ],
-      ),
+                    }
+
+                    final ex = _exercises[index];
+                    final calPerSet = context
+                        .read<AppProvider>()
+                        .calculateExerciseCalories(ex);
+
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: HandDrawnContainer(
+                        padding: const EdgeInsets.all(4),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                          ),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              ex.image ?? '',
+                              width: 44,
+                              height: 44,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 44,
+                                  height: 44,
+                                  color: AppColors.accentMint.withOpacity(0.2),
+                                  child: const Icon(
+                                    LucideIcons.dumbbell,
+                                    color: AppColors.primary,
+                                    size: 20,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          title: Text(
+                            ex.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            '$calPerSet kcal/组 · ${ex.sets ?? 3}组',
+                            style: TextStyle(
+                              color: AppColors.getTextMutedColor(context),
+                              fontSize: 13,
+                            ),
+                          ),
+                          trailing: const Icon(
+                            LucideIcons.plusCircle,
+                            color: AppColors.primary,
+                            size: 24,
+                          ),
+                          onTap: () => widget.onSelect(ex),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ],
     );
   }
 }

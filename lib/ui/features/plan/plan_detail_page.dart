@@ -59,11 +59,9 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
     final Map<String, Exercise> newMap = {};
 
     for (final name in newNames) {
-      try {
-        final match = localExercises.firstWhere((e) => e.name == name);
-        newMap[name] = match;
-      } catch (_) {
-        // Not found locally
+      final matches = localExercises.where((e) => e.name == name);
+      if (matches.isNotEmpty) {
+        newMap[name] = matches.first;
       }
     }
 
@@ -98,8 +96,13 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
 
     final todayStr = DateTime.now().toString().split(' ')[0];
     final viewDateStr = widget.date ?? todayStr;
+    final viewDate = DateTime.parse(viewDateStr);
+    final todayDate = DateTime.parse(todayStr);
+
     final isToday = viewDateStr == todayStr;
+    final isFuture = viewDate.isAfter(todayDate);
     final isCompleted = currentPlan.isCompletedOn(viewDateStr);
+    final isHistory = viewDateStr.compareTo(todayStr) < 0;
 
     // Check for new exercises that need resolving
     final currentExercises = currentPlan.exercises ?? [];
@@ -114,29 +117,36 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('计划详情'),
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => context.pop(),
-        ),
-        actions: isToday
-            ? [
-                IconButton(
-                  icon: const Icon(LucideIcons.edit3, size: 20),
-                  onPressed: () =>
-                      context.push(GlobalRoutes.planAdd, extra: currentPlan),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    LucideIcons.trash2,
-                    size: 20,
-                    color: Colors.redAccent,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('计划详情'),
+            if (isCompleted) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.accentMint.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: AppColors.accentMint.withValues(alpha: 0.5),
+                    width: 1,
                   ),
-                  onPressed: () =>
-                      _confirmDelete(context, appState, currentPlan),
                 ),
-              ]
-            : null,
+                child: const Text(
+                  'DONE',
+                  style: TextStyle(
+                    color: AppColors.accentMint,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 8,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        actions: const [],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -145,7 +155,15 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(context, currentPlan, isCompleted, appState),
+                  _buildHeader(
+                    context,
+                    currentPlan,
+                    isCompleted,
+                    isToday,
+                    isFuture,
+                    isHistory,
+                    appState,
+                  ),
                   const SizedBox(height: 24),
                   _buildStats(context, currentPlan),
                   const SizedBox(height: 32),
@@ -164,15 +182,29 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
     BuildContext context,
     WorkoutPlan plan,
     bool isCompleted,
+    bool isToday,
+    bool isFuture,
+    bool isHistory,
     AppProvider appState,
   ) {
-    // Attempt to find completion time for the current date view
+    // Determine if "Manage" menu should be shown
+    bool showManage = false;
+    if (!isCompleted) {
+      if (plan.mode == PlanMode.oneTime) {
+        // 单次计划：未完成即可管理（过去/今日/未来）
+        showManage = true;
+      } else {
+        // 长期计划：仅限今日调整
+        showManage = isToday;
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Text(
@@ -183,29 +215,120 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
                 ),
               ),
             ),
-            if (isCompleted)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.accentMint.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.accentMint, width: 2),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '已完成',
-                      style: const TextStyle(
-                        color: AppColors.accentMint,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+            const SizedBox(width: 12),
+            if (showManage)
+              PopupMenuButton<String>(
+                elevation: 0,
+                offset: const Offset(0, 8),
+                position: PopupMenuPosition.under,
+                color: Colors.transparent,
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    context.push(
+                      GlobalRoutes.planAdd,
+                      extra: {'plan': plan, 'date': widget.date},
+                    );
+                  } else if (value == 'delete') {
+                    _confirmDelete(context, appState, plan);
+                  }
+                },
+                itemBuilder: (context) {
+                  final isHistoryUncompletedOneTime =
+                      isHistory &&
+                      !isCompleted &&
+                      plan.mode == PlanMode.oneTime;
+
+                  return [
+                    if (!isHistoryUncompletedOneTime)
+                      PopupMenuItem(
+                        value: 'edit',
+                        padding: EdgeInsets.zero,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: HandDrawnContainer(
+                            margin: const EdgeInsets.only(bottom: 8, right: 0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            color: AppColors.getCardColor(context),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(LucideIcons.edit3, size: 16),
+                                const SizedBox(width: 12),
+                                Text(
+                                  '编辑',
+                                  style: TextStyle(
+                                    color: AppColors.getTextMainColor(context),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      padding: EdgeInsets.zero,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: HandDrawnContainer(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          color: AppColors.getCardColor(context),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                LucideIcons.trash2,
+                                size: 16,
+                                color: Colors.redAccent,
+                              ),
+                              const SizedBox(width: 12),
+                              const Text(
+                                '删除',
+                                style: TextStyle(
+                                  color: Colors.redAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ],
+                  ];
+                },
+                child: HandDrawnContainer(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  color: AppColors.getCardColor(context),
+                  borderRadius: 12,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LucideIcons.settings2,
+                        size: 14,
+                        color: AppColors.getTextMutedColor(context),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '管理',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.getTextMutedColor(context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
           ],
@@ -213,17 +336,9 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
         const SizedBox(height: 12),
         Row(
           children: [
-            _buildTag(
-              plan.type == WorkoutType.strength ? '力量训练' : '有氧运动',
-              plan.type == WorkoutType.strength
-                  ? AppColors.accentOrange
-                  : AppColors.accentMint,
-            ),
+            _buildWorkoutTypeTag(plan.type),
             const SizedBox(width: 8),
-            _buildTag(
-              plan.mode == PlanMode.longTerm ? '长期计划' : '单次计划',
-              AppColors.accentPurple,
-            ),
+            _buildTag(plan.recurrenceLabel, AppColors.accentPurple),
           ],
         ),
       ],
@@ -461,16 +576,23 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
             flex: 1,
             child: HandDrawnButton(
               onPressed: () {
+                showHandDrawnSnackBar(
+                  context,
+                  '请长按以立即${isCompleted ? '取消完成计划' : '完成计划'}',
+                  type: ToastType.info,
+                );
+              },
+              onLongPress: () {
                 final targetDate =
                     widget.date ?? DateTime.now().toString().split(' ')[0];
                 appState.togglePlanComplete(plan.id, forDate: targetDate);
-                // Do not pop, just show snackbar. State updates automatically via Provider.
                 showHandDrawnSnackBar(
                   context,
                   isCompleted ? '已取消完成' : '计划已完成！✨',
                 );
               },
-              label: isCompleted ? '标记未完成' : '立即完成',
+              icon: LucideIcons.pointer,
+              label: isCompleted ? '标记未完成' : '完成',
               backgroundColor: isCompleted ? Colors.grey : AppColors.accentMint,
               textColor: Colors.white,
               height: 56,
@@ -598,5 +720,31 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildWorkoutTypeTag(WorkoutType type) {
+    String label;
+    Color color;
+
+    switch (type) {
+      case WorkoutType.strength:
+        label = '力量训练';
+        color = AppColors.accentOrange;
+        break;
+      case WorkoutType.cardio:
+        label = '有氧运动';
+        color = AppColors.accentMint;
+        break;
+      case WorkoutType.yoga:
+        label = '形体训练';
+        color = AppColors.accentPurple;
+        break;
+      case WorkoutType.other:
+        label = '综合训练';
+        color = AppColors.accentPink;
+        break;
+    }
+
+    return _buildTag(label, color);
   }
 }

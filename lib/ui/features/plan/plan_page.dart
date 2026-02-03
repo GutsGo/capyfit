@@ -51,12 +51,8 @@ class _PlanPageState extends State<PlanPage> {
     final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     final dayPlans = allPlans.where((p) {
-      if (p.mode == PlanMode.oneTime) {
-        return p.date == selectedDateStr;
-      } else {
-        // longTerm: show if selectedDate is on or after p.date
-        return selectedDateStr.compareTo(p.date) >= 0;
-      }
+      if (p.isDeleted == true) return false;
+      return p.isActiveOn(_selectedDate);
     }).toList();
 
     // Helper function to determine if plan should show as completed on selected date
@@ -143,9 +139,7 @@ class _PlanPageState extends State<PlanPage> {
                                     ),
                                     child: Center(
                                       child: Icon(
-                                        plan.type == WorkoutType.strength
-                                            ? LucideIcons.dumbbell
-                                            : LucideIcons.heart,
+                                        _getPlanTypeIcon(plan.type),
                                         color: _getPlanTypeColor(plan.type),
                                         size: 24,
                                       ),
@@ -213,9 +207,7 @@ class _PlanPageState extends State<PlanPage> {
                                                     BorderRadius.circular(6),
                                               ),
                                               child: Text(
-                                                plan.mode == PlanMode.longTerm
-                                                    ? '长期'
-                                                    : '单次',
+                                                plan.recurrenceLabel,
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color:
@@ -282,7 +274,10 @@ class _PlanPageState extends State<PlanPage> {
       ),
       floatingActionButton: HandDrawnFAB(
         heroTag: 'plan_fab',
-        onPressed: () => context.push('/plan/add'),
+        onPressed: () => context.push(
+          GlobalRoutes.planAdd,
+          extra: {'date': selectedDateStr},
+        ),
         backgroundColor: AppColors.primary,
         child: const Icon(LucideIcons.plus, color: Colors.white, size: 28),
       ),
@@ -331,8 +326,23 @@ class _PlanPageState extends State<PlanPage> {
         return AppColors.primary;
       case WorkoutType.cardio:
         return AppColors.accentMint;
-      default:
-        return AppColors.accentOrange;
+      case WorkoutType.yoga:
+        return AppColors.accentPurple;
+      case WorkoutType.other:
+        return AppColors.accentPink;
+    }
+  }
+
+  IconData _getPlanTypeIcon(WorkoutType type) {
+    switch (type) {
+      case WorkoutType.strength:
+        return LucideIcons.dumbbell;
+      case WorkoutType.cardio:
+        return LucideIcons.heart;
+      case WorkoutType.yoga:
+        return LucideIcons.sparkles;
+      case WorkoutType.other:
+        return LucideIcons.activity;
     }
   }
 

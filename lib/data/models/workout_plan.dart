@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:lunar/lunar.dart';
 
 part 'workout_plan.g.dart';
 
@@ -58,6 +59,16 @@ class WorkoutPlan extends HiveObject {
   final PlanMode mode;
   @HiveField(11)
   final List<String>? completedDates; // Track completed dates for longTerm plans
+  @HiveField(12)
+  final String? endDate; // For longTerm plans, the date when it was "deleted"
+  @HiveField(13)
+  final bool? isDeleted; // Logical delete for oneTime plans
+  @HiveField(14)
+  final List<int>? repeatDays; // 1-7 for Mon-Sun, null/empty for everyday
+  @HiveField(15, defaultValue: false)
+  final bool isChinaHolidayPlan; // True if active on holidays
+  @HiveField(16, defaultValue: false)
+  final bool isChinaWorkdayPlan; // True if active on workdays (including make-up workdays)
 
   WorkoutPlan({
     required this.id,
@@ -72,7 +83,40 @@ class WorkoutPlan extends HiveObject {
     this.exercises,
     this.mode = PlanMode.oneTime,
     this.completedDates,
+    this.endDate,
+    this.isDeleted,
+    this.repeatDays,
+    this.isChinaHolidayPlan = false,
+    this.isChinaWorkdayPlan = false,
   });
+
+  /// Get a user-friendly label for the plan's recurrence mode
+  String get recurrenceLabel {
+    if (mode == PlanMode.oneTime) {
+      return '单次计划';
+    }
+
+    if (isChinaWorkdayPlan) {
+      return '长期 (工作日)';
+    }
+
+    if (isChinaHolidayPlan) {
+      return '长期 (节假日)';
+    }
+
+    if (repeatDays != null && repeatDays!.isNotEmpty) {
+      final days = repeatDays!.toSet().toList()..sort();
+      final dayLabels = days
+          .map((d) {
+            const labels = ['一', '二', '三', '四', '五', '六', '日'];
+            return labels[d - 1];
+          })
+          .join('/');
+      return '长期 (周$dayLabels)';
+    }
+
+    return '长期 (每天)';
+  }
 
   /// Check if this plan is completed on a specific date
   bool isCompletedOn(String dateStr) {
@@ -82,6 +126,66 @@ class WorkoutPlan extends HiveObject {
       // For longTerm plans, check the completedDates list
       return completedDates?.contains(dateStr) ?? false;
     }
+  }
+
+  /// Check if the plan is active on a specific date (for filtering)
+  bool isActiveOn(DateTime date) {
+    if (mode == PlanMode.oneTime) {
+      final dateOnlyStr = date.toString().split(' ')[0];
+      return this.date == dateOnlyStr;
+    }
+
+    // LongTerm plan
+    final dateOnlyStr = date.toString().split(' ')[0];
+
+    // Check endDate
+    if (endDate != null && dateOnlyStr.compareTo(endDate!) > 0) {
+      return false;
+    }
+
+    // Check startDate (using this.date as start date for long term plans)
+    if (dateOnlyStr.compareTo(this.date) < 0) {
+      return false;
+    }
+
+    if (isChinaWorkdayPlan) {
+      final solar = Solar.fromYmd(date.year, date.month, date.day);
+      final holiday = HolidayUtil.getHoliday(solar.toYmd());
+      // A day is a workday if:
+      // 1. It's a normal workday (Mon-Fri) and NOT a holiday
+      // 2. OR it's a weekend but marked as WORK (make-up day) in holiday list
+
+      if (holiday != null) {
+        return holiday.isWork();
+      } else {
+        // No holiday info, follow Mon-Fri rule
+        final weekday = date.weekday;
+        return weekday >= 1 && weekday <= 5;
+      }
+    }
+
+    if (isChinaHolidayPlan) {
+      final solar = Solar.fromYmd(date.year, date.month, date.day);
+      final holiday = HolidayUtil.getHoliday(solar.toYmd());
+
+      // A day is a holiday if:
+      // 1. It is marked as holiday (NOT work) in holiday list
+      // 2. OR it's a weekend (Sat-Sun) and NOT marked as work
+
+      if (holiday != null) {
+        return !holiday.isWork();
+      } else {
+        final weekday = date.weekday;
+        return weekday == 6 || weekday == 7;
+      }
+    }
+
+    if (repeatDays != null && repeatDays!.isNotEmpty) {
+      return repeatDays!.contains(date.weekday);
+    }
+
+    // Default to everyday if no specific rules
+    return true;
   }
 
   /// Toggle completion status for a specific date
@@ -118,6 +222,11 @@ class WorkoutPlan extends HiveObject {
     List<String>? exercises,
     PlanMode? mode,
     List<String>? completedDates,
+    String? endDate,
+    bool? isDeleted,
+    List<int>? repeatDays,
+    bool? isChinaHolidayPlan,
+    bool? isChinaWorkdayPlan,
   }) {
     return WorkoutPlan(
       id: id ?? this.id,
@@ -132,6 +241,11 @@ class WorkoutPlan extends HiveObject {
       exercises: exercises ?? this.exercises,
       mode: mode ?? this.mode,
       completedDates: completedDates ?? this.completedDates,
+      endDate: endDate ?? this.endDate,
+      isDeleted: isDeleted ?? this.isDeleted,
+      repeatDays: repeatDays ?? this.repeatDays,
+      isChinaHolidayPlan: isChinaHolidayPlan ?? this.isChinaHolidayPlan,
+      isChinaWorkdayPlan: isChinaWorkdayPlan ?? this.isChinaWorkdayPlan,
     );
   }
 
@@ -149,6 +263,11 @@ class WorkoutPlan extends HiveObject {
       'exercises': exercises,
       'mode': mode.index,
       'completedDates': completedDates,
+      'endDate': endDate,
+      'isDeleted': isDeleted,
+      'repeatDays': repeatDays,
+      'isChinaHolidayPlan': isChinaHolidayPlan,
+      'isChinaWorkdayPlan': isChinaWorkdayPlan,
     };
   }
 
@@ -166,12 +285,17 @@ class WorkoutPlan extends HiveObject {
       exercises: (json['exercises'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      mode:
-          PlanMode.values[json['mode'] as int? ??
-              1], // Default to oneTime (index 1 is wrong in enum def? Let's check) -- PlanMode has 0:longTerm, 2:oneTime in definition.
+      mode: PlanMode.values[json['mode'] as int? ?? 1], // Default to oneTime
       completedDates: (json['completedDates'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      endDate: json['endDate'] as String?,
+      isDeleted: json['isDeleted'] as bool? ?? false,
+      repeatDays: (json['repeatDays'] as List<dynamic>?)
+          ?.map((e) => e as int)
+          .toList(),
+      isChinaHolidayPlan: json['isChinaHolidayPlan'] as bool? ?? false,
+      isChinaWorkdayPlan: json['isChinaWorkdayPlan'] as bool? ?? false,
     );
   }
 }

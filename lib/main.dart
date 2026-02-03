@@ -141,8 +141,16 @@ GoRouter _createRouter(bool hasUserProfile) {
       GoRoute(
         path: GlobalRoutes.planAdd,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) =>
-            AddPlanPage(initialPlan: state.extra as WorkoutPlan?),
+        builder: (context, state) {
+          if (state.extra is Map<String, dynamic>) {
+            final data = state.extra as Map<String, dynamic>;
+            return AddPlanPage(
+              initialPlan: data['plan'] as WorkoutPlan?,
+              date: data['date'] as String?,
+            );
+          }
+          return AddPlanPage(initialPlan: state.extra as WorkoutPlan?);
+        },
       ),
       GoRoute(
         path: GlobalRoutes.planDetail,

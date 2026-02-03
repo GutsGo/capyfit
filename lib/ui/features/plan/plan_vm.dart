@@ -19,10 +19,18 @@ class PlanViewModel extends BaseViewModel {
   void _loadPlans() {
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
     _dayPlans = workoutRepository.getWorkoutPlans().where((p) {
+      if (p.isDeleted == true) return false;
+
       if (p.mode == PlanMode.oneTime) {
-        return p.date == dateStr;
+        // 单次计划：如果是当天计划，或者虽然是过去但已完成的计划（历史课查）
+        return p.date == dateStr ||
+            (p.completed && p.date.compareTo(dateStr) < 0);
       } else {
-        return dateStr.compareTo(p.date) >= 0;
+        // 长期计划：selectedDate >= 创建日期 且 (未删除 或 selectedDate <= 结束日期)
+        final isStarted = dateStr.compareTo(p.date) >= 0;
+        final isNotEnded =
+            p.endDate == null || dateStr.compareTo(p.endDate!) <= 0;
+        return isStarted && isNotEnded;
       }
     }).toList();
     notifyListeners();

@@ -8,11 +8,14 @@ import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/features/plan/widgets/exercise_selection_sheet.dart';
+import 'package:capyfit/data/services/exercise_db_service.dart';
 
 class AddPlanPage extends StatefulWidget {
   final WorkoutPlan? initialPlan;
-  const AddPlanPage({super.key, this.initialPlan});
+  final String? date;
+  const AddPlanPage({super.key, this.initialPlan, this.date});
 
   @override
   State<AddPlanPage> createState() => _AddPlanPageState();
@@ -28,7 +31,14 @@ class _AddPlanPageState extends State<AddPlanPage> {
   PlanMode _mode = PlanMode.longTerm;
   Intensity _intensity = Intensity.medium;
   final List<String> _selectedExercises = [];
+  final Map<String, ExerciseCategory?> _exerciseCategoryMap = {};
+  final _exerciseService = ExerciseDbService();
   int _totalCalories = 0;
+
+  // New recurrence fields
+  Set<int> _selectedWeekdays = {};
+  bool _isChinaWorkday = false;
+  bool _isChinaHoliday = false;
 
   @override
   void initState() {
@@ -43,6 +53,21 @@ class _AddPlanPageState extends State<AddPlanPage> {
       _intensity = plan.intensity;
       _selectedExercises.addAll(plan.exercises ?? []);
       _totalCalories = plan.calories;
+
+      // Load recurrence
+      if (plan.repeatDays != null) {
+        _selectedWeekdays = plan.repeatDays!.toSet();
+      }
+      _isChinaWorkday = plan.isChinaWorkdayPlan;
+      _isChinaHoliday = plan.isChinaHolidayPlan;
+
+      _initializeExerciseCategories();
+    } else if (widget.date != null) {
+      // If we are adding for a specific date (e.g. from future date in calendar)
+      final todayStr = DateTime.now().toString().split(' ')[0];
+      if (widget.date!.compareTo(todayStr) > 0) {
+        _mode = PlanMode.oneTime; // Force oneTime for future
+      }
     }
   }
 
@@ -54,9 +79,75 @@ class _AddPlanPageState extends State<AddPlanPage> {
     super.dispose();
   }
 
+  Future<void> _initializeExerciseCategories() async {
+    if (_selectedExercises.isEmpty) return;
+    final results = await _exerciseService.getExercisesByNames(
+      _selectedExercises,
+    );
+    if (!mounted) return;
+    setState(() {
+      for (final name in _selectedExercises) {
+        _exerciseCategoryMap[name] = results[name]?.category;
+      }
+      _updateWorkoutType();
+    });
+  }
+
+  void _updateWorkoutType() {
+    if (_selectedExercises.isEmpty) {
+      setState(() => _type = WorkoutType.strength);
+      return;
+    }
+
+    final categories = _selectedExercises
+        .map((name) => _exerciseCategoryMap[name])
+        .toList();
+
+    // 如果包含自定义动作（null），则判定为综合
+    if (categories.contains(null)) {
+      setState(() => _type = WorkoutType.other);
+      return;
+    }
+
+    final distinctCategories = categories.whereType<ExerciseCategory>().toSet();
+
+    // 判断是否全部属于力量组：核心、上肢、下肢、全身
+    final isAllStrength = distinctCategories.every(
+      (c) =>
+          c == ExerciseCategory.core ||
+          c == ExerciseCategory.upperBody ||
+          c == ExerciseCategory.lowerBody ||
+          c == ExerciseCategory.fullBody,
+    );
+
+    if (isAllStrength) {
+      setState(() => _type = WorkoutType.strength);
+      return;
+    }
+
+    // 判断是否全部是有氧
+    if (distinctCategories.length == 1 &&
+        distinctCategories.first == ExerciseCategory.cardio) {
+      setState(() => _type = WorkoutType.cardio);
+      return;
+    }
+
+    // 判断是否全部是形体
+    if (distinctCategories.length == 1 &&
+        distinctCategories.first == ExerciseCategory.bodySculpting) {
+      setState(() => _type = WorkoutType.yoga);
+      return;
+    }
+
+    // 否则为综合
+    setState(() => _type = WorkoutType.other);
+  }
+
   void _addExerciseFromLibrary(Exercise exercise) {
     setState(() {
       _selectedExercises.add(exercise.name);
+      _exerciseCategoryMap[exercise.name] = exercise.category;
+
       // 使用科学算法进行计算
       final int exerciseCals = context
           .read<AppProvider>()
@@ -64,14 +155,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
       _totalCalories += (exerciseCals * (exercise.sets ?? 3));
       _caloriesController.text = _totalCalories.toString();
 
-      // Auto-set type if it's the first exercise
-      if (_selectedExercises.length == 1) {
-        if (exercise.category == ExerciseCategory.cardio) {
-          _type = WorkoutType.cardio;
-        } else {
-          _type = WorkoutType.strength;
-        }
-      }
+      _updateWorkoutType();
     });
   }
 
@@ -79,14 +163,14 @@ class _AddPlanPageState extends State<AddPlanPage> {
     if (name.isEmpty) return;
     setState(() {
       _selectedExercises.add(name);
+      _exerciseCategoryMap[name] = null; // Custom
+      _updateWorkoutType();
     });
   }
 
   void _showExerciseLibrary() {
-    showModalBottomSheet(
+    HandDrawnBottomSheet.show(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
       builder: (context) {
         return ExerciseSelectionSheet(
           onSelect: (ex) {
@@ -102,35 +186,123 @@ class _AddPlanPageState extends State<AddPlanPage> {
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    showDialog(
+    HandDrawnBottomSheet.show(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: HandDrawnContainer(
-          color: AppColors.getBackgroundColor(context),
-          borderRadius: 24,
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (context) => Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '自定义动作',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            HandDrawnTextField(
+              controller: controller,
+              hintText: '输入动作名称',
+              validator: (val) => Validators.required(val, '动作名称'),
+              autofocus: true,
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text(
-                  '自定义动作',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    '取消',
+                    style: TextStyle(
+                      color: AppColors.getTextMutedColor(context),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 20),
-                HandDrawnTextField(
-                  controller: controller,
-                  hintText: '输入动作名称',
-                  validator: (val) => Validators.required(val, '动作名称'),
+                const SizedBox(width: 8),
+                HandDrawnButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      _addCustomExercise(controller.text);
+                      Navigator.pop(context);
+                    }
+                  },
+                  label: '添加',
+                  backgroundColor: AppColors.primary,
+                  textColor: Colors.white,
                 ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCustomWeekdaysDialog() {
+    Set<int> tempSelected = Set.from(_selectedWeekdays);
+
+    HandDrawnBottomSheet.show(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '选择重复日期',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (int i = 1; i <= 7; i++)
+                    GestureDetector(
+                      onTap: () {
+                        setSheetState(() {
+                          if (tempSelected.contains(i)) {
+                            tempSelected.remove(i);
+                          } else {
+                            tempSelected.add(i);
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: tempSelected.contains(i)
+                              ? AppColors.primary
+                              : AppColors.getCardColor(context),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.primary,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            _getWeekdayLabel(i),
+                            style: TextStyle(
+                              color: tempSelected.contains(i)
+                                  ? Colors.white
+                                  : AppColors.getTextMainColor(context),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         '取消',
@@ -139,26 +311,44 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    HandDrawnButton(
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: HandDrawnButton(
                       onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          _addCustomExercise(controller.text);
-                          Navigator.pop(context);
-                        }
+                        setState(() {
+                          // 如果选择了全部 7 天，自动转换为“每天”（即清空选择项）
+                          if (tempSelected.length == 7) {
+                            _selectedWeekdays = {};
+                          } else {
+                            _selectedWeekdays = tempSelected;
+                          }
+
+                          if (_selectedWeekdays.isNotEmpty) {
+                            _isChinaWorkday = false;
+                            _isChinaHoliday = false;
+                          }
+                        });
+                        Navigator.pop(context);
                       },
-                      label: '添加',
+                      label: '确认',
                       backgroundColor: AppColors.primary,
                       textColor: Colors.white,
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  String _getWeekdayLabel(int day) {
+    const labels = ['一', '二', '三', '四', '五', '六', '日'];
+    return labels[day - 1];
   }
 
   @override
@@ -238,7 +428,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                     (v) => Validators.number(v, '预估消耗'),
                                     (v) => Validators.range(
                                       v,
-                                      min: 0,
+                                      min: 1,
                                       max: 5000,
                                       fieldName: '预估消耗',
                                       unit: 'kcal',
@@ -299,11 +489,15 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                           color: Colors.redAccent,
                                           size: 18,
                                         ),
-                                        onPressed: () => setState(
-                                          () => _selectedExercises.removeAt(
+                                        onPressed: () => setState(() {
+                                          final name =
+                                              _selectedExercises[entry.key];
+                                          _selectedExercises.removeAt(
                                             entry.key,
-                                          ),
-                                        ),
+                                          );
+                                          _exerciseCategoryMap.remove(name);
+                                          _updateWorkoutType();
+                                        }),
                                         padding: EdgeInsets.zero,
                                         constraints: const BoxConstraints(),
                                       ),
@@ -323,33 +517,38 @@ class _AddPlanPageState extends State<AddPlanPage> {
                                     : AppColors.divider,
                               ),
 
-                            Row(
+                            Wrap(
+                              spacing: 12,
+                              runSpacing: 10,
                               children: [
-                                Expanded(
-                                  child: HandDrawnButton(
-                                    onPressed: _showExerciseLibrary,
-                                    label: '项目库',
-                                    icon: LucideIcons.library,
-                                    backgroundColor:
-                                        AppColors.accentMint, // Mint
-                                    textColor: AppColors.getTextMainColor(
-                                      context,
-                                    ),
-                                    height: 48,
+                                HandDrawnButton(
+                                  onPressed: _showExerciseLibrary,
+                                  label: '项目库',
+                                  icon: LucideIcons.library,
+                                  backgroundColor: AppColors.accentMint,
+                                  textColor: AppColors.getTextMainColor(
+                                    context,
+                                  ),
+                                  height: 38,
+                                  fontSize: 14,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: HandDrawnButton(
-                                    onPressed: _showCustomExerciseDialog,
-                                    label: '自定义',
-                                    icon: LucideIcons.plus,
-                                    backgroundColor:
-                                        AppColors.accentPurple, // Purple
-                                    textColor: AppColors.getTextMainColor(
-                                      context,
-                                    ),
-                                    height: 48,
+                                HandDrawnButton(
+                                  onPressed: _showCustomExerciseDialog,
+                                  label: '自定义',
+                                  icon: LucideIcons.plus,
+                                  backgroundColor: AppColors.accentPurple,
+                                  textColor: AppColors.getTextMainColor(
+                                    context,
+                                  ),
+                                  height: 38,
+                                  fontSize: 14,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
                                   ),
                                 ),
                               ],
@@ -359,58 +558,73 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Type/Preference
-                      _buildLabel('完成倾向'),
-                      Row(
+                      // Plan Mode
+                      _buildLabel('类型'),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
                         children: [
-                          Expanded(
-                            child: _buildTypeChip(
-                              WorkoutType.strength,
-                              '力量',
-                              AppColors.accentMint,
-                            ),
+                          _buildModeChip(
+                            PlanMode.longTerm,
+                            '长期计划',
+                            AppColors.primary,
+                            disabled: _isFutureDateSelected(),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildTypeChip(
-                              WorkoutType.cardio,
-                              '有氧',
-                              AppColors.accentPink,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildTypeChip(
-                              WorkoutType.yoga,
-                              '瑜伽',
-                              AppColors.accentPurple,
-                            ),
+                          _buildModeChip(
+                            PlanMode.oneTime,
+                            '单次计划',
+                            AppColors.accentOrange,
                           ),
                         ],
                       ),
                       const SizedBox(height: 24),
 
-                      // Plan Mode
-                      _buildLabel('计划类型'),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildModeChip(
-                              PlanMode.longTerm,
-                              '长期计划',
-                              AppColors.primary,
+                      if (_mode == PlanMode.longTerm) ...[
+                        _buildLabel('时间'),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
+                            _buildRecurrenceChip(
+                              '每天',
+                              isSelected:
+                                  !_isChinaWorkday &&
+                                  !_isChinaHoliday &&
+                                  _selectedWeekdays.isEmpty,
+                              onTap: () => setState(() {
+                                _isChinaWorkday = false;
+                                _isChinaHoliday = false;
+                                _selectedWeekdays.clear();
+                              }),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildModeChip(
-                              PlanMode.oneTime,
-                              '单次计划',
-                              AppColors.accentOrange,
+                            _buildRecurrenceChip(
+                              '工作日',
+                              isSelected: _isChinaWorkday,
+                              onTap: () => setState(() {
+                                _isChinaWorkday = true;
+                                _isChinaHoliday = false;
+                                _selectedWeekdays.clear();
+                              }),
                             ),
-                          ),
-                        ],
-                      ),
+                            _buildRecurrenceChip(
+                              '节假日',
+                              isSelected: _isChinaHoliday,
+                              onTap: () => setState(() {
+                                _isChinaHoliday = true;
+                                _isChinaWorkday = false;
+                                _selectedWeekdays.clear();
+                              }),
+                            ),
+                            _buildRecurrenceChip(
+                              _selectedWeekdays.isEmpty
+                                  ? '自定义'
+                                  : '周${_selectedWeekdays.map((e) => _getWeekdayLabel(e)).join('/')}',
+                              isSelected: _selectedWeekdays.isNotEmpty,
+                              onTap: _showCustomWeekdaysDialog,
+                            ),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -421,9 +635,6 @@ class _AddPlanPageState extends State<AddPlanPage> {
             // Bottom Action Bar
             Container(
               padding: const EdgeInsets.all(20),
-              // decoration: const BoxDecoration(
-              //   border: Border(top: BorderSide(color: AppColors.border, width: 1)),
-              // ),
               child: Row(
                 children: [
                   Expanded(
@@ -471,24 +682,30 @@ class _AddPlanPageState extends State<AddPlanPage> {
     );
   }
 
-  Widget _buildTypeChip(WorkoutType type, String label, Color color) {
-    final isSelected = _type == type;
+  Widget _buildModeChip(
+    PlanMode mode,
+    String label,
+    Color color, {
+    bool disabled = false,
+  }) {
+    final isSelected = _mode == mode;
     return GestureDetector(
-      onTap: () => setState(() => _type = type),
-      child: HandDrawnContainer(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        color: isSelected ? color : AppColors.getCardColor(context),
-        borderRadius: 12,
-        borderColor: AppColors.primary,
-        borderWidth: 1.5,
-        child: Center(
+      onTap: disabled ? null : () => setState(() => _mode = mode),
+      child: Opacity(
+        opacity: disabled ? 0.4 : 1.0,
+        child: HandDrawnContainer(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          color: isSelected ? color : AppColors.getCardColor(context),
+          borderRadius: 12,
+          borderColor: AppColors.primary,
+          borderWidth: 1.5,
           child: Text(
             label,
             style: TextStyle(
               color: isSelected
                   ? Colors.white
                   : AppColors.getTextMainColor(context),
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             ),
           ),
@@ -497,34 +714,19 @@ class _AddPlanPageState extends State<AddPlanPage> {
     );
   }
 
-  Widget _buildModeChip(PlanMode mode, String label, Color color) {
-    final isSelected = _mode == mode;
-    return GestureDetector(
-      onTap: () => setState(() => _mode = mode),
-      child: HandDrawnContainer(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        color: isSelected ? color : AppColors.getCardColor(context),
-        borderRadius: 12,
-        borderColor: AppColors.primary,
-        borderWidth: 1.5,
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected
-                  ? Colors.white
-                  : AppColors.getTextMainColor(context),
-              fontSize: 16,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
-    );
+  bool _isFutureDateSelected() {
+    if (widget.date == null) return false;
+    final todayStr = DateTime.now().toString().split(' ')[0];
+    return widget.date!.compareTo(todayStr) > 0;
   }
 
   void _savePlan() {
     if (_formKey.currentState!.validate()) {
+      if (_selectedExercises.isEmpty) {
+        showHandDrawnSnackBar(context, '请至少添加一个训练项目', type: ToastType.error);
+        return;
+      }
+
       final plan =
           widget.initialPlan?.copyWith(
             name: _nameController.text,
@@ -534,11 +736,20 @@ class _AddPlanPageState extends State<AddPlanPage> {
             intensity: _intensity,
             exercises: _selectedExercises,
             mode: _mode,
+            repeatDays: _mode == PlanMode.longTerm
+                ? _selectedWeekdays.toList()
+                : null,
+            isChinaHolidayPlan: _mode == PlanMode.longTerm
+                ? _isChinaHoliday
+                : false,
+            isChinaWorkdayPlan: _mode == PlanMode.longTerm
+                ? _isChinaWorkday
+                : false,
           ) ??
           WorkoutPlan(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             name: _nameController.text,
-            date: DateTime.now().toString().split(' ')[0],
+            date: widget.date ?? DateTime.now().toString().split(' ')[0],
             time:
                 '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
             duration: int.tryParse(_durationController.text) ?? 30,
@@ -548,9 +759,49 @@ class _AddPlanPageState extends State<AddPlanPage> {
             completed: false,
             exercises: _selectedExercises,
             mode: _mode,
+            endDate: null,
+            isDeleted: false,
+            repeatDays: _mode == PlanMode.longTerm
+                ? _selectedWeekdays.toList()
+                : null,
+            isChinaHolidayPlan: _mode == PlanMode.longTerm
+                ? _isChinaHoliday
+                : false,
+            isChinaWorkdayPlan: _mode == PlanMode.longTerm
+                ? _isChinaWorkday
+                : false,
           );
       context.read<AppProvider>().addPlan(plan);
       context.pop();
     }
+  }
+
+  Widget _buildRecurrenceChip(
+    String label, {
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: HandDrawnContainer(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        color: isSelected
+            ? AppColors.accentBlue
+            : AppColors.getCardColor(context),
+        borderRadius: 12,
+        borderColor: AppColors.primary,
+        borderWidth: 1.5,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected
+                ? Colors.white
+                : AppColors.getTextMainColor(context),
+            fontSize: 13,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+          ),
+        ),
+      ),
+    );
   }
 }
