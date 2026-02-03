@@ -5,6 +5,7 @@ import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
 import 'package:capyfit/data/models/diet_entry.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
+import 'package:capyfit/data/models/daily_step_entry.dart';
 
 class HiveService {
   static final HiveService _instance = HiveService._internal();
@@ -16,6 +17,7 @@ class HiveService {
   static const String foodItemsBoxName = 'foodItems';
   static const String dietEntriesBoxName = 'dietEntries';
   static const String workoutPlansBoxName = 'workoutPlans';
+  static const String dailyStepsBoxName = 'dailySteps';
   static const String settingsBoxName = 'settings';
 
   late Box<UserProfile> _userProfileBox;
@@ -23,6 +25,7 @@ class HiveService {
   late Box<FoodItem> _foodItemsBox;
   late Box<DietEntry> _dietEntriesBox;
   late Box<WorkoutPlan> _workoutPlansBox;
+  late Box<DailyStepEntry> _dailyStepsBox;
   late Box _settingsBox;
 
   bool _isInitialized = false;
@@ -45,6 +48,7 @@ class HiveService {
     Hive.registerAdapter(WorkoutTypeAdapter());
     Hive.registerAdapter(IntensityAdapter());
     Hive.registerAdapter(PlanModeAdapter());
+    Hive.registerAdapter(DailyStepEntryAdapter());
 
     // Open boxes
     _userProfileBox = await Hive.openBox<UserProfile>(userProfileBoxName);
@@ -52,6 +56,7 @@ class HiveService {
     _foodItemsBox = await Hive.openBox<FoodItem>(foodItemsBoxName);
     _dietEntriesBox = await Hive.openBox<DietEntry>(dietEntriesBoxName);
     _workoutPlansBox = await Hive.openBox<WorkoutPlan>(workoutPlansBoxName);
+    _dailyStepsBox = await Hive.openBox<DailyStepEntry>(dailyStepsBoxName);
     _settingsBox = await Hive.openBox(settingsBoxName);
 
     _isInitialized = true;
@@ -159,6 +164,16 @@ class HiveService {
     await _workoutPlansBox.delete(id);
   }
 
+  // ========== Daily Steps ==========
+  List<DailyStepEntry> getDailySteps() {
+    return _dailyStepsBox.values.toList();
+  }
+
+  Future<void> saveDailySteps(DailyStepEntry entry) async {
+    // Key by date to ensure one entry per day
+    await _dailyStepsBox.put(entry.date, entry);
+  }
+
   // ========== Debug Tools ==========
   /// 清空所有数据，仅用于开发环境
   Future<void> debugClearAllBoxes() async {
@@ -168,6 +183,7 @@ class HiveService {
       await _foodItemsBox.clear();
       await _dietEntriesBox.clear();
       await _workoutPlansBox.clear();
+      await _dailyStepsBox.clear();
       await _settingsBox.clear();
       print('DEBUG: All Hive boxes cleared.');
     }

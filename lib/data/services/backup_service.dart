@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crypto/crypto.dart';
 import 'package:capyfit/data/models/diet_entry.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
@@ -7,6 +8,7 @@ import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/services/hive_service.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:capyfit/data/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,10 +17,34 @@ import 'package:share_plus/share_plus.dart';
 class BackupService {
   final HiveService _hiveService = HiveService();
 
+  /// 计算数据的 HMAC 签名
+  String _generateSignature(Map<String, dynamic> data) {
+    final String dataString = jsonEncode(data);
+    final List<int> keyBytes = utf8.encode(GlobalConstants.backupAuthKey);
+    final List<int> dataBytes = utf8.encode(dataString);
+
+    final Hmac hmac = Hmac(sha256, keyBytes);
+    final Digest digest = hmac.convert(dataBytes);
+
+    return digest.toString();
+  }
+
   Future<String> exportData() async {
     try {
-      final data = _collectData();
-      final jsonString = jsonEncode(data);
+      final Map<String, dynamic> dataContent = _collectDataContent();
+      final String signature = _generateSignature(dataContent);
+
+      final Map<String, dynamic> fullData = {
+        'meta': {
+          'version': 2, // 升级版本号以启用签名校验
+          'timestamp': DateTime.now().toIso8601String(),
+          'appName': 'CapyFit',
+          'signature': signature,
+        },
+        'data': dataContent,
+      };
+
+      final jsonString = jsonEncode(fullData);
       final fileName =
           'capyfit_backup_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.json';
 
@@ -81,6 +107,21 @@ class BackupService {
           throw '无效的备份文件格式';
         }
 
+        // 强校验签名完整性 (目前仅支持 Version 2 及以上，且强制校验)
+        final int version = data['meta']?['version'] ?? 0;
+        final String? fileSignature = data['meta']?['signature'];
+        final Map<String, dynamic>? dataContent = data['data'];
+
+        if (version < 2 || fileSignature == null || dataContent == null) {
+          throw '该备份文件已过时或格式不正确，无法导入';
+        }
+
+        final String calculatedSignature = _generateSignature(dataContent);
+        if (fileSignature != calculatedSignature) {
+          debugPrint('Signature mismatch! Data might be tampered.');
+          throw '备份文件签名无效（数据可能已被篡改），导入已取消';
+        }
+
         await _restoreData(data);
         return '数据恢复成功';
       } else {
@@ -92,32 +133,19 @@ class BackupService {
     }
   }
 
-  Map<String, dynamic> _collectData() {
+  Map<String, dynamic> _collectDataContent() {
     return {
-      'meta': {
-        'version': 1,
-        'timestamp': DateTime.now().toIso8601String(),
-        'appName': 'CapyFit',
-      },
-      'data': {
-        'userProfile': _hiveService.getUserProfile()?.toJsonForBackup(),
-        'dietEntries': _hiveService
-            .getDietEntries()
-            .map((e) => e.toJson())
-            .toList(),
-        'workoutPlans': _hiveService
-            .getWorkoutPlans()
-            .map((e) => e.toJson())
-            .toList(),
-        'exercises': _hiveService
-            .getExercises()
-            .map((e) => e.toJson())
-            .toList(),
-        'foodItems': _hiveService
-            .getFoodItems()
-            .map((e) => e.toJson())
-            .toList(),
-      },
+      'userProfile': _hiveService.getUserProfile()?.toJsonForBackup(),
+      'dietEntries': _hiveService
+          .getDietEntries()
+          .map((e) => e.toJson())
+          .toList(),
+      'workoutPlans': _hiveService
+          .getWorkoutPlans()
+          .map((e) => e.toJson())
+          .toList(),
+      'exercises': _hiveService.getExercises().map((e) => e.toJson()).toList(),
+      'foodItems': _hiveService.getFoodItems().map((e) => e.toJson()).toList(),
     };
   }
 

@@ -23,10 +23,9 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   late TextEditingController _ageController;
-  late TextEditingController _customGoalController;
+
   late TextEditingController _nicknameController;
   late Gender _gender;
-  late bool _isSmart;
   String? _avatarPath;
   final ImagePicker _picker = ImagePicker();
 
@@ -41,12 +40,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       text: profile.weight?.toString() ?? '',
     );
     _ageController = TextEditingController(text: profile.age?.toString() ?? '');
-    _customGoalController = TextEditingController(
-      text: profile.customCalorieGoal.toString(),
-    );
     _nicknameController = TextEditingController(text: profile.nickname);
     _gender = profile.gender;
-    _isSmart = profile.isSmartCalculation;
     _avatarPath = profile.avatarPath;
 
     // Add listeners for real-time updates
@@ -57,24 +52,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
   void _onInputChanged() {
     setState(() {
-      // Just trigger rebuild to update the "Current Recommended" display
+      // Just trigger rebuild
     });
-  }
-
-  int _calculateLiveRecommended() {
-    // Build a temporary profile to use its calculation logic
-    final tempProfile = UserProfile(
-      height: double.tryParse(_heightController.text),
-      weight: double.tryParse(_weightController.text),
-      gender: _gender,
-      age: int.tryParse(_ageController.text),
-      goal: context.read<AppProvider>().userProfile.goal,
-      isSmartCalculation: _isSmart,
-      nickname: _nicknameController.text,
-      avatarPath: _avatarPath,
-    );
-
-    return tempProfile.calculateRecommendedCalories();
   }
 
   @override
@@ -85,7 +64,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _heightController.dispose();
     _weightController.dispose();
     _ageController.dispose();
-    _customGoalController.dispose();
     _nicknameController.dispose();
     super.dispose();
   }
@@ -97,14 +75,11 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     }
 
     final provider = context.read<AppProvider>();
-    final newProfile = UserProfile(
+    final newProfile = provider.userProfile.copyWith(
       height: double.tryParse(_heightController.text),
       weight: double.tryParse(_weightController.text),
       gender: _gender,
       age: int.tryParse(_ageController.text),
-      goal: provider.userProfile.goal,
-      isSmartCalculation: _isSmart,
-      customCalorieGoal: int.tryParse(_customGoalController.text) ?? 2000,
       nickname: _nicknameController.text,
       avatarPath: _avatarPath,
     );
@@ -183,78 +158,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               ),
               const SizedBox(height: 24),
 
-              _buildSectionTitle('计算偏好'),
-              HandDrawnCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '智能计算目标',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: AppColors.getTextMainColor(context),
-                              ),
-                            ),
-                            Text(
-                              '根据身体数据自动推荐',
-                              style: TextStyle(
-                                color: AppColors.getTextMutedColor(context),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Switch(
-                          value: _isSmart,
-                          onChanged: (val) => setState(() => _isSmart = val),
-                          activeThumbColor: AppColors.primary,
-                        ),
-                      ],
-                    ),
-                    if (_isSmart) ...[
-                      const SizedBox(height: 12),
-                      HandDrawnContainer(
-                        padding: const EdgeInsets.all(12),
-                        color: AppColors.accentMint.withOpacity(0.2),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              LucideIcons.sparkles,
-                              size: 16,
-                              color: AppColors.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '当前推荐: ${_calculateLiveRecommended()} kcal / 天',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    if (!_isSmart) ...[
-                      const SizedBox(height: 16),
-                      _buildInputField(
-                        '自定义每日热量目标 (kcal)',
-                        _customGoalController,
-                        TextInputType.number,
-                        Validators.dailyCalorieGoal,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
               // 数据隐私说明
               Center(
                 child: Column(

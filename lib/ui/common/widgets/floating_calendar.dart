@@ -80,189 +80,204 @@ class _FloatingCalendarState extends State<FloatingCalendar> {
   Widget build(BuildContext context) {
     final currentWeekStart = _getWeekStartForIndex(_currentPageIndex);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Header / Trigger
-        GestureDetector(
-          onTap: () => setState(() => _isExpanded = !_isExpanded),
-          child: HandDrawnContainer(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: AppColors.getCardColor(context),
-            borderRadius: 20,
-            borderColor: _isExpanded
-                ? AppColors.primary
-                : AppColors.getBorderColor(context),
-            borderWidth: 1.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Icon(
-                      LucideIcons.calendar,
-                      size: 20,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      DateFormat('yyyy年M月d日').format(widget.selectedDate),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: AppColors.getTextMainColor(context),
-                      ),
-                    ),
-                  ],
-                ),
-                Icon(
-                  _isExpanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
-                  size: 20,
-                  color: AppColors.getTextMutedColor(context),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Expandable Week View (Floating)
-        if (_isExpanded)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+    return TapRegion(
+      groupId: 'calendar_region',
+      onTapOutside: (event) {
+        if (_isExpanded) {
+          setState(() => _isExpanded = false);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header / Trigger
+          GestureDetector(
+            onTap: () => setState(() => _isExpanded = !_isExpanded),
             child: HandDrawnContainer(
-              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               color: AppColors.getCardColor(context),
-              borderRadius: 24,
-              borderColor: AppColors.primary,
+              borderRadius: 20,
+              borderColor: _isExpanded
+                  ? AppColors.primary
+                  : AppColors.getBorderColor(context),
               borderWidth: 1.5,
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(LucideIcons.chevronLeft, size: 20),
-                        onPressed: () => _changeWeek(-1),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                      const Icon(
+                        LucideIcons.calendar,
+                        size: 20,
+                        color: AppColors.primary,
                       ),
+                      const SizedBox(width: 12),
                       Text(
-                        DateFormat(
-                          'yyyy年M月',
-                        ).format(currentWeekStart.add(const Duration(days: 3))),
+                        DateFormat('yyyy年M月d日').format(widget.selectedDate),
                         style: TextStyle(
-                          fontSize: 14,
                           fontWeight: FontWeight.bold,
+                          fontSize: 16,
                           color: AppColors.getTextMainColor(context),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(LucideIcons.chevronRight, size: 20),
-                        onPressed: () => _changeWeek(1),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 80,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: (index) =>
-                          setState(() => _currentPageIndex = index),
-                      itemBuilder: (context, weekIndex) {
-                        final weekStart = _getWeekStartForIndex(weekIndex);
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(7, (dayIndex) {
-                            final date = weekStart.add(
-                              Duration(days: dayIndex),
-                            );
-                            final isSelected = _isSameDay(
-                              date,
-                              widget.selectedDate,
-                            );
-                            final isToday = _isSameDay(date, DateTime.now());
-                            final weekDays = [
-                              '一',
-                              '二',
-                              '三',
-                              '四',
-                              '五',
-                              '六',
-                              '日',
-                            ];
-
-                            return GestureDetector(
-                              onTap: () {
-                                widget.onDateSelected(date);
-                                setState(() => _isExpanded = false);
-                              },
-                              child: Container(
-                                width: 38,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.primaryDark
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      weekDays[dayIndex],
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: isSelected
-                                            ? Colors.white.withOpacity(0.8)
-                                            : AppColors.getTextMutedColor(
-                                                context,
-                                              ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      date.day.toString(),
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : AppColors.getTextMainColor(
-                                                context,
-                                              ),
-                                      ),
-                                    ),
-                                    if (isToday)
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 2),
-                                        width: 4,
-                                        height: 4,
-                                        decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : AppColors.accentOrange,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                        );
-                      },
-                    ),
+                  Icon(
+                    _isExpanded
+                        ? LucideIcons.chevronUp
+                        : LucideIcons.chevronDown,
+                    size: 20,
+                    color: AppColors.getTextMutedColor(context),
                   ),
                 ],
               ),
             ),
           ),
-      ],
+
+          // Expandable Week View (Floating)
+          if (_isExpanded)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: HandDrawnContainer(
+                padding: const EdgeInsets.all(16),
+                color: AppColors.getCardColor(context),
+                borderRadius: 24,
+                borderColor: AppColors.primary,
+                borderWidth: 1.5,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(LucideIcons.chevronLeft, size: 20),
+                          onPressed: () => _changeWeek(-1),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        Text(
+                          DateFormat('yyyy年M月').format(
+                            currentWeekStart.add(const Duration(days: 3)),
+                          ),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.getTextMainColor(context),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(LucideIcons.chevronRight, size: 20),
+                          onPressed: () => _changeWeek(1),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 80,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        onPageChanged: (index) =>
+                            setState(() => _currentPageIndex = index),
+                        itemBuilder: (context, weekIndex) {
+                          final weekStart = _getWeekStartForIndex(weekIndex);
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(7, (dayIndex) {
+                              final date = weekStart.add(
+                                Duration(days: dayIndex),
+                              );
+                              final isSelected = _isSameDay(
+                                date,
+                                widget.selectedDate,
+                              );
+                              final isToday = _isSameDay(date, DateTime.now());
+                              final weekDays = [
+                                '一',
+                                '二',
+                                '三',
+                                '四',
+                                '五',
+                                '六',
+                                '日',
+                              ];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  widget.onDateSelected(date);
+                                },
+                                // 使用 TapRegion 包裹日期格以防点击时触发 onTapOutside
+                                child: TapRegion(
+                                  groupId: 'calendar_region',
+                                  child: Container(
+                                    width: 38,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? AppColors.primaryDark
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          weekDays[dayIndex],
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: isSelected
+                                                ? Colors.white.withOpacity(0.8)
+                                                : AppColors.getTextMutedColor(
+                                                    context,
+                                                  ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          date.day.toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : AppColors.getTextMainColor(
+                                                    context,
+                                                  ),
+                                          ),
+                                        ),
+                                        if (isToday)
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                              top: 2,
+                                            ),
+                                            width: 4,
+                                            height: 4,
+                                            decoration: BoxDecoration(
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : AppColors.accentOrange,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

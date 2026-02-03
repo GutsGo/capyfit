@@ -117,16 +117,14 @@ class Validators {
   /// 预设：每日步数校验（1000-50000）
   static String? dailySteps(String? value) {
     return compose(value, [
-      (v) => required(v, '每日步数'),
       (v) => number(v, '每日步数'),
-      (v) => range(v, min: 1000, max: 50000, fieldName: '每日步数', unit: '步'),
+      (v) => range(v, min: 1000, max: 500000, fieldName: '每日步数', unit: '步'),
     ]);
   }
 
   /// 预设：目标体重校验（与普通体重相同范围：20-300kg）
   static String? targetWeight(String? value) {
     return compose(value, [
-      (v) => required(v, '目标体重'),
       (v) => number(v, '目标体重'),
       (v) => range(v, min: 20, max: 300, fieldName: '目标体重', unit: 'kg'),
     ]);
