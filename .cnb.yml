@@ -30,18 +30,6 @@ main:
             
         - name: 安装依赖
           script: flutter pub get
-
-        - name: 打包构建 (IOS)
-          script: |
-            flutter build ios --release --no-codesign --dart-define=GITHUB_TOKEN=$FEEDBACK_TOKEN
-
-        - name: 创建未签名ipa
-          script: |
-            mkdir -p build/ios/iphoneos/Payload
-            cp -R build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/Runner.app
-            cd build/ios/iphoneos/
-            zip -q -r ios_no_sign.ipa Payload
-            cd ../../..
           
         - name: 打包构建 (APK)
           # 使用 --split-per-abi 减小体积，并注入 GITHUB_TOKEN (即 FEEDBACK_TOKEN)
