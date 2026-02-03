@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌",
@@ -31,7 +31,7 @@
   {
     "id": "2",
     "name": "卧推",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "胸大肌",
@@ -60,7 +60,7 @@
   {
     "id": "3",
     "name": "硬拉",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "臀大肌",
@@ -90,7 +90,7 @@
   {
     "id": "4",
     "name": "引体向上",
-    "category": "背部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "背阔肌",
@@ -148,7 +148,7 @@
   {
     "id": "6",
     "name": "俯卧撑",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "胸大肌",
@@ -176,7 +176,7 @@
   {
     "id": "7",
     "name": "杠铃弯举",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "二头肌",
@@ -204,7 +204,7 @@
   {
     "id": "8",
     "name": "哑铃推肩",
-    "category": "肩部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "三角肌",
@@ -233,7 +233,7 @@
   {
     "id": "9",
     "name": "杠铃划船",
-    "category": "背部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "背阔肌",
@@ -262,7 +262,7 @@
   {
     "id": "10",
     "name": "腿部前推",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌"
@@ -289,7 +289,7 @@
   {
     "id": "11",
     "name": "腿部弯举",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "腘绳肌"
@@ -629,7 +629,7 @@
   {
     "id": "23",
     "name": "跳跃深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -742,7 +742,7 @@
   {
     "id": "27",
     "name": "单腿硬拉",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "臀大肌",
@@ -772,7 +772,7 @@
   {
     "id": "28",
     "name": "哑铃推举",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "胸大肌",
@@ -801,7 +801,7 @@
   {
     "id": "29",
     "name": "哑铃飞鸟",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "胸大肌",
@@ -829,7 +829,7 @@
   {
     "id": "30",
     "name": "反向飞鸟",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "后三角肌",
@@ -857,7 +857,7 @@
   {
     "id": "31",
     "name": "拉力器胸部夹胸",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "胸大肌"
@@ -884,7 +884,7 @@
   {
     "id": "32",
     "name": "拉力器下拉",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "背阔肌",
@@ -912,7 +912,7 @@
   {
     "id": "33",
     "name": "拉力器划船",
-    "category": "背部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "背阔肌",
@@ -941,7 +941,7 @@
   {
     "id": "34",
     "name": "拉力器弯举",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "二头肌"
@@ -968,7 +968,7 @@
   {
     "id": "35",
     "name": "三头肌下压",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "三头肌"
@@ -995,7 +995,7 @@
   {
     "id": "36",
     "name": "肩部耸肩",
-    "category": "肩部",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "斜方肌"
@@ -1133,7 +1133,7 @@
   {
     "id": "41",
     "name": "开放式髋部伸展",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "髋部",
@@ -1161,7 +1161,7 @@
   {
     "id": "42",
     "name": "蝴蝶式伸展",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "髋部",
@@ -1189,7 +1189,7 @@
   {
     "id": "43",
     "name": "婴儿式拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "背部",
@@ -1217,7 +1217,7 @@
   {
     "id": "44",
     "name": "四字拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "臀部",
@@ -1245,7 +1245,7 @@
   {
     "id": "45",
     "name": "站立前屈",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "腘绳肌",
@@ -1274,7 +1274,7 @@
   {
     "id": "46",
     "name": "肩部拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "肩膀",
@@ -1302,7 +1302,7 @@
   {
     "id": "47",
     "name": "三头肌拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "三头肌"
@@ -1329,7 +1329,7 @@
   {
     "id": "48",
     "name": "腓肠肌拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "小腿",
@@ -1357,7 +1357,7 @@
   {
     "id": "49",
     "name": "侧弯拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "侧腹",
@@ -1385,7 +1385,7 @@
   {
     "id": "50",
     "name": "腰部旋转拉伸",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "腰部",
@@ -1413,7 +1413,7 @@
   {
     "id": "51",
     "name": "斜板卧推",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "上胸部",
@@ -1442,7 +1442,7 @@
   {
     "id": "52",
     "name": "下斜板卧推",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "下胸部",
@@ -1470,7 +1470,7 @@
   {
     "id": "53",
     "name": "哑铃斜板卧推",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "上胸部",
@@ -1499,7 +1499,7 @@
   {
     "id": "54",
     "name": "杠铃颈后推肩",
-    "category": "肩部",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "三角肌",
@@ -1527,7 +1527,7 @@
   {
     "id": "55",
     "name": "坐姿推肩",
-    "category": "肩部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "三角肌",
@@ -1556,7 +1556,7 @@
   {
     "id": "56",
     "name": "机器胸部推送",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "胸大肌",
@@ -1584,7 +1584,7 @@
   {
     "id": "57",
     "name": "机器腿部外展",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 1,
     "targetMuscles": [
       "臀部外展肌"
@@ -1611,7 +1611,7 @@
   {
     "id": "58",
     "name": "机器腿部内收",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 1,
     "targetMuscles": [
       "大腿内侧"
@@ -1638,7 +1638,7 @@
   {
     "id": "59",
     "name": "机器提踵",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 1,
     "targetMuscles": [
       "小腿",
@@ -1666,7 +1666,7 @@
   {
     "id": "60",
     "name": "杠铃提踵",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 1,
     "targetMuscles": [
       "小腿",
@@ -1694,7 +1694,7 @@
   {
     "id": "61",
     "name": "哑铃提踵",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 1,
     "targetMuscles": [
       "小腿",
@@ -1722,7 +1722,7 @@
   {
     "id": "62",
     "name": "腿举",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌",
@@ -1751,7 +1751,7 @@
   {
     "id": "63",
     "name": "颈前深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -1780,7 +1780,7 @@
   {
     "id": "64",
     "name": "黑盒子深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -1809,7 +1809,7 @@
   {
     "id": "65",
     "name": "分腿蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -1838,7 +1838,7 @@
   {
     "id": "66",
     "name": "保加利亚分腿蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -1867,7 +1867,7 @@
   {
     "id": "67",
     "name": "罗马尼亚硬拉",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "腘绳肌",
@@ -1896,7 +1896,7 @@
   {
     "id": "68",
     "name": "早安式深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "臀大肌",
@@ -1925,7 +1925,7 @@
   {
     "id": "69",
     "name": "杠铃颈部弯举",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "二头肌",
@@ -1953,7 +1953,7 @@
   {
     "id": "70",
     "name": "牧场行走",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 2,
     "targetMuscles": [
       "握力",
@@ -1982,7 +1982,7 @@
   {
     "id": "71",
     "name": "熊爬",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 3,
     "targetMuscles": [
       "全身",
@@ -2039,7 +2039,7 @@
   {
     "id": "73",
     "name": "弹力带划船",
-    "category": "背部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "背阔肌",
@@ -2068,7 +2068,7 @@
   {
     "id": "74",
     "name": "弹力带胸部推送",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "胸大肌",
@@ -2096,7 +2096,7 @@
   {
     "id": "75",
     "name": "弹力带推肩",
-    "category": "肩部",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "三角肌",
@@ -2123,7 +2123,7 @@
   {
     "id": "76",
     "name": "弹力带下拉",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 1,
     "targetMuscles": [
       "背阔肌",
@@ -2207,7 +2207,7 @@
   {
     "id": "79",
     "name": "悬吊俯卧撑",
-    "category": "手臂",
+    "category": "上肢",
     "difficulty": 3,
     "targetMuscles": [
       "胸大肌",
@@ -2265,7 +2265,7 @@
   {
     "id": "81",
     "name": "药球胸部传球",
-    "category": "胸部",
+    "category": "上肢",
     "difficulty": 2,
     "targetMuscles": [
       "胸大肌",
@@ -2293,7 +2293,7 @@
   {
     "id": "82",
     "name": "药球墙壁球",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 2,
     "targetMuscles": [
       "全身",
@@ -2349,7 +2349,7 @@
   {
     "id": "84",
     "name": "药球冲刺",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 3,
     "targetMuscles": [
       "全身",
@@ -2376,7 +2376,7 @@
   {
     "id": "85",
     "name": "药球颈后投掷",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 2,
     "targetMuscles": [
       "肩膀",
@@ -2404,7 +2404,7 @@
   {
     "id": "86",
     "name": "壶铃摇摆",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 2,
     "targetMuscles": [
       "臀大肌",
@@ -2434,7 +2434,7 @@
   {
     "id": "87",
     "name": "壶铃抓举",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 3,
     "targetMuscles": [
       "全身"
@@ -2461,7 +2461,7 @@
   {
     "id": "88",
     "name": "壶铃土耳其站起",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 3,
     "targetMuscles": [
       "肩膀",
@@ -2490,7 +2490,7 @@
   {
     "id": "89",
     "name": "壶铃深蹲",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌",
@@ -2518,7 +2518,7 @@
   {
     "id": "90",
     "name": "壶铃硬拉",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "臀大肌",
@@ -2547,7 +2547,7 @@
   {
     "id": "91",
     "name": "壶铃农民行走",
-    "category": "其他",
+    "category": "全身",
     "difficulty": 2,
     "targetMuscles": [
       "握力",
@@ -2576,7 +2576,7 @@
   {
     "id": "92",
     "name": "跳跃箱",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -2605,7 +2605,7 @@
   {
     "id": "93",
     "name": "阶梯跳跃",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌",
@@ -2634,7 +2634,7 @@
   {
     "id": "94",
     "name": "侧向跳跃",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 2,
     "targetMuscles": [
       "股四头肌",
@@ -2721,7 +2721,7 @@
   {
     "id": "97",
     "name": "蛙跳",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -2749,7 +2749,7 @@
   {
     "id": "98",
     "name": "单腿跳跃",
-    "category": "腿部",
+    "category": "下肢",
     "difficulty": 3,
     "targetMuscles": [
       "股四头肌",
@@ -2806,7 +2806,7 @@
   {
     "id": "100",
     "name": "瑜伽山式",
-    "category": "瑜伽",
+    "category": "形体",
     "difficulty": 1,
     "targetMuscles": [
       "全身"
@@ -2829,5 +2829,621 @@
     ],
     "image": "capy_mountain_pose.webp",
     "met": 3
+  },
+  {
+    "id": "101",
+    "name": "自由泳",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "肩膀",
+      "胸部",
+      "背部",
+      "核心",
+      "腿部"
+    ],
+    "sets": 3,
+    "reps": "20-30分钟",
+    "description": "在游泳池中进行自由泳，交替摆动手臂和腿部，保持身体流线型。",
+    "tips": [
+      "保持身体水平",
+      "头部与脊椎对齐",
+      "手臂动作流畅",
+      "呼吸节奏均匀",
+      "腿部打水有力"
+    ],
+    "steps": [
+      "进入游泳池",
+      "身体保持水平",
+      "交替摆动手臂",
+      "双腿上下打水",
+      "转头吸气",
+      "保持恒定速度"
+    ],
+    "image": "capy_freestyle_swimming.webp",
+    "met": 8.0
+  },
+  {
+    "id": "102",
+    "name": "蛙泳",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "胸部",
+      "肩膀",
+      "背部",
+      "腿部"
+    ],
+    "sets": 3,
+    "reps": "20-30分钟",
+    "description": "进行蛙泳动作，双手同时向外划水，双腿同时蹬水。",
+    "tips": [
+      "手臂和腿部协调",
+      "腿部蹬水有力",
+      "保持身体水平",
+      "呼吸均匀",
+      "避免过度用力"
+    ],
+    "steps": [
+      "进入游泳池",
+      "身体保持水平",
+      "双手同时向外划水",
+      "双腿同时蹬水",
+      "头部向上抬起吸气",
+      "保持节奏"
+    ],
+    "image": "capy_breaststroke_swimming.webp",
+    "met": 6.0
+  },
+  {
+    "id": "103",
+    "name": "背泳",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "肩膀",
+      "背部",
+      "胸部",
+      "核心"
+    ],
+    "sets": 3,
+    "reps": "20-30分钟",
+    "description": "仰卧在水中，交替摆动手臂划水，腿部打水推进身体。",
+    "tips": [
+      "脸部保持在水面以上",
+      "脊椎保持中立",
+      "手臂划水流畅",
+      "腿部打水有力",
+      "保持稳定速度"
+    ],
+    "steps": [
+      "进入游泳池，仰卧",
+      "身体保持水平",
+      "交替摆动手臂",
+      "双腿上下打水",
+      "均匀呼吸",
+      "保持恒定速度"
+    ],
+    "image": "capy_backstroke_swimming.webp",
+    "met": 7.0
+  },
+  {
+    "id": "104",
+    "name": "蝶泳",
+    "category": "有氧",
+    "difficulty": 4,
+    "targetMuscles": [
+      "肩膀",
+      "胸部",
+      "背部",
+      "核心",
+      "腿部"
+    ],
+    "sets": 3,
+    "reps": "15-25分钟",
+    "description": "进行蝶泳动作，双手同时向下划水，身体上下起伏，双腿同时打水。",
+    "tips": [
+      "身体起伏协调",
+      "手臂动作有力",
+      "腿部打水同步",
+      "呼吸节奏稳定",
+      "保持流线型"
+    ],
+    "steps": [
+      "进入游泳池",
+      "身体随着动作起伏",
+      "双手同时向下划水",
+      "双腿同时打水",
+      "头部向前抬起吸气",
+      "保持节奏"
+    ],
+    "image": "capy_butterfly_swimming.webp",
+    "met": 11.0
+  },
+  {
+    "id": "105",
+    "name": "踩水",
+    "category": "有氧",
+    "difficulty": 1,
+    "targetMuscles": [
+      "腿部",
+      "心肺功能"
+    ],
+    "sets": 3,
+    "reps": "10-15分钟",
+    "description": "在水中原地踩水，腿部做踩踏动作保持身体浮起。",
+    "tips": [
+      "腿部用力踩踏",
+      "身体保持直立",
+      "手臂辅助平衡",
+      "呼吸均匀",
+      "节奏稳定"
+    ],
+    "steps": [
+      "进入水中深度适宜",
+      "身体保持竖直",
+      "腿部做踩踏动作",
+      "手臂向外挥动",
+      "保持浮起状态"
+    ],
+    "image": "capy_water_treading.webp",
+    "met": 5.0
+  },
+  {
+    "id": "106",
+    "name": "长距离跑步",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 1,
+    "reps": "30-60分钟",
+    "description": "在较长距离上保持稳定的跑步速度，通常5-20公里。",
+    "tips": [
+      "匀速进行",
+      "前脚掌着地",
+      "呼吸深而均匀",
+      "保持直立姿态",
+      "适当补水"
+    ],
+    "steps": [
+      "热身5-10分钟",
+      "开始以舒适速度跑步",
+      "保持均匀呼吸",
+      "维持稳定步频",
+      "最后冷静5分钟"
+    ],
+    "image": "capy_long_distance_running.webp",
+    "met": 10.0
+  },
+  {
+    "id": "107",
+    "name": "间歇跑步",
+    "category": "有氧",
+    "difficulty": 3,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 5,
+    "reps": "快速3-5分钟，恢复2-3分钟",
+    "description": "交替进行快速跑和恢复慢速跑，提高心肺耐力和速度。",
+    "tips": [
+      "热身充分",
+      "快速跑时全力冲刺",
+      "恢复期保持缓慢速度",
+      "监控心率",
+      "呼吸节奏适应"
+    ],
+    "steps": [
+      "热身10分钟",
+      "快速跑3-5分钟",
+      "缓慢恢复2-3分钟",
+      "重复5-8个循环",
+      "冷静5分钟"
+    ],
+    "image": "capy_interval_running.webp",
+    "met": 12.0
+  },
+  {
+    "id": "108",
+    "name": "越野跑步",
+    "category": "有氧",
+    "difficulty": 3,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心",
+      "平衡感"
+    ],
+    "sets": 1,
+    "reps": "45-90分钟",
+    "description": "在山地、森林或不规则地面上进行跑步，增加难度和挑战性。",
+    "tips": [
+      "穿戴适合的越野跑鞋",
+      "注意地面不规则",
+      "保持视线前方",
+      "谨慎下降",
+      "适应地形变化"
+    ],
+    "steps": [
+      "选择适合的越野路线",
+      "热身10分钟",
+      "根据地形调整速度",
+      "保持平衡",
+      "完成后适当冷静"
+    ],
+    "image": "capy_trail_running.webp",
+    "met": 9.0
+  },
+  {
+    "id": "109",
+    "name": "公路自行车",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 1,
+    "reps": "30-90分钟",
+    "description": "在公路上骑自行车，保持相对较高的速度和强度。",
+    "tips": [
+      "调整座椅高度",
+      "保持脊椎直立",
+      "均匀踏频",
+      "监控心率",
+      "安全骑行"
+    ],
+    "steps": [
+      "检查自行车状况",
+      "热身5分钟",
+      "以舒适速度骑行",
+      "逐渐增加速度",
+      "最后缓速冷静"
+    ],
+    "image": "capy_road_cycling.webp",
+    "met": 8.0
+  },
+  {
+    "id": "110",
+    "name": "山地自行车",
+    "category": "有氧",
+    "difficulty": 3,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心",
+      "平衡感"
+    ],
+    "sets": 1,
+    "reps": "45-120分钟",
+    "description": "在山地、丘陵或不规则地形上骑自行车，增加难度。",
+    "tips": [
+      "穿戴适合的装备",
+      "注意地形变化",
+      "掌握刹车技巧",
+      "保持平衡",
+      "根据地形调整速度"
+    ],
+    "steps": [
+      "检查自行车状况",
+      "热身5分钟",
+      "根据地形选择路线",
+      "逐步适应地形",
+      "安全完成骑行"
+    ],
+    "image": "capy_mountain_biking.webp",
+    "met": 8.5
+  },
+  {
+    "id": "111",
+    "name": "室内骑行课程",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 1,
+    "reps": "30-60分钟",
+    "description": "在室内健身房参加团体骑行课程，跟随教练和音乐进行运动。",
+    "tips": [
+      "调整座椅和把手",
+      "跟随教练节奏",
+      "根据能力调整阻力",
+      "保持水分",
+      "享受团体氛围"
+    ],
+    "steps": [
+      "到达健身房",
+      "调整自行车设置",
+      "参加课程热身",
+      "跟随课程进行",
+      "参加冷静阶段"
+    ],
+    "image": "capy_indoor_cycling.webp",
+    "met": 8.0
+  },
+  {
+    "id": "112",
+    "name": "徒步登山",
+    "category": "有氧",
+    "difficulty": 3,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心",
+      "平衡感"
+    ],
+    "sets": 1,
+    "reps": "2-4小时",
+    "description": "在山地或山脉上进行徒步，克服高度和地形变化。",
+    "tips": [
+      "穿戴适合的登山鞋",
+      "携带充足水分",
+      "根据体能选择路线",
+      "注意天气条件",
+      "使用登山杖"
+    ],
+    "steps": [
+      "准备登山装备",
+      "选择合适的路线",
+      "保持稳定的步伐",
+      "适时休息补水",
+      "安全下山"
+    ],
+    "image": "capy_hiking_mountain.webp",
+    "met": 6.5
+  },
+  {
+    "id": "113",
+    "name": "城市徒步",
+    "category": "有氧",
+    "difficulty": 1,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 1,
+    "reps": "30-90分钟",
+    "description": "在城市环境中进行徒步，探索城市景观和文化。",
+    "tips": [
+      "穿戴舒适的徒步鞋",
+      "规划路线",
+      "保持适当速度",
+      "注意安全",
+      "适当补水"
+    ],
+    "steps": [
+      "选择徒步路线",
+      "热身10分钟",
+      "以舒适速度行走",
+      "沿途欣赏风景",
+      "适当冷静"
+    ],
+    "image": "capy_urban_hiking.webp",
+    "met": 3.5
+  },
+  {
+    "id": "114",
+    "name": "快速徒步",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心"
+    ],
+    "sets": 1,
+    "reps": "30-60分钟",
+    "description": "以较快的步伐进行徒步，介于散步和跑步之间的强度。",
+    "tips": [
+      "步伐快而有力",
+      "挥臂配合步伐",
+      "保持直立姿态",
+      "呼吸均匀",
+      "适当补水"
+    ],
+    "steps": [
+      "热身5-10分钟",
+      "以快速步伐开始",
+      "保持恒定速度",
+      "监控心率",
+      "最后冷静"
+    ],
+    "image": "capy_brisk_walking.webp",
+    "met": 4.5
+  },
+  {
+    "id": "115",
+    "name": "皮划艇",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "肩膀",
+      "背部",
+      "核心",
+      "心肺功能"
+    ],
+    "sets": 1,
+    "reps": "30-90分钟",
+    "description": "在水上使用桨驱动皮划艇，进行全身有氧运动。",
+    "tips": [
+      "穿戴救生衣",
+      "掌握桨的使用",
+      "保持姿态稳定",
+      "双臂协调用力",
+      "注意安全"
+    ],
+    "steps": [
+      "穿上救生衣",
+      "上船并调整座椅",
+      "掌握桨的用法",
+      "开始划动",
+      "保持稳定速度"
+    ],
+    "image": "capy_kayaking.webp",
+    "met": 5.0
+  },
+  {
+    "id": "116",
+    "name": "冲浪",
+    "category": "全身",
+    "difficulty": 3,
+    "targetMuscles": [
+      "核心",
+      "肩膀",
+      "背部",
+      "平衡感"
+    ],
+    "sets": 3,
+    "reps": "45-90分钟",
+    "description": "在海浪中使用冲浪板，利用波浪进行冲浪运动。",
+    "tips": [
+      "穿戴湿衣",
+      "掌握上板技巧",
+      "保持平衡",
+      "注意安全",
+      "了解海浪条件"
+    ],
+    "steps": [
+      "准备冲浪板和湿衣",
+      "进入水中",
+      "学习和练习上板",
+      "追逐波浪",
+      "保持平衡滑行"
+    ],
+    "image": "capy_surfing.webp",
+    "met": 5.0
+  },
+  {
+    "id": "117",
+    "name": "攀岩",
+    "category": "全身",
+    "difficulty": 3,
+    "targetMuscles": [
+      "核心",
+      "上肢",
+      "下肢",
+      "握力"
+    ],
+    "sets": 3,
+    "reps": "30-90分钟",
+    "description": "在岩壁或人工攀岩墙上进行攀爬，需要力量和技巧。",
+    "tips": [
+      "穿戴安全装备",
+      "学习基本技巧",
+      "使用双腿发力",
+      "保持身体贴近岩壁",
+      "适当休息"
+    ],
+    "steps": [
+      "准备安全装备",
+      "选择合适的路线",
+      "学习基本技巧",
+      "开始攀爬",
+      "适当休息和恢复"
+    ],
+    "image": "capy_rock_climbing.webp",
+    "met": 7.0
+  },
+  {
+    "id": "118",
+    "name": "滑冰",
+    "category": "有氧",
+    "difficulty": 2,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "核心",
+      "平衡感"
+    ],
+    "sets": 1,
+    "reps": "30-60分钟",
+    "description": "在冰面上进行滑冰运动，使用冰刀在冰上滑行。",
+    "tips": [
+      "穿戴护具",
+      "掌握平衡技巧",
+      "循序渐进",
+      "保持直立姿态",
+      "适当补水"
+    ],
+    "steps": [
+      "穿上滑冰鞋和护具",
+      "进入冰面",
+      "练习基本滑行",
+      "逐步提高速度",
+      "练习转弯技巧"
+    ],
+    "image": "capy_ice_skating.webp",
+    "met": 7.0
+  },
+  {
+    "id": "119",
+    "name": "跳绳高级",
+    "category": "有氧",
+    "difficulty": 3,
+    "targetMuscles": [
+      "心肺功能",
+      "腿部",
+      "协调性"
+    ],
+    "sets": 5,
+    "reps": "1-2分钟",
+    "description": "进行高强度跳绳，包括双脚跳、单脚跳、交叉跳等复杂动作。",
+    "tips": [
+      "掌握基本跳绳技巧",
+      "逐步增加难度",
+      "保持高节奏",
+      "手腕灵活",
+      "循序渐进"
+    ],
+    "steps": [
+      "热身跳绳3分钟",
+      "练习不同跳法",
+      "增加速度和复杂度",
+      "进行间歇训练",
+      "冷静阶段"
+    ],
+    "image": "capy_advanced_jump_rope.webp",
+    "met": 12.0
+  },
+  {
+    "id": "120",
+    "name": "功能性训练",
+    "category": "全身",
+    "difficulty": 2,
+    "targetMuscles": [
+      "全身",
+      "心肺功能",
+      "协调性"
+    ],
+    "sets": 3,
+    "reps": "30-45分钟",
+    "description": "结合多种运动方式进行综合训练，提高整体体能和功能性。",
+    "tips": [
+      "混合不同运动",
+      "保持高强度",
+      "适当休息",
+      "循环训练",
+      "适应不同动作"
+    ],
+    "steps": [
+      "热身5-10分钟",
+      "进行循环训练",
+      "每个动作30秒-1分钟",
+      "组间休息30-60秒",
+      "冷静和拉伸"
+    ],
+    "image": "capy_functional_training.webp",
+    "met": 8.0
   }
 ]

@@ -84,57 +84,42 @@ class ExerciseCategoryAdapter extends TypeAdapter<ExerciseCategory> {
   ExerciseCategory read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ExerciseCategory.chest;
-      case 1:
-        return ExerciseCategory.back;
-      case 2:
-        return ExerciseCategory.legs;
-      case 3:
-        return ExerciseCategory.shoulders;
-      case 4:
-        return ExerciseCategory.arms;
-      case 5:
         return ExerciseCategory.core;
-      case 6:
+      case 1:
+        return ExerciseCategory.upperBody;
+      case 2:
+        return ExerciseCategory.lowerBody;
+      case 3:
+        return ExerciseCategory.fullBody;
+      case 4:
         return ExerciseCategory.cardio;
-      case 7:
-        return ExerciseCategory.yoga;
-      case 8:
-        return ExerciseCategory.other;
+      case 5:
+        return ExerciseCategory.bodySculpting;
       default:
-        return ExerciseCategory.chest;
+        return ExerciseCategory.core;
     }
   }
 
   @override
   void write(BinaryWriter writer, ExerciseCategory obj) {
     switch (obj) {
-      case ExerciseCategory.chest:
+      case ExerciseCategory.core:
         writer.writeByte(0);
         break;
-      case ExerciseCategory.back:
+      case ExerciseCategory.upperBody:
         writer.writeByte(1);
         break;
-      case ExerciseCategory.legs:
+      case ExerciseCategory.lowerBody:
         writer.writeByte(2);
         break;
-      case ExerciseCategory.shoulders:
+      case ExerciseCategory.fullBody:
         writer.writeByte(3);
         break;
-      case ExerciseCategory.arms:
+      case ExerciseCategory.cardio:
         writer.writeByte(4);
         break;
-      case ExerciseCategory.core:
+      case ExerciseCategory.bodySculpting:
         writer.writeByte(5);
-        break;
-      case ExerciseCategory.cardio:
-        writer.writeByte(6);
-        break;
-      case ExerciseCategory.yoga:
-        writer.writeByte(7);
-        break;
-      case ExerciseCategory.other:
-        writer.writeByte(8);
         break;
     }
   }

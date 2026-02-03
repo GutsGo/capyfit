@@ -302,7 +302,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
       case ExerciseCategory.cardio:
         type = WorkoutType.cardio;
         break;
-      case ExerciseCategory.yoga:
+      case ExerciseCategory.bodySculpting:
         type = WorkoutType.yoga;
         break;
       default:
@@ -383,24 +383,18 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
 
   String _getCategoryLabel(ExerciseCategory cat) {
     switch (cat) {
-      case ExerciseCategory.chest:
-        return '胸部';
-      case ExerciseCategory.back:
-        return '背部';
-      case ExerciseCategory.legs:
-        return '腿部';
-      case ExerciseCategory.shoulders:
-        return '肩部';
-      case ExerciseCategory.arms:
-        return '手臂';
       case ExerciseCategory.core:
         return '核心';
+      case ExerciseCategory.upperBody:
+        return '上肢';
+      case ExerciseCategory.lowerBody:
+        return '下肢';
+      case ExerciseCategory.fullBody:
+        return '全身';
       case ExerciseCategory.cardio:
         return '有氧';
-      case ExerciseCategory.yoga:
-        return '瑜伽';
-      case ExerciseCategory.other:
-        return '其他';
+      case ExerciseCategory.bodySculpting:
+        return '形体';
     }
   }
 

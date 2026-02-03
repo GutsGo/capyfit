@@ -99,7 +99,9 @@ class FoodDetailPage extends StatelessWidget {
                         color: AppColors.getTextMainColor(context),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
+                    _buildCategoryTag(context, food.category),
+                    const SizedBox(height: 6),
                     Text(
                       '食物代码: ${food.foodCode}',
                       style: TextStyle(
@@ -447,6 +449,50 @@ class FoodDetailPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryTag(BuildContext context, String category) {
+    Color color = AppColors.primary;
+    switch (category) {
+      case '谷薯类':
+        color = Colors.orange;
+        break;
+      case '蔬菜类':
+        color = Colors.green;
+        break;
+      case '水果类':
+        color = Colors.redAccent;
+        break;
+      case '蛋奶豆类':
+        color = Colors.blue;
+        break;
+      case '肉禽水产类':
+        color = Colors.brown;
+        break;
+      case '油脂类':
+        color = Colors.amber;
+        break;
+      case '调味品类':
+        color = Colors.grey;
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withOpacity(0.5), width: 0.5),
+      ),
+      child: Text(
+        category,
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

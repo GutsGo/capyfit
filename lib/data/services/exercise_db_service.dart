@@ -51,32 +51,26 @@ class ExerciseDbService {
       ExerciseCategory category;
       final catStr = data['category'] ?? '其他';
       switch (catStr) {
-        case '胸部':
-          category = ExerciseCategory.chest;
-          break;
-        case '背部':
-          category = ExerciseCategory.back;
-          break;
-        case '腿部':
-          category = ExerciseCategory.legs;
-          break;
-        case '肩部':
-          category = ExerciseCategory.shoulders;
-          break;
-        case '手臂':
-          category = ExerciseCategory.arms;
-          break;
         case '核心':
           category = ExerciseCategory.core;
+          break;
+        case '上肢':
+          category = ExerciseCategory.upperBody;
+          break;
+        case '下肢':
+          category = ExerciseCategory.lowerBody;
+          break;
+        case '全身':
+          category = ExerciseCategory.fullBody;
           break;
         case '有氧':
           category = ExerciseCategory.cardio;
           break;
-        case '瑜伽':
-          category = ExerciseCategory.yoga;
+        case '形体':
+          category = ExerciseCategory.bodySculpting;
           break;
         default:
-          category = ExerciseCategory.other;
+          category = ExerciseCategory.fullBody;
       }
 
       Difficulty difficulty;
@@ -88,6 +82,22 @@ class ExerciseDbService {
       } else {
         difficulty = Difficulty.advanced;
       }
+
+      final imageName = data['image'] ?? '';
+      const existingImages = {
+        'capy_dance.gif',
+        'capy_dumbbell_curl.webp',
+        'capy_plank.webp',
+        'capy_pushup.webp',
+        'capy_running.webp',
+        'capy_squat.webp',
+        'capy_yoga.webp',
+        'capybara-mascot.webp',
+      };
+
+      final safeImage = existingImages.contains(imageName)
+          ? imageName
+          : 'capybara-mascot.webp';
 
       return Exercise(
         id: data['id'].toString(),
@@ -101,7 +111,7 @@ class ExerciseDbService {
         description: data['description'],
         tips: List<String>.from(data['tips'] ?? []),
         steps: List<String>.from(data['steps'] ?? []),
-        image: '${GlobalAssets.imagesPath}/${data['image']}',
+        image: '${GlobalAssets.imagesPath}/$safeImage',
       );
     }).toList();
   }
@@ -163,24 +173,18 @@ class ExerciseDbService {
 
   String _getCategoryLabel(ExerciseCategory cat) {
     switch (cat) {
-      case ExerciseCategory.chest:
-        return '胸部';
-      case ExerciseCategory.back:
-        return '背部';
-      case ExerciseCategory.legs:
-        return '腿部';
-      case ExerciseCategory.shoulders:
-        return '肩部';
-      case ExerciseCategory.arms:
-        return '手臂';
       case ExerciseCategory.core:
         return '核心';
+      case ExerciseCategory.upperBody:
+        return '上肢';
+      case ExerciseCategory.lowerBody:
+        return '下肢';
+      case ExerciseCategory.fullBody:
+        return '全身';
       case ExerciseCategory.cardio:
         return '有氧';
-      case ExerciseCategory.yoga:
-        return '瑜伽';
-      case ExerciseCategory.other:
-        return '其他';
+      case ExerciseCategory.bodySculpting:
+        return '形体';
     }
   }
 }

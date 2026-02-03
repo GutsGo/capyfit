@@ -98,62 +98,40 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return HandDrawnContainer(
-      color: AppColors.getBackgroundColor(context),
-      borderRadius: 32,
-      margin: const EdgeInsets.all(12),
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        top: 12,
-        left: 20,
-        right: 20,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.getBorderColor(context),
-                borderRadius: BorderRadius.circular(2),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.onlyAddToList
+                  ? '新增自定义食物'
+                  : (_isAddingCustom ? '自定义食物' : '新增记录'),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.getTextMainColor(context),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.onlyAddToList
-                    ? '新增自定义食物'
-                    : (_isAddingCustom ? '自定义食物' : '新增记录'),
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.getTextMainColor(context),
-                ),
-              ),
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(LucideIcons.x),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(LucideIcons.x),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
 
-          if (_isAddingCustom)
-            _buildCustomForm()
-          else if (_selectedDbFood != null)
-            _buildWeightInput()
-          else
-            _buildFoodList(),
+        if (_isAddingCustom)
+          _buildCustomForm()
+        else if (_selectedDbFood != null)
+          _buildWeightInput()
+        else
+          _buildFoodList(),
 
-          const SizedBox(height: 8),
-        ],
-      ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 

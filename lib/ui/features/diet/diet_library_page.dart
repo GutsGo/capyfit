@@ -27,6 +27,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
   bool _isLoadingMore = false;
   bool _hasMore = true;
   bool _showBackToTop = false;
+  List<String> selectedCategories = [];
   String _searchQuery = '';
   Timer? _debounceTimer;
   final int _pageSize = 50;
@@ -79,15 +80,22 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     });
 
     // 获取数据库食物
-    final dbFoods = await _foodService.search(_searchQuery, limit: _pageSize);
+    final dbFoods = await _foodService.search(
+      _searchQuery,
+      categories: selectedCategories,
+      limit: _pageSize,
+    );
 
     // 获取自定义食物并转换为 FoodDatabaseItem
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final customFoods = appProvider.foodPresets
         .where(
           (food) =>
-              _searchQuery.isEmpty ||
-              food.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+              (_searchQuery.isEmpty ||
+                  food.name.toLowerCase().contains(
+                    _searchQuery.toLowerCase(),
+                  )) &&
+              (selectedCategories.isEmpty), // 暂时只在未选择分类时显示自定义食物，因为自定义食物没有分类信息
         )
         .map(
           (food) => FoodDatabaseItem(
@@ -134,6 +142,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
 
     final moreFoods = await _foodService.search(
       _searchQuery,
+      categories: selectedCategories,
       limit: _pageSize,
       offset: dbOffset,
     );
@@ -186,30 +195,54 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
           // 搜索栏
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: HandDrawnTextField(
-              controller: _searchController,
-              onChanged: _onSearchChanged,
-              hintText: '搜索食物...',
-              prefixIcon: Icon(
-                LucideIcons.search,
-                size: 20,
-                color: AppColors.getBorderColor(context),
-              ),
-              suffixIcon: _searchQuery.isNotEmpty
-                  ? IconButton(
-                      icon: Icon(
-                        LucideIcons.x,
-                        size: 18,
-                        color: AppColors.getTextMutedColor(context),
-                      ),
-                      onPressed: () {
-                        _searchController.clear();
-                        _onSearchChanged('');
-                      },
-                    )
-                  : null,
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-              style: TextStyle(color: AppColors.getTextMainColor(context)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: HandDrawnTextField(
+                    controller: _searchController,
+                    onChanged: _onSearchChanged,
+                    hintText: '搜索食物...',
+                    prefixIcon: Icon(
+                      LucideIcons.search,
+                      size: 20,
+                      color: AppColors.getBorderColor(context),
+                    ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: Icon(
+                              LucideIcons.x,
+                              size: 18,
+                              color: AppColors.getTextMutedColor(context),
+                            ),
+                            onPressed: () {
+                              _searchController.clear();
+                              _onSearchChanged('');
+                            },
+                          )
+                        : null,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    style: TextStyle(
+                      color: AppColors.getTextMainColor(context),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () => _showFilterSheet(),
+                  child: HandDrawnContainer(
+                    padding: const EdgeInsets.all(12),
+                    color: AppColors.getCardColor(context),
+                    borderRadius: 12,
+                    child: Icon(
+                      LucideIcons.filter,
+                      size: 20,
+                      color: selectedCategories.isNotEmpty
+                          ? AppColors.primary
+                          : AppColors.getTextMainColor(context),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -286,6 +319,84 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     );
   }
 
+  void _showFilterSheet() {
+    final categories = ['谷薯类', '蔬菜类', '水果类', '蛋奶豆类', '肉禽水产类', '油脂类', '调味品类'];
+
+    HandDrawnBottomSheet.show(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '食物分类',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextMainColor(context),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(LucideIcons.x, size: 20),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: categories.map((cat) {
+                    final isSelected = selectedCategories.contains(cat);
+                    return FilterChip(
+                      label: Text(cat),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setState(() {
+                          if (val) {
+                            selectedCategories.add(cat);
+                          } else {
+                            selectedCategories.remove(cat);
+                          }
+                          _loadFoods();
+                        });
+                        setModalState(() {});
+                      },
+                      selectedColor: AppColors.primary,
+                      checkmarkColor: Colors.white,
+                      labelStyle: TextStyle(
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.getTextMainColor(context),
+                        fontSize: 13,
+                      ),
+                      backgroundColor: AppColors.getCardColor(context),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.getBorderColor(context),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 32), // 底部留白
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _buildFoodCard(FoodDatabaseItem food) {
     return GestureDetector(
       onTap: () => context.push('/diet/food', extra: food),
@@ -320,12 +431,14 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '100g 约 ${food.energyKCal} kcal',
+                    '${food.energyKCal} kcal / 100g',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       color: AppColors.getTextMutedColor(context),
                     ),
                   ),
+                  const SizedBox(height: 6),
+                  _buildCategoryTag(food.category),
                 ],
               ),
             ),
@@ -371,6 +484,50 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCategoryTag(String category) {
+    Color color = AppColors.primary;
+    switch (category) {
+      case '谷薯类':
+        color = Colors.orange;
+        break;
+      case '蔬菜类':
+        color = Colors.green;
+        break;
+      case '水果类':
+        color = Colors.redAccent;
+        break;
+      case '蛋奶豆类':
+        color = Colors.blue;
+        break;
+      case '肉禽水产类':
+        color = Colors.brown;
+        break;
+      case '油脂类':
+        color = Colors.amber;
+        break;
+      case '调味品类':
+        color = Colors.grey;
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color.withOpacity(0.5), width: 0.5),
+      ),
+      child: Text(
+        category,
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

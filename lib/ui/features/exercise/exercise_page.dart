@@ -135,17 +135,7 @@ class _ExercisePageState extends State<ExercisePage> {
   Widget build(BuildContext context) {
     // Dynamically get categories from all exercises (for filter sheet)
     // In a real DB we'd have a separate method, here we can use a fixed list or get once
-    final dynamicCategories = [
-      '胸部',
-      '背部',
-      '腿部',
-      '肩部',
-      '手臂',
-      '核心',
-      '有氧',
-      '瑜伽',
-      '其他',
-    ];
+    final dynamicCategories = ['核心', '上肢', '下肢', '全身', '有氧', '形体'];
 
     // Split exercises into two columns for masonry-like adaptive height
     final leftColumnItems = <Exercise>[];
@@ -288,91 +278,72 @@ class _ExercisePageState extends State<ExercisePage> {
   }
 
   void _showFilterSheet(List<String> categories) {
-    showModalBottomSheet(
+    HandDrawnBottomSheet.show(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return HandDrawnContainer(
-              color: AppColors.getBackgroundColor(context),
-              borderRadius: 32,
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: AppColors.getBorderColor(context),
-                        borderRadius: BorderRadius.circular(2),
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '筛选分类',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextMainColor(context),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '筛选分类',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.getTextMainColor(context),
-                        ),
+                    IconButton(
+                      icon: const Icon(LucideIcons.x, size: 20),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: categories.map((cat) {
+                    final isSelected = selectedCategories.contains(cat);
+                    return FilterChip(
+                      label: Text(cat),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setState(() {
+                          if (val) {
+                            selectedCategories.add(cat);
+                          } else {
+                            selectedCategories.remove(cat);
+                          }
+                          _loadExercises();
+                        });
+                        setModalState(() {});
+                      },
+                      selectedColor: AppColors.primary,
+                      checkmarkColor: Colors.white,
+                      labelStyle: TextStyle(
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.getTextMainColor(context),
                       ),
-                      IconButton(
-                        icon: const Icon(LucideIcons.x, size: 20),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: categories.map((cat) {
-                      final isSelected = selectedCategories.contains(cat);
-                      return FilterChip(
-                        label: Text(cat),
-                        selected: isSelected,
-                        onSelected: (val) {
-                          setState(() {
-                            if (val) {
-                              selectedCategories.add(cat);
-                            } else {
-                              selectedCategories.remove(cat);
-                            }
-                            _loadExercises();
-                          });
-                          setModalState(() {});
-                        },
-                        selectedColor: AppColors.primary,
-                        checkmarkColor: Colors.white,
-                        labelStyle: TextStyle(
+                      backgroundColor: AppColors.getCardColor(context),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
                           color: isSelected
-                              ? Colors.white
-                              : AppColors.getTextMainColor(context),
+                              ? AppColors.primary
+                              : AppColors.getBorderColor(context),
                         ),
-                        backgroundColor: AppColors.getCardColor(context),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: isSelected
-                                ? AppColors.primary
-                                : AppColors.getBorderColor(context),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             );
           },
         );
@@ -516,24 +487,18 @@ class _ExercisePageState extends State<ExercisePage> {
 
   String _getCategoryLabel(ExerciseCategory cat) {
     switch (cat) {
-      case ExerciseCategory.chest:
-        return '胸部';
-      case ExerciseCategory.back:
-        return '背部';
-      case ExerciseCategory.legs:
-        return '腿部';
-      case ExerciseCategory.shoulders:
-        return '肩部';
-      case ExerciseCategory.arms:
-        return '手臂';
       case ExerciseCategory.core:
         return '核心';
+      case ExerciseCategory.upperBody:
+        return '上肢';
+      case ExerciseCategory.lowerBody:
+        return '下肢';
+      case ExerciseCategory.fullBody:
+        return '全身';
       case ExerciseCategory.cardio:
         return '有氧';
-      case ExerciseCategory.yoga:
-        return '瑜伽';
-      case ExerciseCategory.other:
-        return '其他';
+      case ExerciseCategory.bodySculpting:
+        return '形体';
     }
   }
 

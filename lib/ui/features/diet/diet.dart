@@ -381,10 +381,8 @@ class _DietPageState extends State<DietPage> {
               if (isToday)
                 _AddButton(
                   onTap: () {
-                    showModalBottomSheet(
+                    HandDrawnBottomSheet.show(
                       context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
                       builder: (context) => AddFoodSheet(mealType: type),
                     );
                   },

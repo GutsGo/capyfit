@@ -5,23 +5,17 @@ part 'exercise.g.dart';
 @HiveType(typeId: 4)
 enum ExerciseCategory {
   @HiveField(0)
-  chest,
-  @HiveField(1)
-  back,
-  @HiveField(2)
-  legs,
-  @HiveField(3)
-  shoulders,
-  @HiveField(4)
-  arms,
-  @HiveField(5)
   core,
-  @HiveField(6)
+  @HiveField(1)
+  upperBody,
+  @HiveField(2)
+  lowerBody,
+  @HiveField(3)
+  fullBody,
+  @HiveField(4)
   cardio,
-  @HiveField(7)
-  yoga,
-  @HiveField(8)
-  other,
+  @HiveField(5)
+  bodySculpting,
 }
 
 @HiveType(typeId: 5)

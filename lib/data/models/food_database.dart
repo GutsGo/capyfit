@@ -1,6 +1,7 @@
 /// 食物数据库模型
 /// 完整映射 food_db.json 的数据结构
 library;
+
 import 'food_item.dart';
 
 class FoodDatabaseItem {
@@ -39,6 +40,7 @@ class FoodDatabaseItem {
   final String mn; // 锰
   final String remark; // 备注
   final String emoji;
+  final String category;
 
   const FoodDatabaseItem({
     required this.foodCode,
@@ -76,6 +78,7 @@ class FoodDatabaseItem {
     this.mn = '—',
     this.remark = '',
     this.emoji = '🍴',
+    this.category = '调味品类',
   });
 
   factory FoodDatabaseItem.fromJson(Map<String, dynamic> json) {
@@ -115,6 +118,7 @@ class FoodDatabaseItem {
       mn: json['Mn'] as String? ?? '—',
       remark: json['remark'] as String? ?? '',
       emoji: json['emoji'] as String? ?? '🍴',
+      category: json['category'] as String? ?? '调味品类',
     );
   }
 

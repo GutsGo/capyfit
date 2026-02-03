@@ -57,33 +57,34 @@ class FoodDbService {
   /// [offset] 起始位置，用于分页
   Future<List<FoodDatabaseItem>> search(
     String query, {
+    List<String>? categories,
     int limit = 50,
     int offset = 0,
   }) async {
     final allFoods = await getAllFoods();
-
-    if (query.isEmpty) {
-      // 分页返回所有食物
-      final end = (offset + limit).clamp(0, allFoods.length);
-      if (offset >= allFoods.length) return [];
-      return allFoods.sublist(offset, end);
-    }
-
     final lowerQuery = query.toLowerCase();
-    final results = <FoodDatabaseItem>[];
-    int matchCount = 0;
 
-    for (final food in allFoods) {
-      if (food.foodName.toLowerCase().contains(lowerQuery)) {
-        if (matchCount >= offset) {
-          results.add(food);
-          if (results.length >= limit) break;
-        }
-        matchCount++;
+    // 过滤逻辑
+    final filteredFoods = allFoods.where((food) {
+      // 关键词过滤
+      bool matchesQuery = true;
+      if (lowerQuery.isNotEmpty) {
+        matchesQuery = food.foodName.toLowerCase().contains(lowerQuery);
       }
-    }
 
-    return results;
+      // 分类过滤
+      bool matchesCategory = true;
+      if (categories != null && categories.isNotEmpty) {
+        matchesCategory = categories.contains(food.category);
+      }
+
+      return matchesQuery && matchesCategory;
+    }).toList();
+
+    // 分页
+    final end = (offset + limit).clamp(0, filteredFoods.length);
+    if (offset >= filteredFoods.length) return [];
+    return filteredFoods.sublist(offset, end);
   }
 
   /// 根据食物代码获取食物
