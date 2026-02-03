@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
+import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/utils/assets.dart';
 import 'package:capyfit/data/utils/constants.dart';
@@ -59,15 +60,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final greeting = GlobalUtils.getGreeting();
 
     final todayStr = GlobalUtils.dateOnly(today);
+
     final todayPlans = appState.plans
-        .where((p) => p.date == todayStr || p.mode == PlanMode.longTerm)
-        .where((p) {
-          if (p.mode == PlanMode.oneTime) {
-            return p.date == todayStr;
-          } else {
-            return todayStr.compareTo(p.date) >= 0;
-          }
-        })
+        .where((p) => p.isActiveOn(today))
         .toList();
 
     // Priority: oneTime (0) > longTerm (1)
@@ -122,6 +117,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               // Today's Plan Section
               _buildSectionTitle(GlobalConstants.homeTitle),
               const SizedBox(height: 12),
+              // Steps Card (Full Width)
+              if (appState.userProfile.dailyStepsGoal != null) ...[
+                AnimatedBuilder(
+                  animation: _countController,
+                  builder: (context, child) {
+                    final val = _countController.value;
+                    return GestureDetector(
+                      onTap: () => _showStepsInput(context, appState),
+                      child: _buildStatCardWithImage(
+                        LucideIcons.footprints,
+                        '${(appState.todaySteps * val).round()}',
+                        '/${appState.userProfile.dailyStepsGoal}',
+                        '今日步数',
+                        GlobalAssets.iconRun,
+                        color: const Color(0xFF5D9FE3),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+              ],
               if (todayPlans.isNotEmpty) ...[
                 HandDrawnCard(
                   child: Column(
@@ -563,5 +579,72 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       case Intensity.low:
         return GlobalConstants.planLowIntensity;
     }
+  }
+
+  void _showStepsInput(BuildContext context, AppProvider appState) {
+    final controller = TextEditingController(
+      text: appState.todaySteps.toString(),
+    );
+    final formKey = GlobalKey<FormState>();
+
+    HandDrawnBottomSheet.show(
+      context: context,
+      builder: (context) => Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '记录今日步数',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            HandDrawnTextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              hintText: '输入步数',
+              suffixIcon: const Icon(LucideIcons.footprints, size: 16),
+              autofocus: true,
+              validator: (val) {
+                if (val == null || val.isEmpty) return '请输入步数';
+                final steps = int.tryParse(val);
+                if (steps == null) return '请输入有效的数字';
+                if (steps > 500000) return '步数不能超过 500,000';
+                return null;
+              },
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    '取消',
+                    style: TextStyle(
+                      color: AppColors.getTextMutedColor(context),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                HandDrawnButton(
+                  label: '确定',
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      final steps = int.parse(controller.text);
+                      appState.updateDailySteps(steps);
+                      Navigator.pop(context);
+                      showHandDrawnSnackBar(context, '步数已更新！');
+                    }
+                  },
+                  backgroundColor: AppColors.primary,
+                  textColor: Colors.white,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

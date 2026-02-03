@@ -20,6 +20,8 @@ class _GoalsPageState extends State<GoalsPage> {
   late UserGoal _selectedGoal;
   late TextEditingController _weightGoalController;
   late TextEditingController _dailyStepsController;
+  late TextEditingController _customGoalController;
+  late bool _isSmart;
 
   @override
   void initState() {
@@ -27,16 +29,31 @@ class _GoalsPageState extends State<GoalsPage> {
     final profile = context.read<AppProvider>().userProfile;
     _selectedGoal = profile.goal;
     _weightGoalController = TextEditingController(
-      text: profile.weight?.toString() ?? '',
+      text:
+          profile.targetWeight?.toString() ?? profile.weight?.toString() ?? '',
     );
-    _dailyStepsController = TextEditingController(text: '10000');
+    _dailyStepsController = TextEditingController(
+      text: profile.dailyStepsGoal?.toString() ?? '',
+    );
+    _customGoalController = TextEditingController(
+      text: profile.customCalorieGoal.toString(),
+    );
+    _isSmart = profile.isSmartCalculation;
   }
 
   @override
   void dispose() {
     _weightGoalController.dispose();
     _dailyStepsController.dispose();
+    _customGoalController.dispose();
     super.dispose();
+  }
+
+  int _calculateLiveRecommended() {
+    final profile = context.read<AppProvider>().userProfile;
+    // Use current profile data but override the goal with selected one
+    final tempProfile = profile.copyWith(goal: _selectedGoal);
+    return tempProfile.calculateRecommendedCalories();
   }
 
   void _saveGoals() {
@@ -45,7 +62,19 @@ class _GoalsPageState extends State<GoalsPage> {
       return;
     }
 
-    // In a real app, update the provider/database
+    final appProvider = context.read<AppProvider>();
+    final currentProfile = appProvider.userProfile;
+
+    final newProfile = currentProfile.copyWith(
+      goal: _selectedGoal,
+      targetWeight: double.tryParse(_weightGoalController.text),
+      dailyStepsGoal: int.tryParse(_dailyStepsController.text),
+      isSmartCalculation: _isSmart,
+      customCalorieGoal: int.tryParse(_customGoalController.text) ?? 2000,
+    );
+
+    appProvider.updateUserProfile(newProfile);
+
     Navigator.pop(context);
     showHandDrawnSnackBar(context, '目标设置已成功更新！');
   }
@@ -120,6 +149,80 @@ class _GoalsPageState extends State<GoalsPage> {
                       LucideIcons.footprints,
                       Validators.dailySteps,
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              _buildSectionTitle('计算偏好'),
+              HandDrawnCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '智能计算目标',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: AppColors.getTextMainColor(context),
+                              ),
+                            ),
+                            Text(
+                              '根据身体数据自动推荐',
+                              style: TextStyle(
+                                color: AppColors.getTextMutedColor(context),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Switch(
+                          value: _isSmart,
+                          onChanged: (val) => setState(() => _isSmart = val),
+                          activeThumbColor: AppColors.primary,
+                        ),
+                      ],
+                    ),
+                    if (_isSmart) ...[
+                      const SizedBox(height: 12),
+                      HandDrawnContainer(
+                        padding: const EdgeInsets.all(12),
+                        color: AppColors.accentMint.withOpacity(0.2),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.sparkles,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '当前推荐: ${_calculateLiveRecommended()} kcal / 天',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    if (!_isSmart) ...[
+                      const SizedBox(height: 16),
+                      _buildInputField(
+                        '自定义每日热量目标 (kcal)',
+                        _customGoalController,
+                        TextInputType.number,
+                        LucideIcons.flame,
+                        Validators.dailyCalorieGoal,
+                      ),
+                    ],
                   ],
                 ),
               ),
