@@ -21,7 +21,7 @@ class LevelSystemPage extends StatelessWidget {
         foregroundColor: AppColors.getTextMainColor(context),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(top: 0),
         itemCount: LevelService.realms.length,
         itemBuilder: (context, index) {
           final realm = LevelService.realms[index];

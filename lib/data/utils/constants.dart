@@ -87,4 +87,9 @@ class GlobalConstants {
 
   // Home Profile Reminder
   static const String homeProfileReminder = '完善身体数据，让系统更懂你 →';
+
+  // --- Security ---
+  // 用于备份数据的 HMAC 签名私钥
+  // 提示：由于是离线单机应用，该密钥编译在代码中。主要用于拦截普通用户的明文篡改行为。
+  static const String backupAuthKey = 'CSBK_2026_v2';
 }

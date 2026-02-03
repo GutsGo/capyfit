@@ -249,11 +249,11 @@ class ProfilePage extends StatelessWidget {
               ),
               _buildSettingsItem(
                 context,
-                icon: LucideIcons.helpCircle,
-                title: GlobalConstants.profileHelp,
-                iconBgColor: const Color(0xFFF1EFEC),
-                iconColor: const Color(0xFF8D8D8D),
-                onTap: () => context.push(GlobalRoutes.profileHelp),
+                icon: LucideIcons.messageSquare,
+                title: GlobalConstants.profileFeedback,
+                iconBgColor: const Color(0xFFE3F1EC),
+                iconColor: const Color(0xFF7EB8A2),
+                onTap: () => context.push(GlobalRoutes.profileFeedback),
               ),
               const SizedBox(height: 12),
               _buildSettingsItem(
@@ -263,15 +263,6 @@ class ProfilePage extends StatelessWidget {
                 iconBgColor: const Color(0xFFE8F0FD),
                 iconColor: const Color(0xFF5C7BCF),
                 onTap: () => context.push(GlobalRoutes.profileAbout),
-              ),
-              const SizedBox(height: 12),
-              _buildSettingsItem(
-                context,
-                icon: LucideIcons.messageSquare,
-                title: GlobalConstants.profileFeedback,
-                iconBgColor: const Color(0xFFE3F1EC),
-                iconColor: const Color(0xFF7EB8A2),
-                onTap: () => context.push(GlobalRoutes.profileFeedback),
               ),
               const SizedBox(height: 48),
 

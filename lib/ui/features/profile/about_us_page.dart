@@ -62,16 +62,16 @@ class AboutUsPage extends StatelessWidget {
           const SizedBox(height: 12),
           _buildMenuItem(
             context,
-            icon: LucideIcons.fileText,
-            title: GlobalConstants.profileTerms,
-            onTap: () => context.push(GlobalRoutes.terms),
+            icon: LucideIcons.medal,
+            title: GlobalConstants.profileLevelSystem,
+            onTap: () => context.push(GlobalRoutes.profileLevelSystem),
           ),
           const SizedBox(height: 12),
           _buildMenuItem(
             context,
-            icon: LucideIcons.medal,
-            title: GlobalConstants.profileLevelSystem,
-            onTap: () => context.push(GlobalRoutes.profileLevelSystem),
+            icon: LucideIcons.fileText,
+            title: GlobalConstants.profileTerms,
+            onTap: () => context.push(GlobalRoutes.terms),
           ),
           const SizedBox(height: 12),
           _buildMenuItem(

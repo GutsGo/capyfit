@@ -4,6 +4,7 @@ import 'package:capyfit/data/models/diet_entry.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
 import 'package:capyfit/data/models/user_profile.dart';
+import 'package:capyfit/data/models/daily_step_entry.dart';
 import 'package:capyfit/data/services/hive_service.dart';
 import 'package:capyfit/data/utils/constants.dart';
 
@@ -43,6 +44,7 @@ class AppProvider extends ChangeNotifier {
 
   List<WorkoutPlan> _plans = [];
   List<DietEntry> _dietEntries = [];
+  List<DailyStepEntry> _stepEntries = [];
   List<FoodItem> _foodPresets = [];
   List<Exercise> _exercises = [];
   UserProfile? _userProfile;
@@ -66,6 +68,7 @@ class AppProvider extends ChangeNotifier {
     // Load data from Hive
     _userProfile = _hiveService.getUserProfile();
     _plans = _hiveService.getWorkoutPlans();
+    _stepEntries = _hiveService.getDailySteps();
     _dietEntries = _hiveService.getDietEntries();
     _foodPresets = _hiveService.getFoodItems();
     _exercises = _hiveService.getExercises();
@@ -181,6 +184,7 @@ class AppProvider extends ChangeNotifier {
 
   List<WorkoutPlan> get plans => _plans;
   List<DietEntry> get dietEntries => _dietEntries;
+  List<DailyStepEntry> get stepEntries => _stepEntries;
   List<Exercise> get exercises => _exercises;
   List<FoodItem> get foodPresets => _foodPresets;
 
@@ -204,8 +208,36 @@ class AppProvider extends ChangeNotifier {
   void updatePlan(WorkoutPlan plan) {
     final index = _plans.indexWhere((p) => p.id == plan.id);
     if (index != -1) {
-      _plans[index] = plan;
-      _hiveService.saveWorkoutPlan(plan);
+      final oldPlan = _plans[index];
+      final todayStr = DateTime.now().toString().split(' ')[0];
+      final yesterdayStr = DateTime.now()
+          .subtract(const Duration(days: 1))
+          .toString()
+          .split(' ')[0];
+
+      if (oldPlan.mode == PlanMode.longTerm) {
+        // 长期计划编辑分支逻辑：
+        // 1. 将旧版本的快照保存为历史版本（修改 ID 并设置结束日期）
+        final historyPlan = oldPlan.copyWith(
+          id: '${oldPlan.id}_hist_${DateTime.now().millisecondsSinceEpoch}',
+          endDate: yesterdayStr,
+        );
+        _plans.add(historyPlan);
+        _hiveService.saveWorkoutPlan(historyPlan);
+
+        // 2. 将当前 ID 对应的计划更新为新版本，起始日期设为今天
+        final updatedActivePlan = plan.copyWith(
+          date: plan.date.compareTo(todayStr) > 0 ? plan.date : todayStr,
+          completedDates: [], // 新周期重新开始
+          endDate: null,
+        );
+        _plans[index] = updatedActivePlan;
+        _hiveService.saveWorkoutPlan(updatedActivePlan);
+      } else {
+        // 单次计划直接更新
+        _plans[index] = plan;
+        _hiveService.saveWorkoutPlan(plan);
+      }
       notifyListeners();
     }
   }
@@ -222,9 +254,27 @@ class AppProvider extends ChangeNotifier {
   }
 
   void deletePlan(String id) {
-    _plans.removeWhere((p) => p.id == id);
-    _hiveService.deleteWorkoutPlan(id);
-    notifyListeners();
+    final index = _plans.indexWhere((p) => p.id == id);
+    if (index != -1) {
+      final plan = _plans[index];
+      final yesterdayStr = DateTime.now()
+          .subtract(const Duration(days: 1))
+          .toString()
+          .split(' ')[0];
+
+      WorkoutPlan updatedPlan;
+      if (plan.mode == PlanMode.oneTime) {
+        // 单次计划逻辑删除
+        updatedPlan = plan.copyWith(isDeleted: true);
+      } else {
+        // 长期计划：设置结束日期为昨天，从而在今天及以后不再显示，但保留历史
+        updatedPlan = plan.copyWith(endDate: yesterdayStr);
+      }
+
+      _plans[index] = updatedPlan;
+      _hiveService.saveWorkoutPlan(updatedPlan);
+      notifyListeners();
+    }
   }
 
   void addDietEntry(DietEntry entry) {
@@ -270,6 +320,26 @@ class AppProvider extends ChangeNotifier {
   double get todayCarbs =>
       getTodayCarbs(DateTime.now().toString().split(' ')[0]);
   double get todayFat => getTodayFat(DateTime.now().toString().split(' ')[0]);
+
+  int get todaySteps {
+    final today = DateTime.now().toString().split(' ')[0];
+    final entry = _stepEntries.where((e) => e.date == today).firstOrNull;
+    return entry?.steps ?? 0;
+  }
+
+  void updateDailySteps(int steps) {
+    final today = DateTime.now().toString().split(' ')[0];
+    final index = _stepEntries.indexWhere((e) => e.date == today);
+    final entry = DailyStepEntry(date: today, steps: steps);
+
+    if (index != -1) {
+      _stepEntries[index] = entry;
+    } else {
+      _stepEntries.add(entry);
+    }
+    _hiveService.saveDailySteps(entry);
+    notifyListeners();
+  }
 
   // Get the start of current week (Monday)
   DateTime get _weekStart {
@@ -356,6 +426,14 @@ class AppProvider extends ChangeNotifier {
       }
     }
 
+    // Merge consolidated step goals into active days
+    final stepGoal = userProfile.dailyStepsGoal ?? 10000;
+    for (var s in _stepEntries) {
+      if (s.steps >= stepGoal) {
+        activeDates.add(s.date);
+      }
+    }
+
     return UserStats(
       totalWorkouts: totalWorkouts,
       totalDuration: totalDuration,
@@ -383,6 +461,14 @@ class AppProvider extends ChangeNotifier {
         if (p.completedDates != null) {
           allCompletedDates.addAll(p.completedDates!);
         }
+      }
+    }
+
+    // Merge consolidated step goals into streak
+    final stepGoal = userProfile.dailyStepsGoal ?? 10000;
+    for (var s in _stepEntries) {
+      if (s.steps >= stepGoal) {
+        allCompletedDates.add(s.date);
       }
     }
 

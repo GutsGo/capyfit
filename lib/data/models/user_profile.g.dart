@@ -26,13 +26,15 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       customCalorieGoal: fields[6] as int,
       nickname: fields[7] as String?,
       avatarPath: fields[8] as String?,
+      targetWeight: fields[9] as double?,
+      dailyStepsGoal: fields[10] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProfile obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.height)
       ..writeByte(1)
@@ -50,7 +52,11 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       ..writeByte(7)
       ..write(obj.nickname)
       ..writeByte(8)
-      ..write(obj.avatarPath);
+      ..write(obj.avatarPath)
+      ..writeByte(9)
+      ..write(obj.targetWeight)
+      ..writeByte(10)
+      ..write(obj.dailyStepsGoal);
   }
 
   @override
