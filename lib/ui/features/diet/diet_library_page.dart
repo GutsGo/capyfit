@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/data/models/food_database.dart';
 import 'package:capyfit/data/services/food_db_service.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
@@ -86,35 +84,9 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
       limit: _pageSize,
     );
 
-    // 获取自定义食物并转换为 FoodDatabaseItem
-    final appProvider = Provider.of<AppProvider>(context, listen: false);
-    final customFoods = appProvider.foodPresets
-        .where(
-          (food) =>
-              (_searchQuery.isEmpty ||
-                  food.name.toLowerCase().contains(
-                    _searchQuery.toLowerCase(),
-                  )) &&
-              (selectedCategories.isEmpty), // 暂时只在未选择分类时显示自定义食物，因为自定义食物没有分类信息
-        )
-        .map(
-          (food) => FoodDatabaseItem(
-            foodCode: food.id,
-            foodName: food.name,
-            energyKCal: food.caloriesPer100g.toStringAsFixed(0),
-            protein: food.proteinPer100g.toStringAsFixed(1),
-            fat: food.fatPer100g.toStringAsFixed(1),
-            cho: food.carbsPer100g.toStringAsFixed(1),
-            remark: '自定义食物',
-            emoji: food.emoji ?? '🍴',
-          ),
-        )
-        .toList();
-
     if (mounted) {
       setState(() {
-        // 自定义食物显示在前面
-        _foods = [...customFoods, ...dbFoods];
+        _foods = dbFoods;
         _isLoading = false;
         if (dbFoods.length < _pageSize) {
           _hasMore = false;
@@ -129,16 +101,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     setState(() => _isLoadingMore = true);
 
     // 计算当前数据库食物的偏移量
-    final appProvider = Provider.of<AppProvider>(context, listen: false);
-    final customCount = appProvider.foodPresets
-        .where(
-          (food) =>
-              _searchQuery.isEmpty ||
-              food.name.toLowerCase().contains(_searchQuery.toLowerCase()),
-        )
-        .length;
-
-    final dbOffset = _foods.length - customCount;
+    final dbOffset = _foods.length;
 
     final moreFoods = await _foodService.search(
       _searchQuery,

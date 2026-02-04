@@ -21,6 +21,7 @@ class AddFoodSheet extends StatefulWidget {
 }
 
 class _AddFoodSheetState extends State<AddFoodSheet> {
+  final _formKey = GlobalKey<FormState>();
   final FoodDbService _foodService = FoodDbService();
   final TextEditingController _searchController = TextEditingController();
 
@@ -226,146 +227,162 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
   }
 
   Widget _buildWeightInput() {
-    return Column(
-      children: [
-        // 食物信息卡片，可点击跳转到详情页
-        GestureDetector(
-          onTap: () {
-            context.push('/diet/food', extra: _selectedDbFood);
-          },
-          child: HandDrawnContainer(
-            color: AppColors.getCardColor(context),
-            borderRadius: 16,
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Text(
-                  _selectedDbFood!.emoji,
-                  style: const TextStyle(fontSize: 32),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _selectedDbFood!.foodName,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.getTextMainColor(context),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${_selectedDbFood!.energyKCal} kcal · 蛋白质 ${_selectedDbFood!.protein}g · 碳水 ${_selectedDbFood!.cho}g',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.getTextMutedColor(context),
-                        ),
-                      ),
-                    ],
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          // 食物信息卡片，可点击跳转到详情页
+          GestureDetector(
+            onTap: () {
+              context.push('/diet/food', extra: _selectedDbFood);
+            },
+            child: HandDrawnContainer(
+              color: AppColors.getCardColor(context),
+              borderRadius: 16,
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Text(
+                    _selectedDbFood!.emoji,
+                    style: const TextStyle(fontSize: 32),
                   ),
-                ),
-                Icon(
-                  LucideIcons.chevronRight,
-                  size: 20,
-                  color: AppColors.getTextMutedColor(context),
-                ),
-              ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _selectedDbFood!.foodName,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.getTextMainColor(context),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${_selectedDbFood!.energyKCal} kcal · 蛋白质 ${_selectedDbFood!.protein}g · 碳水 ${_selectedDbFood!.cho}g',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.getTextMutedColor(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    LucideIcons.chevronRight,
+                    size: 20,
+                    color: AppColors.getTextMutedColor(context),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 24),
-        HandDrawnTextField(
-          controller: _weightController,
-          keyboardType: TextInputType.number,
-          labelText: '摄入重量 (克)',
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(
-              'g',
-              style: TextStyle(color: AppColors.getTextMutedColor(context)),
+          const SizedBox(height: 24),
+          HandDrawnTextField(
+            controller: _weightController,
+            keyboardType: TextInputType.number,
+            labelText: '摄入重量 (克)',
+            validator: Validators.foodWeight,
+            suffixIcon: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                'g',
+                style: TextStyle(color: AppColors.getTextMutedColor(context)),
+              ),
+            ),
+            style: TextStyle(color: AppColors.getTextMainColor(context)),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: HandDrawnButton(
+              onPressed: _saveEntry,
+              label: '保存',
+              backgroundColor: AppColors.primary,
+              textColor: Colors.white,
+              height: 56,
             ),
           ),
-          style: TextStyle(color: AppColors.getTextMainColor(context)),
-        ),
-        const SizedBox(height: 24),
-        SizedBox(
-          width: double.infinity,
-          child: HandDrawnButton(
-            onPressed: _saveEntry,
-            label: '保存',
-            backgroundColor: AppColors.primary,
-            textColor: Colors.white,
-            height: 56,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildCustomForm() {
-    return Column(
-      children: [
-        // 食物名称
-        _buildTextField(_nameController, '食物名称', '例如：苹果'),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildTextField(
-                _calController,
-                '热量 (kcal)',
-                '每100g',
-                isNum: true,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildTextField(
-                _proteinController,
-                '蛋白质 (g)',
-                '每100g',
-                isNum: true,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildTextField(
-                _carbController,
-                '碳水 (g)',
-                '每100g',
-                isNum: true,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildTextField(
-                _fatController,
-                '脂肪 (g)',
-                '每100g',
-                isNum: true,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        SizedBox(
-          width: double.infinity,
-          child: HandDrawnButton(
-            onPressed: _saveCustomFood,
-            label: widget.onlyAddToList ? '保存食物' : '保存并选择',
-            backgroundColor: AppColors.primary,
-            textColor: Colors.white,
-            height: 56,
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          // 食物名称
+          _buildTextField(
+            _nameController,
+            '食物名称',
+            '例如：苹果',
+            validator: (v) => Validators.required(v, '食物名称'),
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  _calController,
+                  '热量 (kcal)',
+                  '每100g',
+                  isNum: true,
+                  validator: Validators.calories,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  _proteinController,
+                  '蛋白质 (g)',
+                  '每100g',
+                  isNum: true,
+                  validator: (v) => Validators.nutrient(v, '蛋白质'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  _carbController,
+                  '碳水 (g)',
+                  '每100g',
+                  isNum: true,
+                  validator: (v) => Validators.nutrient(v, '碳水化合物'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  _fatController,
+                  '脂肪 (g)',
+                  '每100g',
+                  isNum: true,
+                  validator: (v) => Validators.nutrient(v, '脂肪'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: HandDrawnButton(
+              onPressed: _saveCustomFood,
+              label: widget.onlyAddToList ? '保存食物' : '保存并选择',
+              backgroundColor: AppColors.primary,
+              textColor: Colors.white,
+              height: 56,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -374,12 +391,14 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
     String label,
     String hint, {
     bool isNum = false,
+    String? Function(String?)? validator,
   }) {
     return HandDrawnTextField(
       controller: controller,
       keyboardType: isNum ? TextInputType.number : TextInputType.text,
       labelText: label,
       hintText: hint,
+      validator: validator,
       style: TextStyle(color: AppColors.getTextMainColor(context)),
     );
   }
@@ -401,12 +420,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
   }
 
   void _saveCustomFood() {
-    // 校验名称
-    final nameError = Validators.required(_nameController.text, '食物名称');
-    if (nameError != null) {
-      _showError(nameError);
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
     // 检查名称唯一性
     final appProvider = Provider.of<AppProvider>(context, listen: false);
@@ -416,21 +430,6 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
     if (existingFood) {
       _showError('已存在名为「${_nameController.text}」的食物，请修改。');
       return;
-    }
-
-    // 校验营养素
-    final validations = [
-      Validators.calories(_calController.text),
-      Validators.nutrient(_proteinController.text, '蛋白质'),
-      Validators.nutrient(_fatController.text, '脂肪'),
-      Validators.nutrient(_carbController.text, '碳水化合物'),
-    ];
-
-    for (final error in validations) {
-      if (error != null) {
-        _showError(error);
-        return;
-      }
     }
 
     // 检查三大营养素总和
@@ -475,6 +474,8 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
 
   void _saveEntry() {
     if (_selectedDbFood == null || widget.mealType == null) return;
+    if (!_formKey.currentState!.validate()) return;
+
     final weight = double.tryParse(_weightController.text) ?? 100;
     final ratio = weight / 100.0;
 
@@ -488,6 +489,9 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
       fat: _selectedDbFood!.fatValue * ratio,
       time: TimeOfDay.now().format(context),
       date: DateTime.now().toString().split(' ')[0],
+      foodId: _selectedDbFood!.foodCode,
+      isCustom: _selectedDbFood!.remark == '自定义食物',
+      emoji: _selectedDbFood!.emoji,
     );
 
     Provider.of<AppProvider>(context, listen: false).addDietEntry(entry);

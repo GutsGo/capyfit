@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:capyfit/providers/app_provider.dart';
+import 'package:capyfit/data/services/food_db_service.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
@@ -133,7 +135,7 @@ class _DietPageState extends State<DietPage> {
                         '加餐',
                         Icons.cookie_outlined,
                         const Color(0xFFF5F5DC),
-                        const Color(0xFFC4A989),
+                        const Color(0xFFC4A889),
                         selectedDateStr,
                         isToday,
                         isFuture,
@@ -409,55 +411,83 @@ class _DietPageState extends State<DietPage> {
     );
   }
 
+  Future<void> _navigateToFoodDetail(DietEntry entry) async {
+    if (entry.isCustom || entry.foodId == null) return;
+
+    final food = await FoodDbService().getFoodByCode(entry.foodId!);
+    if (food != null && mounted) {
+      context.push('/diet/food', extra: food);
+    }
+  }
+
   Widget _buildMealItem(DietEntry entry, AppProvider state, bool isToday) {
-    return HandDrawnContainer(
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      borderRadius: 16,
-      color: AppColors.getBackgroundColor(context),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  entry.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                  ),
+    return GestureDetector(
+      onTap: () => _navigateToFoodDetail(entry),
+      behavior: HitTestBehavior.opaque,
+      child: HandDrawnContainer(
+        margin: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        borderRadius: 16,
+        color: AppColors.getBackgroundColor(context),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.accentOrange.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  entry.emoji ?? '🍴',
+                  style: const TextStyle(fontSize: 20),
                 ),
-                Text(
-                  entry.time,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.getTextMutedColor(context),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            '${entry.calories} kcal',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          if (isToday) ...[
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () => state.deleteDietEntry(entry.id),
-              child: Icon(
-                LucideIcons.x,
-                size: 16,
-                color: AppColors.getTextMutedColor(context),
               ),
             ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    entry.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    entry.time,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.getTextMutedColor(context),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              '${entry.calories} kcal',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            if (isToday) ...[
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => state.deleteDietEntry(entry.id),
+                child: Icon(
+                  LucideIcons.x,
+                  size: 16,
+                  color: AppColors.getTextMutedColor(context),
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
