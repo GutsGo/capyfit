@@ -1,7 +1,7 @@
 [
   {
     "foodCode": "012401x",
-    "foodName": "米饭（蒸，代表值）",
+    "foodName": "米饭（蒸）",
     "edible": "100",
     "water": "70.9",
     "energyKCal": "116",
@@ -39,7 +39,7 @@
   },
   {
     "foodCode": "111101x",
-    "foodName": "鸡蛋（代表值）",
+    "foodName": "鸡蛋",
     "edible": "87",
     "water": "75.2",
     "energyKCal": "139",
@@ -77,7 +77,7 @@
   },
   {
     "foodCode": "045101x",
-    "foodName": "大白菜（代表值）",
+    "foodName": "大白菜",
     "edible": "89",
     "water": "94.4",
     "energyKCal": "20",
@@ -153,7 +153,7 @@
   },
   {
     "foodCode": "124301x",
-    "foodName": "螺（代表值）",
+    "foodName": "螺",
     "edible": "41",
     "water": "73.6",
     "energyKCal": "100",
@@ -229,7 +229,7 @@
   },
   {
     "foodCode": "101101x",
-    "foodName": "纯牛奶（代表值，全脂）",
+    "foodName": "纯牛奶（全脂）",
     "edible": "100",
     "water": "87.6",
     "energyKCal": "65",
@@ -267,7 +267,7 @@
   },
   {
     "foodCode": "061201x",
-    "foodName": "梨（代表值）",
+    "foodName": "梨",
     "edible": "82",
     "water": "85.9",
     "energyKCal": "51",
@@ -381,7 +381,7 @@
   },
   {
     "foodCode": "031301x",
-    "foodName": "豆腐（代表值）",
+    "foodName": "豆腐",
     "edible": "100",
     "water": "83.8",
     "energyKCal": "84",
@@ -457,7 +457,7 @@
   },
   {
     "foodCode": "101152x",
-    "foodName": "纯牛奶(代表值,低脂)",
+    "foodName": "纯牛奶(低脂)",
     "edible": "100",
     "water": "89.4",
     "energyKCal": "47",
@@ -495,7 +495,7 @@
   },
   {
     "foodCode": "061101x",
-    "foodName": "苹果（代表值）",
+    "foodName": "苹果",
     "edible": "85",
     "water": "86.1",
     "energyKCal": "53",
@@ -608,7 +608,7 @@
   },
   {
     "foodCode": "063201x",
-    "foodName": "石榴（代表值）",
+    "foodName": "石榴",
     "edible": "57",
     "water": "79.2",
     "energyKCal": "72",
@@ -640,8 +640,8 @@
     "Cu": "0.15",
     "Mn": "0.17",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "012408",
@@ -683,7 +683,7 @@
   },
   {
     "foodCode": "101161x",
-    "foodName": "纯牛奶（代表值，脱脂）",
+    "foodName": "纯牛奶（脱脂）",
     "edible": "100",
     "water": "91.0",
     "energyKCal": "34",
@@ -797,7 +797,7 @@
   },
   {
     "foodCode": "091101x",
-    "foodName": "鸡（代表值）",
+    "foodName": "鸡",
     "edible": "63",
     "water": "70.5",
     "energyKCal": "145",
@@ -835,7 +835,7 @@
   },
   {
     "foodCode": "063901x",
-    "foodName": "桑葚（代表值）",
+    "foodName": "桑葚",
     "edible": "100",
     "water": "82.8",
     "energyKCal": "57",
@@ -868,8 +868,8 @@
     "Cu": "0.07",
     "Mn": "0.28",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍇",
+    "category": "水果类"
   },
   {
     "foodCode": "011315",
@@ -911,7 +911,7 @@
   },
   {
     "foodCode": "101187x",
-    "foodName": "鲜牛奶（代表值，全脂）",
+    "foodName": "鲜牛奶（全脂）",
     "edible": "100",
     "water": "87.1",
     "energyKCal": "67",
@@ -1025,7 +1025,7 @@
   },
   {
     "foodCode": "092101x",
-    "foodName": "鸭（代表值）",
+    "foodName": "鸭",
     "edible": "68",
     "water": "63.9",
     "energyKCal": "240",
@@ -1063,7 +1063,7 @@
   },
   {
     "foodCode": "124201x",
-    "foodName": "蛤蜊（代表值）",
+    "foodName": "蛤蜊",
     "edible": "39",
     "water": "84.1",
     "energyKCal": "62",
@@ -1096,8 +1096,8 @@
     "Cu": "0.11",
     "Mn": "0.44",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "021205",
@@ -1173,7 +1173,7 @@
     "Mn": "0.24",
     "remark": "北京",
     "emoji": "🥬",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "061218",
@@ -1253,7 +1253,7 @@
   },
   {
     "foodCode": "082101x",
-    "foodName": "牛肉（代表值，fat 9g）",
+    "foodName": "牛肉（fat 9g）",
     "edible": "100",
     "water": "69.8",
     "energyKCal": "160",
@@ -1291,7 +1291,7 @@
   },
   {
     "foodCode": "031510x",
-    "foodName": "豆腐干（代表值）",
+    "foodName": "豆腐干",
     "edible": "100",
     "water": "61.3",
     "energyKCal": "197",
@@ -1329,7 +1329,7 @@
   },
   {
     "foodCode": "011301x",
-    "foodName": "挂面（代表值）",
+    "foodName": "挂面",
     "edible": "100",
     "water": "11.5",
     "energyKCal": "353",
@@ -1481,7 +1481,7 @@
   },
   {
     "foodCode": "083101x",
-    "foodName": "羊肉（代表值，fat 7g）",
+    "foodName": "羊肉（fat 7g）",
     "edible": "100",
     "water": "72.5",
     "energyKCal": "139",
@@ -1519,7 +1519,7 @@
   },
   {
     "foodCode": "011201x",
-    "foodName": "小麦粉（代表值）",
+    "foodName": "小麦粉",
     "edible": "100",
     "water": "11.2",
     "energyKCal": "359",
@@ -1552,12 +1552,12 @@
     "Cu": "0.23",
     "Mn": "0.37",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012001x",
-    "foodName": "稻米（代表值）",
+    "foodName": "稻米",
     "edible": "100",
     "water": "13.3",
     "energyKCal": "346",
@@ -1705,11 +1705,11 @@
     "Mn": "1.04",
     "remark": "",
     "emoji": "🍍",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081101x",
-    "foodName": "猪肉（代表值，fat 30g）",
+    "foodName": "猪肉（fat 30g）",
     "edible": "91",
     "water": "54.9",
     "energyKCal": "331",
@@ -1780,12 +1780,12 @@
     "Cu": "0.24",
     "Mn": "0.05",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "011305x",
-    "foodName": "面条（生，代表值）",
+    "foodName": "面条（生）",
     "edible": "100",
     "water": "24.2",
     "energyKCal": "301",
@@ -1933,11 +1933,11 @@
     "Mn": "0.03",
     "remark": "山东",
     "emoji": "🍐",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082108x",
-    "foodName": "牛肉（代表值，瘦，fat 3g）",
+    "foodName": "牛肉（瘦，fat 3g）",
     "edible": "100",
     "water": "73.7",
     "energyKCal": "113",
@@ -2009,7 +2009,7 @@
     "Mn": "2.03",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "061905",
@@ -2047,7 +2047,7 @@
     "Mn": "0.22",
     "remark": "甘肃",
     "emoji": "🍜",
-    "category": "谷薯类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "111201",
@@ -2237,7 +2237,7 @@
     "Mn": "0.41",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "064211",
@@ -2426,8 +2426,8 @@
     "Cu": "0.14",
     "Mn": "0.13",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "042118",
@@ -2465,7 +2465,7 @@
     "Mn": "0.13",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "063304",
@@ -2654,8 +2654,8 @@
     "Cu": "0.12",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "042119",
@@ -2693,7 +2693,7 @@
     "Mn": "0.27",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "015101",
@@ -2882,8 +2882,8 @@
     "Cu": "0.11",
     "Mn": "0.08",
     "remark": "杭州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "122106",
@@ -3110,8 +3110,8 @@
     "Cu": "0.05",
     "Mn": "0.26",
     "remark": "天津",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "122107",
@@ -3267,7 +3267,7 @@
   },
   {
     "foodCode": "066201x",
-    "foodName": "西瓜（代表值）",
+    "foodName": "西瓜",
     "edible": "59",
     "water": "92.3",
     "energyKCal": "31",
@@ -3301,7 +3301,7 @@
     "Mn": "0.03",
     "remark": "甘肃",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "085101",
@@ -3338,8 +3338,8 @@
     "Cu": "0.15",
     "Mn": "0.03",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "122108",
@@ -3495,7 +3495,7 @@
   },
   {
     "foodCode": "043101x",
-    "foodName": "茄子（代表值）",
+    "foodName": "茄子",
     "edible": "93",
     "water": "93.4",
     "energyKCal": "23",
@@ -3757,7 +3757,7 @@
     "Mn": "—",
     "remark": "河北",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "101201",
@@ -3984,8 +3984,8 @@
     "Cu": "0.04",
     "Mn": "0.15",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "219022",
@@ -4213,7 +4213,7 @@
     "Mn": "0.11",
     "remark": "广东",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "219033",
@@ -4441,7 +4441,7 @@
     "Mn": "0.03",
     "remark": "山东",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "031522",
@@ -4669,7 +4669,7 @@
     "Mn": "Tr",
     "remark": "上海",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "082203",
@@ -4787,7 +4787,7 @@
   },
   {
     "foodCode": "102101x",
-    "foodName": "全脂奶粉（代表值）",
+    "foodName": "全脂奶粉",
     "edible": "100",
     "water": "2.6",
     "energyKCal": "482",
@@ -4897,7 +4897,7 @@
     "Mn": "0.02",
     "remark": "",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082204",
@@ -5015,7 +5015,7 @@
   },
   {
     "foodCode": "103001x",
-    "foodName": "酸奶（代表值，全脂）",
+    "foodName": "酸奶（全脂）",
     "edible": "100",
     "water": "81.0",
     "energyKCal": "86",
@@ -5125,7 +5125,7 @@
     "Mn": "0.07",
     "remark": "",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082205",
@@ -5243,7 +5243,7 @@
   },
   {
     "foodCode": "102130x",
-    "foodName": "全脂甜奶粉（代表值）",
+    "foodName": "全脂甜奶粉",
     "edible": "100",
     "water": "2.2",
     "energyKCal": "485",
@@ -5352,8 +5352,8 @@
     "Cu": "0.05",
     "Mn": "0.21",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082206",
@@ -5429,7 +5429,7 @@
     "Mn": "0.05",
     "remark": "",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "019001",
@@ -5471,7 +5471,7 @@
   },
   {
     "foodCode": "102301x",
-    "foodName": "儿童配方奶粉(代表值)",
+    "foodName": "儿童配方奶粉",
     "edible": "100",
     "water": "3.8",
     "energyKCal": "454",
@@ -5581,7 +5581,7 @@
     "Mn": "0.12",
     "remark": "BJV",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "082207",
@@ -5699,7 +5699,7 @@
   },
   {
     "foodCode": "102501x",
-    "foodName": "孕产妇配方奶粉(代表值)",
+    "foodName": "孕产妇配方奶粉",
     "edible": "100",
     "water": "3.0",
     "energyKCal": "413",
@@ -5808,8 +5808,8 @@
     "Cu": "0.03",
     "Mn": "0.23",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082208",
@@ -5927,7 +5927,7 @@
   },
   {
     "foodCode": "102801x",
-    "foodName": "中老年配方奶粉(代表值)",
+    "foodName": "中老年配方奶粉",
     "edible": "100",
     "water": "3.5",
     "energyKCal": "424",
@@ -6036,8 +6036,8 @@
     "Cu": "0.06",
     "Mn": "0.09",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫑",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082209",
@@ -6155,7 +6155,7 @@
   },
   {
     "foodCode": "102150x",
-    "foodName": "低脂奶粉(代表值,高钙高铁)",
+    "foodName": "低脂奶粉(高钙高铁)",
     "edible": "100",
     "water": "3.6",
     "energyKCal": "425",
@@ -6265,7 +6265,7 @@
     "Mn": "1.45",
     "remark": "青岛",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081115",
@@ -6303,7 +6303,7 @@
     "Mn": "0.01",
     "remark": "山东",
     "emoji": "🐷",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121147",
@@ -6493,7 +6493,7 @@
     "Mn": "0.08",
     "remark": "云南",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081116",
@@ -6721,7 +6721,7 @@
     "Mn": "—",
     "remark": "武汉",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081130",
@@ -6873,7 +6873,7 @@
     "Mn": "0.16",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "061117",
@@ -6949,7 +6949,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081202",
@@ -7177,7 +7177,7 @@
     "Mn": "0.01",
     "remark": "北京",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081203",
@@ -7405,7 +7405,7 @@
     "Mn": "0.01",
     "remark": "河北",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081205",
@@ -7633,7 +7633,7 @@
     "Mn": "—",
     "remark": "兰州",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081206",
@@ -7860,8 +7860,8 @@
     "Cu": "0.03",
     "Mn": "0.13",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081211",
@@ -7937,7 +7937,7 @@
     "Mn": "0.43",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "油脂类"
   },
   {
     "foodCode": "043219",
@@ -8013,7 +8013,7 @@
     "Mn": "Tr",
     "remark": "青海",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "061109",
@@ -8088,8 +8088,8 @@
     "Cu": "0.09",
     "Mn": "0.16",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081212",
@@ -8164,8 +8164,8 @@
     "Cu": "0.10",
     "Mn": "0.09",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧀",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "022103",
@@ -8241,7 +8241,7 @@
     "Mn": "Tr",
     "remark": "青海",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "061110",
@@ -8316,8 +8316,8 @@
     "Cu": "0.09",
     "Mn": "0.70",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081202",
@@ -8392,8 +8392,8 @@
     "Cu": "0.40",
     "Mn": "1.80",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐢",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "013202",
@@ -8620,8 +8620,8 @@
     "Cu": "1.31",
     "Mn": "2.55",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "⬜",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "021108",
@@ -8772,8 +8772,8 @@
     "Cu": "0.02",
     "Mn": "0.06",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081401",
@@ -8848,8 +8848,8 @@
     "Cu": "0.78",
     "Mn": "2.90",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "⬜",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "121117",
@@ -9000,8 +9000,8 @@
     "Cu": "0.07",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081410",
@@ -9038,8 +9038,8 @@
     "Cu": "0.07",
     "Mn": "0.16",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "031507",
@@ -9076,8 +9076,8 @@
     "Cu": "1.31",
     "Mn": "2.55",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "⬜",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "012301",
@@ -9228,8 +9228,8 @@
     "Cu": "0.08",
     "Mn": "0.31",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081412",
@@ -9266,8 +9266,8 @@
     "Cu": "0.04",
     "Mn": "0.18",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "061903",
@@ -9304,8 +9304,8 @@
     "Cu": "0.08",
     "Mn": "0.08",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍎",
+    "category": "水果类"
   },
   {
     "foodCode": "015201",
@@ -9457,7 +9457,7 @@
     "Mn": "0.79",
     "remark": "上海",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081413",
@@ -9494,7 +9494,7 @@
     "Cu": "0.31",
     "Mn": "0.36",
     "remark": "北京",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -9532,8 +9532,8 @@
     "Cu": "8.51",
     "Mn": "0.47",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "021204",
@@ -9647,7 +9647,7 @@
     "Mn": "—",
     "remark": "",
     "emoji": "🍐",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "043118",
@@ -9685,7 +9685,7 @@
     "Mn": "0.03",
     "remark": "北京",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083202",
@@ -9761,7 +9761,7 @@
     "Mn": "0.05",
     "remark": "北京",
     "emoji": "🍋",
-    "category": "调味品类"
+    "category": "水果类"
   },
   {
     "foodCode": "012405",
@@ -9913,7 +9913,7 @@
     "Mn": "0.04",
     "remark": "北京",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "083203",
@@ -9988,8 +9988,8 @@
     "Cu": "0.04",
     "Mn": "0.16",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "021203",
@@ -10069,7 +10069,7 @@
   },
   {
     "foodCode": "062101x",
-    "foodName": "桃（代表值）",
+    "foodName": "桃",
     "edible": "89",
     "water": "88.9",
     "energyKCal": "42",
@@ -10140,8 +10140,8 @@
     "Cu": "0.05",
     "Mn": "6.00",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083204",
@@ -10216,8 +10216,8 @@
     "Cu": "0.02",
     "Mn": "0.03",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "122101",
@@ -10297,7 +10297,7 @@
   },
   {
     "foodCode": "063101x",
-    "foodName": "葡萄（代表值）",
+    "foodName": "葡萄",
     "edible": "86",
     "water": "88.5",
     "energyKCal": "45",
@@ -10368,8 +10368,8 @@
     "Cu": "0.04",
     "Mn": "0.07",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083205",
@@ -10444,8 +10444,8 @@
     "Cu": "0.02",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "122201",
@@ -10596,8 +10596,8 @@
     "Cu": "0.02",
     "Mn": "0.06",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "谷薯类"
   },
   {
     "foodCode": "083206",
@@ -10672,8 +10672,8 @@
     "Cu": "0.56",
     "Mn": "0.66",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "192003",
@@ -10786,8 +10786,8 @@
     "Cu": "0.11",
     "Mn": "0.06",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "043214",
@@ -10900,8 +10900,8 @@
     "Cu": "0.10",
     "Mn": "0.07",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "011312",
@@ -11014,8 +11014,8 @@
     "Cu": "0.06",
     "Mn": "0.50",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "071002",
@@ -11053,7 +11053,7 @@
     "Mn": "0.30",
     "remark": "广东",
     "emoji": "🍍",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083208",
@@ -11128,8 +11128,8 @@
     "Cu": "0.16",
     "Mn": "0.09",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "021101",
@@ -11205,7 +11205,7 @@
     "Mn": "1.24",
     "remark": "浙江",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "064202",
@@ -11355,8 +11355,8 @@
     "Cu": "0.19",
     "Mn": "0.06",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥥",
+    "category": "水果类"
   },
   {
     "foodCode": "012304",
@@ -11508,7 +11508,7 @@
     "Mn": "1.21",
     "remark": "上海",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091106",
@@ -11582,8 +11582,8 @@
     "Cu": "0.06",
     "Mn": "0.34",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "047203",
@@ -11620,8 +11620,8 @@
     "Cu": "0.06",
     "Mn": "0.30",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "101501",
@@ -11735,7 +11735,7 @@
     "Mn": "0.06",
     "remark": "北京",
     "emoji": "🍒",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091111",
@@ -11810,8 +11810,8 @@
     "Cu": "0.03",
     "Mn": "0.10",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "019008",
@@ -12038,8 +12038,8 @@
     "Cu": "0.05",
     "Mn": "0.01",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "022107",
@@ -12076,8 +12076,8 @@
     "Cu": "0.17",
     "Mn": "0.88",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "104015",
@@ -12114,8 +12114,8 @@
     "Cu": "0.05",
     "Mn": "Tr",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥛",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "062109",
@@ -12191,7 +12191,7 @@
     "Mn": "—",
     "remark": "甘肃",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091114",
@@ -12266,8 +12266,8 @@
     "Cu": "14.74",
     "Mn": "0.03",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121215",
@@ -12419,7 +12419,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091201",
@@ -12494,8 +12494,8 @@
     "Cu": "0.10",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍗",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "015104",
@@ -12647,7 +12647,7 @@
     "Mn": "—",
     "remark": "云南",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091203",
@@ -12799,7 +12799,7 @@
     "Mn": "0.06",
     "remark": "哈尔滨",
     "emoji": "🍅",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "065016",
@@ -12874,8 +12874,8 @@
     "Cu": "Tr",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091204",
@@ -12950,8 +12950,8 @@
     "Cu": "0.10",
     "Mn": "0.42",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "047204",
@@ -12988,8 +12988,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "051033",
@@ -13064,8 +13064,8 @@
     "Cu": "0.80",
     "Mn": "0.77",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "043220",
@@ -13103,7 +13103,7 @@
     "Mn": "0.05",
     "remark": "保定",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091301",
@@ -13178,8 +13178,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "011314",
@@ -13293,7 +13293,7 @@
     "Mn": "0.20",
     "remark": "甘肃",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "048067",
@@ -13330,8 +13330,8 @@
     "Cu": "0.21",
     "Mn": "0.85",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092105",
@@ -13406,7 +13406,7 @@
     "Cu": "0.87",
     "Mn": "Tr",
     "remark": "甘肃",
-    "emoji": "🍴",
+    "emoji": "🥒",
     "category": "调味品类"
   },
   {
@@ -13483,7 +13483,7 @@
     "Mn": "—",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "062312",
@@ -13521,7 +13521,7 @@
     "Mn": "0.13",
     "remark": "山东",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045328",
@@ -13559,7 +13559,7 @@
     "Mn": "0.51",
     "remark": "北京",
     "emoji": "🍒",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092106",
@@ -13634,8 +13634,8 @@
     "Cu": "0.03",
     "Mn": "0.34",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "013109",
@@ -13749,7 +13749,7 @@
     "Mn": "0.86",
     "remark": "北京",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "048069",
@@ -13787,7 +13787,7 @@
     "Mn": "0.85",
     "remark": "BJV",
     "emoji": "🍵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092107",
@@ -13862,7 +13862,7 @@
     "Cu": "0.05",
     "Mn": "0.18",
     "remark": "青海",
-    "emoji": "🍴",
+    "emoji": "🥬",
     "category": "调味品类"
   },
   {
@@ -13976,8 +13976,8 @@
     "Cu": "0.04",
     "Mn": "0.04",
     "remark": "济南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "046010",
@@ -14014,8 +14014,8 @@
     "Cu": "0.09",
     "Mn": "0.89",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092201",
@@ -14090,8 +14090,8 @@
     "Cu": "0.28",
     "Mn": "0.84",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "012103",
@@ -14204,8 +14204,8 @@
     "Cu": "0.12",
     "Mn": "0.22",
     "remark": "泰国",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "066108",
@@ -14243,7 +14243,7 @@
     "Mn": "0.04",
     "remark": "—",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "092202",
@@ -14318,8 +14318,8 @@
     "Cu": "—",
     "Mn": "1.01",
     "remark": "1.22",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "012104",
@@ -14395,7 +14395,7 @@
     "Mn": "0.10",
     "remark": "内蒙古",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "062206",
@@ -14432,8 +14432,8 @@
     "Cu": "7.67",
     "Mn": "0.24",
     "remark": "敦煌",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "043209",
@@ -14471,7 +14471,7 @@
     "Mn": "0.10",
     "remark": "广东",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "092206",
@@ -14546,8 +14546,8 @@
     "Cu": "0.15",
     "Mn": "0.85",
     "remark": "河南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "012105",
@@ -14661,7 +14661,7 @@
     "Mn": "—",
     "remark": "甘肃",
     "emoji": "🌰",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "043217",
@@ -14699,7 +14699,7 @@
     "Mn": "0.05",
     "remark": "合肥",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092210",
@@ -14774,8 +14774,8 @@
     "Cu": "0.56",
     "Mn": "2.04",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012203",
@@ -14889,7 +14889,7 @@
     "Mn": "0.09",
     "remark": "北京",
     "emoji": "🍊",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045116",
@@ -14926,8 +14926,8 @@
     "Cu": "0.18",
     "Mn": "0.45",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092211",
@@ -15002,8 +15002,8 @@
     "Cu": "5.13",
     "Mn": "2.08",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "022109",
@@ -15230,8 +15230,8 @@
     "Cu": "0.43",
     "Mn": "3.10",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012101",
@@ -15383,7 +15383,7 @@
     "Mn": "0.05",
     "remark": "广东",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "093201",
@@ -15458,8 +15458,8 @@
     "Cu": "2.03",
     "Mn": "10.85",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012102",
@@ -15611,7 +15611,7 @@
     "Mn": "0.05",
     "remark": "广东",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "093202",
@@ -15686,8 +15686,8 @@
     "Cu": "0.25",
     "Mn": "2.73",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012201",
@@ -15838,8 +15838,8 @@
     "Cu": "0.12",
     "Mn": "—",
     "remark": "武汉",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "093203",
@@ -15914,8 +15914,8 @@
     "Cu": "0.05",
     "Mn": "0.76",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "047202",
@@ -15952,8 +15952,8 @@
     "Cu": "0.02",
     "Mn": "—",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "104012",
@@ -16066,8 +16066,8 @@
     "Cu": "0.06",
     "Mn": "0.19",
     "remark": "重庆",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "093301",
@@ -16256,8 +16256,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "郑州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "041104",
@@ -16294,8 +16294,8 @@
     "Cu": "Tr",
     "Mn": "0.06",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "093302",
@@ -16447,7 +16447,7 @@
     "Mn": "0.83",
     "remark": "上海",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "062305",
@@ -16485,7 +16485,7 @@
     "Mn": "0.28",
     "remark": "山东",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "041108",
@@ -16523,7 +16523,7 @@
     "Mn": "0.05",
     "remark": "",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048034",
@@ -16598,8 +16598,8 @@
     "Cu": "0.38",
     "Mn": "1.93",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "022111",
@@ -16712,8 +16712,8 @@
     "Cu": "Tr",
     "Mn": "0.17",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "043119",
@@ -16826,8 +16826,8 @@
     "Cu": "0.40",
     "Mn": "0.60",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "021105",
@@ -16978,8 +16978,8 @@
     "Cu": "0.18",
     "Mn": "0.11",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "031519",
@@ -17017,7 +17017,7 @@
     "Mn": "1.40",
     "remark": "青岛",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124106",
@@ -17054,8 +17054,8 @@
     "Cu": "0.11",
     "Mn": "59.61",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "043227",
@@ -17093,7 +17093,7 @@
     "Mn": "0.03",
     "remark": "北京",
     "emoji": "🎃",
-    "category": "蔬菜类"
+    "category": "谷薯类"
   },
   {
     "foodCode": "031208",
@@ -17206,7 +17206,7 @@
     "Mn": "0.02",
     "remark": "",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "065008",
@@ -17242,8 +17242,8 @@
     "Cu": "0.65",
     "Mn": "0.43",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "水果类"
   },
   {
     "foodCode": "124109",
@@ -17280,8 +17280,8 @@
     "Cu": "11.50",
     "Mn": "0.30",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "019003",
@@ -17432,8 +17432,8 @@
     "Cu": "0.03",
     "Mn": "0.16",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082301",
@@ -17508,8 +17508,8 @@
     "Cu": "Tr",
     "Mn": "0.33",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "013201",
@@ -17659,8 +17659,8 @@
     "Se": "0.01",
     "Cu": "0.06",
     "Mn": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082305",
@@ -17887,8 +17887,8 @@
     "Cu": "0.05",
     "Mn": "0.03",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081303",
@@ -17925,8 +17925,8 @@
     "Cu": "0.39",
     "Mn": "0.10",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124304",
@@ -18078,7 +18078,7 @@
     "Mn": "0.39",
     "remark": "北京",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "041102",
@@ -18114,8 +18114,8 @@
     "Cu": "0.02",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081321",
@@ -18152,8 +18152,8 @@
     "Cu": "0.12",
     "Mn": "0.06",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124305",
@@ -18341,8 +18341,8 @@
     "Cu": "0.05",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081325",
@@ -18569,8 +18569,8 @@
     "Cu": "0.05",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081403",
@@ -18607,8 +18607,8 @@
     "Cu": "0.11",
     "Mn": "0.07",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121114",
@@ -18645,8 +18645,8 @@
     "Cu": "0.09",
     "Mn": "0.47",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "012107",
@@ -18759,8 +18759,8 @@
     "Cu": "0.18",
     "Mn": "0.08",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍊",
+    "category": "水果类"
   },
   {
     "foodCode": "043211",
@@ -18798,7 +18798,7 @@
     "Mn": "0.11",
     "remark": "哈尔滨",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083117",
@@ -18872,8 +18872,8 @@
     "Se": "0.02",
     "Cu": "0.16",
     "Mn": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "012108",
@@ -18949,7 +18949,7 @@
     "Mn": "2.57",
     "remark": "甘肃",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "039401",
@@ -18987,7 +18987,7 @@
     "Mn": "0.44",
     "remark": "2.20",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "水果类"
   },
   {
     "foodCode": "043224",
@@ -19100,8 +19100,8 @@
     "Cu": "0.01",
     "Mn": "0.05",
     "remark": "内蒙古",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧈",
+    "category": "油脂类"
   },
   {
     "foodCode": "013108",
@@ -19253,7 +19253,7 @@
     "Mn": "0.07",
     "remark": "",
     "emoji": "🥒",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091307",
@@ -19328,8 +19328,8 @@
     "Cu": "0.18",
     "Mn": "Tr",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧈",
+    "category": "油脂类"
   },
   {
     "foodCode": "021102",
@@ -19443,7 +19443,7 @@
     "Mn": "0.20",
     "remark": "杭州",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "052006",
@@ -19480,8 +19480,8 @@
     "Cu": "2.10",
     "Mn": "0.30",
     "remark": "1.40",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045122",
@@ -19519,7 +19519,7 @@
     "Mn": "0.26",
     "remark": "",
     "emoji": "🐔",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "105007",
@@ -19556,8 +19556,8 @@
     "Cu": "0.18",
     "Mn": "Tr",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧈",
+    "category": "油脂类"
   },
   {
     "foodCode": "012406",
@@ -19709,7 +19709,7 @@
     "Mn": "0.18",
     "remark": "广东",
     "emoji": "🍍",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082303",
@@ -19784,8 +19784,8 @@
     "Cu": "0.25",
     "Mn": "0.73",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "013106",
@@ -19936,8 +19936,8 @@
     "Cu": "0.04",
     "Mn": "0.13",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083306",
@@ -20013,7 +20013,7 @@
     "Mn": "1.17",
     "remark": "",
     "emoji": "🍵",
-    "category": "调味品类"
+    "category": "油脂类"
   },
   {
     "foodCode": "047101",
@@ -20165,7 +20165,7 @@
     "Mn": "0.03",
     "remark": "",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "219028",
@@ -20240,8 +20240,8 @@
     "Cu": "0.22",
     "Mn": "0.28",
     "remark": "杭州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "012407",
@@ -20278,7 +20278,7 @@
     "Cu": "—",
     "Mn": "西安",
     "emoji": "🍚",
-    "category": "谷薯类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "101170",
@@ -20391,8 +20391,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "031520",
@@ -20429,7 +20429,7 @@
     "Cu": "1.06",
     "Mn": "1.14",
     "remark": "江苏",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -20467,7 +20467,7 @@
     "Cu": "0.05",
     "Mn": "0.15",
     "remark": "",
-    "emoji": "🍴",
+    "emoji": "🍜",
     "category": "调味品类"
   },
   {
@@ -20582,7 +20582,7 @@
     "Mn": "0.51",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "水果类"
   },
   {
     "foodCode": "043120",
@@ -20695,7 +20695,7 @@
     "Cu": "0.18",
     "Mn": "0.16",
     "remark": "",
-    "emoji": "🍴",
+    "emoji": "🍜",
     "category": "调味品类"
   },
   {
@@ -20810,7 +20810,7 @@
     "Mn": "0.73",
     "remark": "",
     "emoji": "🥝",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "042120",
@@ -20923,8 +20923,8 @@
     "Cu": "0.24",
     "Mn": "0.71",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012202",
@@ -21038,7 +21038,7 @@
     "Mn": "0.49",
     "remark": "",
     "emoji": "🍓",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048081",
@@ -21075,8 +21075,8 @@
     "Cu": "0.09",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081114",
@@ -21264,8 +21264,8 @@
     "Cu": "0.10",
     "Mn": "0.78",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍌",
+    "category": "水果类"
   },
   {
     "foodCode": "045111",
@@ -21302,8 +21302,8 @@
     "Cu": "0.13",
     "Mn": "0.36",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081117",
@@ -21378,7 +21378,7 @@
     "Cu": "0.94",
     "Mn": "0.26",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🥣",
     "category": "调味品类"
   },
   {
@@ -21493,7 +21493,7 @@
     "Mn": "0.32",
     "remark": "",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045306",
@@ -21530,8 +21530,8 @@
     "Cu": "0.17",
     "Mn": "1.53",
     "remark": "青岛",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081118",
@@ -21606,7 +21606,7 @@
     "Cu": "0.42",
     "Mn": "94.38",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🥣",
     "category": "调味品类"
   },
   {
@@ -21721,7 +21721,7 @@
     "Mn": "0.39",
     "remark": "",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045310",
@@ -21759,7 +21759,7 @@
     "Mn": "0.43",
     "remark": "",
     "emoji": "🪵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081120",
@@ -21834,8 +21834,8 @@
     "Cu": "0.25",
     "Mn": "0.29",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048006",
@@ -21949,7 +21949,7 @@
     "Mn": "—",
     "remark": "甘肃",
     "emoji": "🌰",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "045332",
@@ -21986,8 +21986,8 @@
     "Cu": "0.02",
     "Mn": "0.06",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081210",
@@ -22062,7 +22062,7 @@
     "Cu": "0.52",
     "Mn": "0.06",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🥣",
     "category": "调味品类"
   },
   {
@@ -22215,7 +22215,7 @@
     "Mn": "0.15",
     "remark": "",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081306",
@@ -22290,8 +22290,8 @@
     "Cu": "0.02",
     "Mn": "0.01",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍎",
+    "category": "水果类"
   },
   {
     "foodCode": "021201",
@@ -22443,7 +22443,7 @@
     "Mn": "0.16",
     "remark": "山东",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "081328",
@@ -22518,8 +22518,8 @@
     "Cu": "0.11",
     "Mn": "0.16",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "047104",
@@ -22632,8 +22632,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "045124",
@@ -22670,8 +22670,8 @@
     "Cu": "0.02",
     "Mn": "0.15",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081402",
@@ -22708,8 +22708,8 @@
     "Cu": "0.10",
     "Mn": "Tr",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "031501",
@@ -22784,8 +22784,8 @@
     "Cu": "0.22",
     "Mn": "0.39",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "109007",
@@ -22860,8 +22860,8 @@
     "Cu": "0.04",
     "Mn": "0.03",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "045215",
@@ -22898,8 +22898,8 @@
     "Cu": "0.03",
     "Mn": "0.31",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081405",
@@ -22936,7 +22936,7 @@
     "Cu": "0.02",
     "Mn": "0.05",
     "remark": "哈尔滨",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -23012,8 +23012,8 @@
     "Cu": "0.19",
     "Mn": "0.21",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "104018",
@@ -23051,7 +23051,7 @@
     "Mn": "Tr",
     "remark": "德国",
     "emoji": "🥛",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "062313",
@@ -23089,7 +23089,7 @@
     "Mn": "0.22",
     "remark": "河北",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045337",
@@ -23126,8 +23126,8 @@
     "Cu": "0.05",
     "Mn": "0.52",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081408",
@@ -23164,8 +23164,8 @@
     "Cu": "0.10",
     "Mn": "0.01",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "水果类"
   },
   {
     "foodCode": "031527",
@@ -23355,7 +23355,7 @@
     "Mn": "0.06",
     "remark": "",
     "emoji": "🥒",
-    "category": "蔬菜类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "081409",
@@ -23392,8 +23392,8 @@
     "Cu": "0.36",
     "Mn": "0.14",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "033205",
@@ -23431,7 +23431,7 @@
     "Mn": "0.27",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "102211",
@@ -23544,8 +23544,8 @@
     "Cu": "0.23",
     "Mn": "0.33",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081411",
@@ -23582,7 +23582,7 @@
     "Cu": "0.30",
     "Mn": "0.25",
     "remark": "哈尔滨",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -23621,7 +23621,7 @@
     "Mn": "0.48",
     "remark": "广东",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "102221",
@@ -23697,7 +23697,7 @@
     "Mn": "8.16",
     "remark": "",
     "emoji": "🌰",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "043124",
@@ -23772,7 +23772,7 @@
     "Cu": "0.25",
     "Mn": "0.16",
     "remark": "北京",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -23811,7 +23811,7 @@
     "Mn": "0.98",
     "remark": "青海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "101180",
@@ -23886,8 +23886,8 @@
     "Cu": "1.11",
     "Mn": "2.54",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "045327",
@@ -23924,8 +23924,8 @@
     "Cu": "0.04",
     "Mn": "0.76",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081418",
@@ -23962,8 +23962,8 @@
     "Cu": "0.50",
     "Mn": "0.15",
     "remark": "保定",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "042201",
@@ -24076,7 +24076,7 @@
     "Mn": "0.37",
     "remark": "山东",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045330",
@@ -24113,8 +24113,8 @@
     "Cu": "0.09",
     "Mn": "0.80",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081423",
@@ -24151,7 +24151,7 @@
     "Cu": "0.17",
     "Mn": "0.13",
     "remark": "河南",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -24266,7 +24266,7 @@
     "Mn": "0.34",
     "remark": "",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "043206",
@@ -24304,7 +24304,7 @@
     "Mn": "0.08",
     "remark": "",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081424",
@@ -24341,7 +24341,7 @@
     "Cu": "0.11",
     "Mn": "0.10",
     "remark": "河南",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -24494,7 +24494,7 @@
     "Mn": "0.09",
     "remark": "",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083201",
@@ -24645,8 +24645,8 @@
     "Cu": "0.67",
     "Mn": "0.72",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "041103",
@@ -24684,7 +24684,7 @@
     "Mn": "0.05",
     "remark": "山东",
     "emoji": "🍒",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "094201",
@@ -24835,8 +24835,8 @@
     "Cu": "1.17",
     "Mn": "2.24",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "041302",
@@ -24873,8 +24873,8 @@
     "Cu": "0.02",
     "Mn": "0.11",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "094202",
@@ -25026,7 +25026,7 @@
     "Mn": "0.34",
     "remark": "河北",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "048050",
@@ -25063,8 +25063,8 @@
     "Cu": "0.13",
     "Mn": "—",
     "remark": "武汉",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091105",
@@ -25253,8 +25253,8 @@
     "Cu": "1.68",
     "Mn": "4.32",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091116",
@@ -25365,8 +25365,8 @@
     "Se": "2.61",
     "Cu": "3.26",
     "Mn": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045113",
@@ -25403,8 +25403,8 @@
     "Cu": "Tr",
     "Mn": "1.09",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091304",
@@ -25517,8 +25517,8 @@
     "Cu": "1.00",
     "Mn": "1.93",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "045115",
@@ -25555,8 +25555,8 @@
     "Cu": "Tr",
     "Mn": "0.13",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092102",
@@ -25668,8 +25668,8 @@
     "Cu": "1.43",
     "Mn": "2.45",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "048073",
@@ -25706,8 +25706,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092103",
@@ -25820,8 +25820,8 @@
     "Cu": "0.96",
     "Mn": "2.46",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "072013",
@@ -25859,7 +25859,7 @@
     "Mn": "1.82",
     "remark": "—",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "092214",
@@ -26011,7 +26011,7 @@
     "Mn": "1.61",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051041",
@@ -26125,7 +26125,7 @@
     "Mn": "3.44",
     "remark": "",
     "emoji": "🌰",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "045307",
@@ -26162,8 +26162,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "014201",
@@ -26200,8 +26200,8 @@
     "Cu": "13.66",
     "Mn": "1.08",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121112",
@@ -26275,8 +26275,8 @@
     "Cu": "5.11",
     "Mn": "2.84",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045308",
@@ -26313,8 +26313,8 @@
     "Cu": "0.03",
     "Mn": "0.86",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081406",
@@ -26351,7 +26351,7 @@
     "Cu": "0.11",
     "Mn": "0.03",
     "remark": "北京",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -26427,8 +26427,8 @@
     "Cu": "0.45",
     "Mn": "2.03",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "045313",
@@ -26465,8 +26465,8 @@
     "Cu": "0.99",
     "Mn": "0.54",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082120",
@@ -26579,8 +26579,8 @@
     "Cu": "1.17",
     "Mn": "2.62",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧂",
+    "category": "水果类"
   },
   {
     "foodCode": "045316",
@@ -26617,8 +26617,8 @@
     "Cu": "0.19",
     "Mn": "—",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081317",
@@ -26655,8 +26655,8 @@
     "Cu": "0.41",
     "Mn": "0.43",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121138",
@@ -26732,7 +26732,7 @@
     "Mn": "0.59",
     "remark": "北京",
     "emoji": "🫘",
-    "category": "蛋奶豆类"
+    "category": "水果类"
   },
   {
     "foodCode": "045318",
@@ -26770,7 +26770,7 @@
     "Mn": "2.46",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "094101",
@@ -26883,8 +26883,8 @@
     "Cu": "1.17",
     "Mn": "2.62",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧂",
+    "category": "水果类"
   },
   {
     "foodCode": "041112",
@@ -26921,8 +26921,8 @@
     "Cu": "0.01",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091112",
@@ -27036,7 +27036,7 @@
     "Mn": "11.39",
     "remark": "浙江",
     "emoji": "🌰",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "041202",
@@ -27073,8 +27073,8 @@
     "Cu": "0.03",
     "Mn": "0.07",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092104",
@@ -27188,7 +27188,7 @@
     "Mn": "0.01",
     "remark": "北京",
     "emoji": "🍓",
-    "category": "水果类"
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "048021",
@@ -27225,8 +27225,8 @@
     "Cu": "0.06",
     "Mn": "0.36",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "122301",
@@ -27338,8 +27338,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121262",
@@ -27453,7 +27453,7 @@
     "Mn": "2.31",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "031523",
@@ -27529,7 +27529,7 @@
     "Mn": "2.00",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "045114",
@@ -27567,7 +27567,7 @@
     "Mn": "1.28",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081407",
@@ -27604,7 +27604,7 @@
     "Cu": "0.07",
     "Mn": "0.04",
     "remark": "北京",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -27643,7 +27643,7 @@
     "Mn": "1.38",
     "remark": "",
     "emoji": "腐⬜",
-    "category": "蛋奶豆类"
+    "category": "油脂类"
   },
   {
     "foodCode": "045401",
@@ -27680,8 +27680,8 @@
     "Cu": "0.09",
     "Mn": "1.14",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092302",
@@ -27794,8 +27794,8 @@
     "Cu": "0.15",
     "Mn": "0.78",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092301",
@@ -27908,8 +27908,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081315",
@@ -27946,8 +27946,8 @@
     "Cu": "0.64",
     "Mn": "0.33",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "219030",
@@ -28022,8 +28022,8 @@
     "Cu": "0.12",
     "Mn": "0.12",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "094102",
@@ -28098,8 +28098,8 @@
     "Cu": "1.25",
     "Mn": "2.56",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "水果类"
   },
   {
     "foodCode": "043112",
@@ -28212,8 +28212,8 @@
     "Cu": "0.95",
     "Mn": "6.01",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "045402",
@@ -28250,8 +28250,8 @@
     "Cu": "1.94",
     "Mn": "2.20",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081316",
@@ -28288,8 +28288,8 @@
     "Cu": "0.30",
     "Mn": "1.07",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "072001",
@@ -28326,8 +28326,8 @@
     "Cu": "1.60",
     "Mn": "2.63",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "油脂类"
   },
   {
     "foodCode": "045406",
@@ -28364,8 +28364,8 @@
     "Cu": "1.30",
     "Mn": "5.43",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081215",
@@ -28440,8 +28440,8 @@
     "Cu": "0.16",
     "Mn": "1.57",
     "remark": "青岛",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "041203",
@@ -28479,7 +28479,7 @@
     "Mn": "0.75",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091205",
@@ -28554,8 +28554,8 @@
     "Cu": "0.21",
     "Mn": "1.06",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥗",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045319",
@@ -28592,8 +28592,8 @@
     "Cu": "0.13",
     "Mn": "0.78",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121210",
@@ -28668,8 +28668,8 @@
     "Cu": "",
     "Mn": "",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "油脂类"
   },
   {
     "foodCode": "043123",
@@ -28782,8 +28782,8 @@
     "Cu": "0.01",
     "Mn": "0.17",
     "remark": "青岛",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "043109",
@@ -28895,8 +28895,8 @@
     "Cu": "0.04",
     "Mn": "0.60",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "042110",
@@ -28972,7 +28972,7 @@
     "Mn": "0.15",
     "remark": "云南",
     "emoji": "🐔",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "065013",
@@ -29009,8 +29009,8 @@
     "Cu": "0.04",
     "Mn": "0.13",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "水果类"
   },
   {
     "foodCode": "045309",
@@ -29047,8 +29047,8 @@
     "Cu": "0.04",
     "Mn": "0.45",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "043126",
@@ -29123,7 +29123,7 @@
     "Cu": "0.21",
     "Mn": "0.35",
     "remark": "",
-    "emoji": "🍴",
+    "emoji": "🍑",
     "category": "调味品类"
   },
   {
@@ -29161,8 +29161,8 @@
     "Cu": "0.06",
     "Mn": "0.15",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "065005",
@@ -29199,7 +29199,7 @@
     "Mn": "0.11",
     "remark": "",
     "emoji": "🐔",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "081322",
@@ -29236,8 +29236,8 @@
     "Cu": "0.07",
     "Mn": "0.03",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048022",
@@ -29274,8 +29274,8 @@
     "Cu": "0.09",
     "Mn": "0.42",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045338",
@@ -29313,7 +29313,7 @@
     "Mn": "0.48",
     "remark": "北京",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081329",
@@ -29350,8 +29350,8 @@
     "Cu": "0.12",
     "Mn": "0.04",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "192008",
@@ -29388,8 +29388,8 @@
     "Cu": "0.12",
     "Mn": "—",
     "remark": "武汉",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051029",
@@ -29427,7 +29427,7 @@
     "Mn": "0.09",
     "remark": "云南",
     "emoji": "🐑",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045408",
@@ -29464,8 +29464,8 @@
     "Cu": "0.04",
     "Mn": "0.54",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048087",
@@ -29502,8 +29502,8 @@
     "Cu": "0.49",
     "Mn": "8.54",
     "remark": "陕西",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051038",
@@ -29541,7 +29541,7 @@
     "Mn": "0.12",
     "remark": "云南",
     "emoji": "🐔",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045419",
@@ -29578,8 +29578,8 @@
     "Cu": "0.03",
     "Mn": "0.16",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045305",
@@ -29616,8 +29616,8 @@
     "Cu": "0.12",
     "Mn": "0.36",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "089005",
@@ -29654,8 +29654,8 @@
     "Cu": "0.18",
     "Mn": "0.04",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045422",
@@ -29692,8 +29692,8 @@
     "Cu": "1.19",
     "Mn": "6.66",
     "remark": "湖北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045317",
@@ -29730,8 +29730,8 @@
     "Cu": "0.21",
     "Mn": "0.28",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "085301",
@@ -29768,8 +29768,8 @@
     "Cu": "0.17",
     "Mn": "0.04",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "043218",
@@ -29806,8 +29806,8 @@
     "Cu": "0.03",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥒",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "043208",
@@ -29845,7 +29845,7 @@
     "Mn": "0.06",
     "remark": "",
     "emoji": "🥒",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "091104",
@@ -29920,8 +29920,8 @@
     "Cu": "0.13",
     "Mn": "0.56",
     "remark": "广西",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048074",
@@ -29958,8 +29958,8 @@
     "Cu": "0.05",
     "Mn": "0.19",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "129016",
@@ -29996,8 +29996,8 @@
     "Cu": "—",
     "Mn": "0.37",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "014102",
@@ -30034,8 +30034,8 @@
     "Cu": "1.09",
     "Mn": "1.17",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "043106",
@@ -30148,7 +30148,7 @@
     "Cu": "0.08",
     "Mn": "0.05",
     "remark": "河北",
-    "emoji": "🍴",
+    "emoji": "🥣",
     "category": "调味品类"
   },
   {
@@ -30186,8 +30186,8 @@
     "Cu": "0.93",
     "Mn": "3.29",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "191002",
@@ -30262,7 +30262,7 @@
     "Cu": "0.53",
     "Mn": "—",
     "remark": "江西",
-    "emoji": "🍴",
+    "emoji": "🍚",
     "category": "调味品类"
   },
   {
@@ -30376,8 +30376,8 @@
     "Cu": "0.12",
     "Mn": "0.44",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐙",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045324",
@@ -30414,8 +30414,8 @@
     "Cu": "0.07",
     "Mn": "0.19",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "191005",
@@ -30490,8 +30490,8 @@
     "Cu": "0.21",
     "Mn": "1.76",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐙",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "043108",
@@ -30642,8 +30642,8 @@
     "Cu": "0.07",
     "Mn": "0.33",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081312",
@@ -30756,8 +30756,8 @@
     "Cu": "0.10",
     "Mn": "0.66",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051039",
@@ -30869,8 +30869,8 @@
     "Cu": "0.01",
     "Mn": "0.05",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "084101",
@@ -30907,8 +30907,8 @@
     "Cu": "0.23",
     "Mn": "Tr",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124601",
@@ -30945,8 +30945,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "台北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048060",
@@ -30983,8 +30983,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "084301",
@@ -31021,8 +31021,8 @@
     "Cu": "0.19",
     "Mn": "0.01",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121108",
@@ -31059,8 +31059,8 @@
     "Cu": "0.02",
     "Mn": "8.25",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "072026",
@@ -31098,7 +31098,7 @@
     "Mn": "2.12",
     "remark": "甘肃",
     "emoji": "🍉",
-    "category": "水果类"
+    "category": "调味品类"
   },
   {
     "foodCode": "084302",
@@ -31135,8 +31135,8 @@
     "Cu": "0.17",
     "Mn": "0.04",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121109",
@@ -31173,7 +31173,7 @@
     "Cu": "0.06",
     "Mn": "0.04",
     "remark": "合肥",
-    "emoji": "🍴",
+    "emoji": "🥬",
     "category": "调味品类"
   },
   {
@@ -31248,8 +31248,8 @@
     "Cu": "0.29",
     "Mn": "0.07",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121245",
@@ -31286,8 +31286,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "台北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045216",
@@ -31324,8 +31324,8 @@
     "Cu": "0.02",
     "Mn": "0.09",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥥",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081304",
@@ -31362,8 +31362,8 @@
     "Cu": "0.03",
     "Mn": "0.05",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "105005",
@@ -31400,8 +31400,8 @@
     "Cu": "0.11",
     "Mn": "1.18",
     "remark": "内蒙古",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧈",
+    "category": "油脂类"
   },
   {
     "foodCode": "046009",
@@ -31438,8 +31438,8 @@
     "Cu": "0.04",
     "Mn": "0.26",
     "remark": "杭州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083110",
@@ -31514,8 +31514,8 @@
     "Cu": "Tr",
     "Mn": "Tr",
     "remark": "UK",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "048009",
@@ -31552,8 +31552,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083308",
@@ -31628,8 +31628,8 @@
     "Cu": "0.02",
     "Mn": "0.03",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "048036",
@@ -31666,8 +31666,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083310",
@@ -31780,8 +31780,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091202",
@@ -31856,8 +31856,8 @@
     "Cu": "Tr",
     "Mn": "Tr",
     "remark": "UK",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "048063",
@@ -31894,8 +31894,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083304",
@@ -31970,8 +31970,8 @@
     "Cu": "0.08",
     "Mn": "Tr",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "045320",
@@ -32008,8 +32008,8 @@
     "Cu": "0.07",
     "Mn": "0.35",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083305",
@@ -32084,8 +32084,8 @@
     "Cu": "0.05",
     "Mn": "0.01",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "072025",
@@ -32198,8 +32198,8 @@
     "Cu": "Tr",
     "Mn": "Tr",
     "remark": "UK",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥥",
+    "category": "水果类"
   },
   {
     "foodCode": "043122",
@@ -32312,8 +32312,8 @@
     "Cu": "Tr",
     "Mn": "0.01",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "045206",
@@ -32350,8 +32350,8 @@
     "Cu": "0.10",
     "Mn": "0.70",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082201",
@@ -32426,8 +32426,8 @@
     "Cu": "Tr",
     "Mn": "UK",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫒",
+    "category": "水果类"
   },
   {
     "foodCode": "045331",
@@ -32464,8 +32464,8 @@
     "Cu": "0.03",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082210",
@@ -32503,7 +32503,7 @@
     "Mn": "0.04",
     "remark": "河北",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051032",
@@ -32540,8 +32540,8 @@
     "Cu": "0.30",
     "Mn": "0.67",
     "remark": "云南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "043212",
@@ -32579,7 +32579,7 @@
     "Mn": "0.16",
     "remark": "",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081310",
@@ -32654,7 +32654,7 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🍜",
     "category": "调味品类"
   },
   {
@@ -32768,8 +32768,8 @@
     "Cu": "0.29",
     "Mn": "1.36",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐍",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124116",
@@ -32806,8 +32806,8 @@
     "Cu": "0.73",
     "Mn": "1.27",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092205",
@@ -32882,7 +32882,7 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🍯",
     "category": "调味品类"
   },
   {
@@ -32920,8 +32920,8 @@
     "Cu": "0.08",
     "Mn": "0.69",
     "remark": "杭州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092207",
@@ -32996,7 +32996,7 @@
     "Cu": "0.49",
     "Mn": "0.07",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🍯",
     "category": "调味品类"
   },
   {
@@ -33034,8 +33034,8 @@
     "Cu": "0.07",
     "Mn": "0.35",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048035",
@@ -33073,7 +33073,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "089002",
@@ -33110,8 +33110,8 @@
     "Cu": "1.08",
     "Mn": "0.09",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "046007",
@@ -33148,8 +33148,8 @@
     "Cu": "0.06",
     "Mn": "0.49",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🎍",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "191001",
@@ -33224,8 +33224,8 @@
     "Cu": "2.61",
     "Mn": "0.59",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048083",
@@ -33263,7 +33263,7 @@
     "Mn": "1.00",
     "remark": "北京",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "191004",
@@ -33337,8 +33337,8 @@
     "Cu": "0.68",
     "Mn": "2.20",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045203",
@@ -33376,7 +33376,7 @@
     "Mn": "1.08",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "191006",
@@ -33489,8 +33489,8 @@
     "Cu": "0.37",
     "Mn": "1.21",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082306",
@@ -33566,7 +33566,7 @@
     "Mn": "0.07",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "048046",
@@ -33603,8 +33603,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081313",
@@ -33680,7 +33680,7 @@
     "Mn": "0.29",
     "remark": "青海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "045205",
@@ -33717,8 +33717,8 @@
     "Cu": "0.08",
     "Mn": "0.42",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081414",
@@ -33755,7 +33755,7 @@
     "Cu": "0.05",
     "Mn": "Tr",
     "remark": "北京",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -33794,7 +33794,7 @@
     "Mn": "0.09",
     "remark": "青海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "045207",
@@ -33831,8 +33831,8 @@
     "Cu": "0.05",
     "Mn": "0.10",
     "remark": "重庆",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "094301",
@@ -33907,8 +33907,8 @@
     "Cu": "0.56",
     "Mn": "1.07",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "油脂类"
   },
   {
     "foodCode": "045208",
@@ -33945,8 +33945,8 @@
     "Cu": "0.06",
     "Mn": "0.33",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091310",
@@ -34021,8 +34021,8 @@
     "Cu": "0.10",
     "Mn": "0.05",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045321",
@@ -34059,8 +34059,8 @@
     "Cu": "0.06",
     "Mn": "0.28",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092306",
@@ -34135,8 +34135,8 @@
     "Cu": "0.06",
     "Mn": "0.40",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045323",
@@ -34173,8 +34173,8 @@
     "Cu": "0.29",
     "Mn": "0.65",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "084304",
@@ -34211,8 +34211,8 @@
     "Cu": "0.20",
     "Mn": "0.13",
     "remark": "陕西",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048003",
@@ -34249,8 +34249,8 @@
     "Cu": "0.05",
     "Mn": "0.02",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048079",
@@ -34287,8 +34287,8 @@
     "Cu": "0.21",
     "Mn": "0.37",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081307",
@@ -34325,8 +34325,8 @@
     "Cu": "0.08",
     "Mn": "0.06",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048029",
@@ -34363,8 +34363,8 @@
     "Cu": "0.27",
     "Mn": "0.25",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "052007",
@@ -34401,8 +34401,8 @@
     "Cu": "1.11",
     "Mn": "Tr",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083309",
@@ -34477,8 +34477,8 @@
     "Cu": "—",
     "Mn": "0.38",
     "remark": "1.00",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048052",
@@ -34591,8 +34591,8 @@
     "Cu": "0.10",
     "Mn": "0.21",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "042113",
@@ -34705,8 +34705,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "云南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "水果类"
   },
   {
     "foodCode": "124115",
@@ -34743,8 +34743,8 @@
     "Cu": "0.13",
     "Mn": "0.41",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083303",
@@ -34819,8 +34819,8 @@
     "Cu": "Tr",
     "Mn": "0.02",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "045303",
@@ -34857,8 +34857,8 @@
     "Cu": "0.13",
     "Mn": "2.50",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082110",
@@ -34933,8 +34933,8 @@
     "Cu": "0.05",
     "Mn": "0.34",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048011",
@@ -34971,8 +34971,8 @@
     "Cu": "0.37",
     "Mn": "0.20",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082309",
@@ -35010,7 +35010,7 @@
     "Mn": "0.11",
     "remark": "北京",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "019004",
@@ -35047,8 +35047,8 @@
     "Cu": "0.89",
     "Mn": "1.31",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "048076",
@@ -35085,8 +35085,8 @@
     "Cu": "0.16",
     "Mn": "0.32",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081422",
@@ -35123,8 +35123,8 @@
     "Cu": "0.16",
     "Mn": "0.07",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "011204",
@@ -35161,8 +35161,8 @@
     "Cu": "0.83",
     "Mn": "17.30",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "052005",
@@ -35199,8 +35199,8 @@
     "Cu": "0.12",
     "Mn": "0.04",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "083112",
@@ -35541,8 +35541,8 @@
     "Cu": "0.08",
     "Mn": "0.24",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥕",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092203",
@@ -35617,8 +35617,8 @@
     "Cu": "0.15",
     "Mn": "—",
     "remark": "河南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "041401",
@@ -35655,8 +35655,8 @@
     "Cu": "0.15",
     "Mn": "0.86",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092204",
@@ -35731,8 +35731,8 @@
     "Cu": "0.06",
     "Mn": "0.14",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048031",
@@ -35770,7 +35770,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🍈",
-    "category": "水果类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092208",
@@ -35845,8 +35845,8 @@
     "Cu": "0.04",
     "Mn": "0.08",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥒",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "052010",
@@ -35884,7 +35884,7 @@
     "Mn": "0.95",
     "remark": "辽宁",
     "emoji": "🪵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092209",
@@ -35997,8 +35997,8 @@
     "Cu": "0.10",
     "Mn": "0.12",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092212",
@@ -36111,8 +36111,8 @@
     "Cu": "1.07",
     "Mn": "0.55",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "092213",
@@ -36225,8 +36225,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "091115",
@@ -36643,8 +36643,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "082310",
@@ -36719,8 +36719,8 @@
     "Cu": "0.28",
     "Mn": "0.34",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082311",
@@ -36794,8 +36794,8 @@
     "Cu": "0.91",
     "Mn": "0.68",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081302",
@@ -36832,8 +36832,8 @@
     "Cu": "0.23",
     "Mn": "0.28",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "031101",
@@ -36871,7 +36871,7 @@
     "Mn": "2.26",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081331",
@@ -37060,8 +37060,8 @@
     "Cu": "0.12",
     "Mn": "0.10",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121111",
@@ -37136,8 +37136,8 @@
     "Cu": "0.09",
     "Mn": "0.07",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121118",
@@ -37212,8 +37212,8 @@
     "Cu": "0.13",
     "Mn": "0.18",
     "remark": "河南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121124",
@@ -37478,8 +37478,8 @@
     "Cu": "0.46",
     "Mn": "1.96",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "⬜",
+    "category": "蛋奶豆类"
   },
   {
     "foodCode": "089006",
@@ -37516,8 +37516,8 @@
     "Cu": "0.01",
     "Mn": "—",
     "remark": "吉林",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "水果类"
   },
   {
     "foodCode": "014101",
@@ -37554,8 +37554,8 @@
     "Cu": "0.63",
     "Mn": "1.23",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "081429",
@@ -37592,8 +37592,8 @@
     "Cu": "0.06",
     "Mn": "0.07",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "水果类"
   },
   {
     "foodCode": "124107",
@@ -37630,8 +37630,8 @@
     "Cu": "0.47",
     "Mn": "0.18",
     "remark": "福州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "081323",
@@ -37706,8 +37706,8 @@
     "Cu": "0.13",
     "Mn": "0.71",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "092305",
@@ -37745,7 +37745,7 @@
     "Mn": "0.14",
     "remark": "—",
     "emoji": "🦆",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121208",
@@ -37782,8 +37782,8 @@
     "Cu": "0.07",
     "Mn": "0.03",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "081324",
@@ -37858,8 +37858,8 @@
     "Cu": "0.06",
     "Mn": "0.08",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "082121",
@@ -38011,7 +38011,7 @@
     "Mn": "0.21",
     "remark": "合肥",
     "emoji": "🦐",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081319",
@@ -38048,8 +38048,8 @@
     "Cu": "0.06",
     "Mn": "0.21",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124101",
@@ -38277,7 +38277,7 @@
     "Mn": "2.49",
     "remark": "甘肃",
     "emoji": "🐑",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121140",
@@ -38428,8 +38428,8 @@
     "Cu": "0.26",
     "Mn": "0.13",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121253",
@@ -38581,7 +38581,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🦢",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "061901",
@@ -38618,8 +38618,8 @@
     "Cu": "0.11",
     "Mn": "0.11",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "051047",
@@ -38657,7 +38657,7 @@
     "Mn": "0.32",
     "remark": "云南",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "063905",
@@ -38694,8 +38694,8 @@
     "Cu": "0.07",
     "Mn": "0.14",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "水果类"
   },
   {
     "foodCode": "051036",
@@ -38733,7 +38733,7 @@
     "Mn": "0.72",
     "remark": "广东",
     "emoji": "🐔",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "124108",
@@ -38770,8 +38770,8 @@
     "Cu": "8.13",
     "Mn": "0.85",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "081305",
@@ -38808,8 +38808,8 @@
     "Cu": "0.08",
     "Mn": "0.05",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124117",
@@ -38846,8 +38846,8 @@
     "Cu": "0.13",
     "Mn": "0.10",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "081320",
@@ -38884,8 +38884,8 @@
     "Cu": "0.01",
     "Mn": "0.01",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124303",
@@ -38961,7 +38961,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🐷",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "192017",
@@ -38998,8 +38998,8 @@
     "Cu": "0.05",
     "Mn": "0.76",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "051042",
@@ -39037,7 +39037,7 @@
     "Mn": "0.19",
     "remark": "云南",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121219",
@@ -39113,7 +39113,7 @@
     "Mn": "0.17",
     "remark": "云南",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "031305",
@@ -39227,7 +39227,7 @@
     "Mn": "0.22",
     "remark": "福建",
     "emoji": "🦐",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "081102",
@@ -39417,7 +39417,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🦆",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121214",
@@ -39645,7 +39645,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121251",
@@ -39759,7 +39759,7 @@
     "Mn": "0.03",
     "remark": "三沙",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "051043",
@@ -39797,7 +39797,7 @@
     "Mn": "3.88",
     "remark": "四川",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "031202",
@@ -39873,7 +39873,7 @@
     "Mn": "0.26",
     "remark": "—",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "谷薯类"
   },
   {
     "foodCode": "063906",
@@ -39910,8 +39910,8 @@
     "Cu": "0.09",
     "Mn": "0.26",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "水果类"
   },
   {
     "foodCode": "048013",
@@ -39949,7 +39949,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051017",
@@ -40176,7 +40176,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "042122",
@@ -40214,7 +40214,7 @@
     "Mn": "0.62",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "051045",
@@ -40252,7 +40252,7 @@
     "Mn": "0.28",
     "remark": "云南",
     "emoji": "🐮",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121127",
@@ -40403,8 +40403,8 @@
     "Cu": "0.11",
     "Mn": "1.25",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "071022",
@@ -40441,8 +40441,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "贵州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "219014",
@@ -40479,7 +40479,7 @@
     "Cu": "0.39",
     "Mn": "0.12",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🍯",
     "category": "调味品类"
   },
   {
@@ -40632,7 +40632,7 @@
     "Mn": "0.01",
     "remark": "天津",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "谷薯类"
   },
   {
     "foodCode": "121126",
@@ -41087,8 +41087,8 @@
     "Cu": "0.02",
     "Mn": "0.72",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "桃",
+    "category": "水果类"
   },
   {
     "foodCode": "051015",
@@ -41163,8 +41163,8 @@
     "Cu": "0.01",
     "Mn": "0.11",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "122104",
@@ -41201,7 +41201,7 @@
     "Cu": "—",
     "Mn": "武汉",
     "emoji": "🦐",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "121106",
@@ -41428,8 +41428,8 @@
     "Cu": "0.11",
     "Mn": "0.24",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍐",
+    "category": "水果类"
   },
   {
     "foodCode": "124104",
@@ -41466,8 +41466,8 @@
     "Cu": "2.05",
     "Mn": "7.80",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "122103",
@@ -41731,8 +41731,8 @@
     "Cu": "0.04",
     "Mn": "0.19",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "051028",
@@ -41922,7 +41922,7 @@
     "Mn": "0.09",
     "remark": "—",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "121234",
@@ -42148,8 +42148,8 @@
     "Cu": "0.09",
     "Mn": "0.12",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121218",
@@ -42187,7 +42187,7 @@
     "Mn": "0.06",
     "remark": "",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "谷薯类"
   },
   {
     "foodCode": "121229",
@@ -42262,8 +42262,8 @@
     "Cu": "0.96",
     "Mn": "10.65",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "039204",
@@ -42301,7 +42301,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039302",
@@ -42339,7 +42339,7 @@
     "Mn": "1.17",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039303",
@@ -42377,7 +42377,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "031403",
@@ -42415,7 +42415,7 @@
     "Mn": "—",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035203",
@@ -42453,7 +42453,7 @@
     "Mn": "0.26",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "122204",
@@ -42529,7 +42529,7 @@
     "Mn": "0.41",
     "remark": "江苏",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121415",
@@ -42681,7 +42681,7 @@
     "Mn": "1.19",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039202",
@@ -42719,7 +42719,7 @@
     "Mn": "1.07",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039301",
@@ -42757,7 +42757,7 @@
     "Mn": "1.15",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039901",
@@ -42795,7 +42795,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "032101",
@@ -42833,7 +42833,7 @@
     "Mn": "1.11",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035101",
@@ -42871,7 +42871,7 @@
     "Mn": "1.09",
     "remark": "青海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035105",
@@ -42909,7 +42909,7 @@
     "Mn": "2.05",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035201",
@@ -42947,7 +42947,7 @@
     "Mn": "1.15",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "129018",
@@ -43211,8 +43211,8 @@
     "Cu": "2.68",
     "Mn": "10.35",
     "remark": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071012",
@@ -43249,8 +43249,8 @@
     "Cu": "1.21",
     "Mn": "7.40",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071025",
@@ -43287,8 +43287,8 @@
     "Cu": "2.00",
     "Mn": "18.47",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "072003",
@@ -43363,8 +43363,8 @@
     "Cu": "0.03",
     "Mn": "0.32",
     "remark": "青海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048012",
@@ -43401,8 +43401,8 @@
     "Cu": "0.65",
     "Mn": "6.13",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "水果类"
   },
   {
     "foodCode": "048049",
@@ -43439,8 +43439,8 @@
     "Cu": "—",
     "Mn": "0.04",
     "remark": "0.12",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048061",
@@ -43477,8 +43477,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048065",
@@ -43515,8 +43515,8 @@
     "Cu": "0.24",
     "Mn": "0.78",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048075",
@@ -43553,8 +43553,8 @@
     "Cu": "0.05",
     "Mn": "0.02",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "012211",
@@ -43590,7 +43590,7 @@
     "Se": "0.35",
     "Cu": "3.20",
     "Mn": "江西",
-    "emoji": "🍴",
+    "emoji": "🍚",
     "category": "调味品类"
   },
   {
@@ -43627,8 +43627,8 @@
     "Se": "0.02",
     "Cu": "0.16",
     "Mn": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "水果类"
   },
   {
     "foodCode": "123006",
@@ -43779,8 +43779,8 @@
     "Cu": "—",
     "Mn": "0.15",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124310",
@@ -43817,8 +43817,8 @@
     "Cu": "—",
     "Mn": "Tr",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124311",
@@ -43855,8 +43855,8 @@
     "Cu": "—",
     "Mn": "0.01",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124313",
@@ -43893,8 +43893,8 @@
     "Cu": "—",
     "Mn": "0.14",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124314",
@@ -43931,8 +43931,8 @@
     "Cu": "—",
     "Mn": "0.13",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "219042",
@@ -43969,7 +43969,7 @@
     "Cu": "0.09",
     "Mn": "0.77",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🐚",
     "category": "调味品类"
   },
   {
@@ -44007,8 +44007,8 @@
     "Cu": "3.03",
     "Mn": "14.94",
     "remark": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071033",
@@ -44045,8 +44045,8 @@
     "Cu": "1.01",
     "Mn": "1.36",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071036",
@@ -44083,8 +44083,8 @@
     "Cu": "2.57",
     "Mn": "1.19",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "水果类"
   },
   {
     "foodCode": "071037",
@@ -44121,8 +44121,8 @@
     "Cu": "1.13",
     "Mn": "1.96",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071040",
@@ -44159,8 +44159,8 @@
     "Cu": "0.38",
     "Mn": "0.74",
     "remark": "浙江",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "072009",
@@ -44197,7 +44197,7 @@
     "Cu": "1.33",
     "Mn": "8.23",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🥬",
     "category": "调味品类"
   },
   {
@@ -44235,8 +44235,8 @@
     "Cu": "0.41",
     "Mn": "0.57",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍐",
+    "category": "水果类"
   },
   {
     "foodCode": "065007",
@@ -44273,8 +44273,8 @@
     "Cu": "1.28",
     "Mn": "0.30",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "065007",
@@ -44311,8 +44311,8 @@
     "Cu": "1.28",
     "Mn": "0.30",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "065024",
@@ -44349,8 +44349,8 @@
     "Cu": "—",
     "Mn": "0.05",
     "remark": "0.06",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "051006",
@@ -44387,8 +44387,8 @@
     "Cu": "0.46",
     "Mn": "3.09",
     "remark": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051006",
@@ -44425,8 +44425,8 @@
     "Cu": "0.46",
     "Mn": "3.09",
     "remark": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "047105",
@@ -44463,8 +44463,8 @@
     "Cu": "0.63",
     "Mn": "0.23",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥔",
+    "category": "谷薯类"
   },
   {
     "foodCode": "129002",
@@ -44500,8 +44500,8 @@
     "Se": "0.27",
     "Cu": "0.43",
     "Mn": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "129002",
@@ -44537,8 +44537,8 @@
     "Se": "0.27",
     "Cu": "0.43",
     "Mn": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "035102",
@@ -44576,7 +44576,7 @@
     "Mn": "1.00",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035103",
@@ -44614,7 +44614,7 @@
     "Mn": "0.96",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "048020",
@@ -44690,7 +44690,7 @@
     "Mn": "1.28",
     "remark": "北京",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "042102",
@@ -44728,7 +44728,7 @@
     "Mn": "0.55",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "042103",
@@ -44766,7 +44766,7 @@
     "Mn": "0.45",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "042107",
@@ -44804,7 +44804,7 @@
     "Mn": "0.19",
     "remark": "兰州",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "042115",
@@ -44842,7 +44842,7 @@
     "Mn": "0.44",
     "remark": "山东",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "042117",
@@ -44880,7 +44880,7 @@
     "Mn": "0.39",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "129010",
@@ -45411,8 +45411,8 @@
     "Cu": "2.51",
     "Mn": "1.95",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "油脂类"
   },
   {
     "foodCode": "072016",
@@ -45449,8 +45449,8 @@
     "Cu": "1.41",
     "Mn": "1.17",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "油脂类"
   },
   {
     "foodCode": "072017",
@@ -45487,8 +45487,8 @@
     "Cu": "1.77",
     "Mn": "17.85",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "油脂类"
   },
   {
     "foodCode": "065019",
@@ -45525,8 +45525,8 @@
     "Cu": "Tr",
     "Mn": "0.48",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫒",
+    "category": "水果类"
   },
   {
     "foodCode": "065026",
@@ -45640,7 +45640,7 @@
     "Mn": "7.74",
     "remark": "甘肃",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051007",
@@ -45677,7 +45677,7 @@
     "Mn": "0.81",
     "remark": "哈尔滨",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051010",
@@ -45713,8 +45713,8 @@
     "Cu": "5.88",
     "Mn": "5.96",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051011",
@@ -45790,7 +45790,7 @@
     "Mn": "1.21",
     "remark": "哈尔滨",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "045409",
@@ -45827,8 +45827,8 @@
     "Cu": "0.24",
     "Mn": "0.35",
     "remark": "兰州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044102",
@@ -45866,7 +45866,7 @@
     "Mn": "0.63",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044104",
@@ -45903,8 +45903,8 @@
     "Cu": "0.05",
     "Mn": "0.15",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044105",
@@ -45941,8 +45941,8 @@
     "Cu": "0.09",
     "Mn": "0.25",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044202",
@@ -45979,8 +45979,8 @@
     "Cu": "0.34",
     "Mn": "0.10",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048007",
@@ -46017,8 +46017,8 @@
     "Cu": "1.08",
     "Mn": "0.94",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048010",
@@ -46055,8 +46055,8 @@
     "Cu": "0.07",
     "Mn": "0.66",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048026",
@@ -46093,8 +46093,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "USA",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "019002",
@@ -46131,7 +46131,7 @@
     "Cu": "0.61",
     "Mn": "1.10",
     "remark": "甘肃",
-    "emoji": "🍴",
+    "emoji": "🥩",
     "category": "调味品类"
   },
   {
@@ -46169,8 +46169,8 @@
     "Cu": "14.05",
     "Mn": "1.31",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌾",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012207",
@@ -46207,8 +46207,8 @@
     "Cu": "0.40",
     "Mn": "1.30",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012210",
@@ -46245,8 +46245,8 @@
     "Cu": "0.23",
     "Mn": "0.89",
     "remark": "福州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "129003",
@@ -46284,7 +46284,7 @@
     "Mn": "0.04",
     "remark": "",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "129015",
@@ -46321,8 +46321,8 @@
     "Cu": "—",
     "Mn": "0.24",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐢",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "123009",
@@ -46397,8 +46397,8 @@
     "Cu": "0.48",
     "Mn": "0.70",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124315",
@@ -46473,7 +46473,7 @@
     "Cu": "0.03",
     "Mn": "0.02",
     "remark": "三沙",
-    "emoji": "🍴",
+    "emoji": "🐟",
     "category": "调味品类"
   },
   {
@@ -46549,8 +46549,8 @@
     "Cu": "1.39",
     "Mn": "2.90",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "油脂类"
   },
   {
     "foodCode": "071039",
@@ -46587,8 +46587,8 @@
     "Cu": "0.83",
     "Mn": "1.69",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "水果类"
   },
   {
     "foodCode": "063912",
@@ -46625,8 +46625,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "中国台湾",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "051052",
@@ -46702,7 +46702,7 @@
     "Mn": "1.24",
     "remark": "云南",
     "emoji": "🐚",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "043207",
@@ -46739,8 +46739,8 @@
     "Cu": "0.56",
     "Mn": "1.64",
     "remark": "山东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥒",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "022108",
@@ -46777,8 +46777,8 @@
     "Cu": "0.02",
     "Mn": "—",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012205",
@@ -46815,8 +46815,8 @@
     "Cu": "0.23",
     "Mn": "1.21",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012206",
@@ -46853,8 +46853,8 @@
     "Cu": "0.55",
     "Mn": "1.84",
     "remark": "福州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012208",
@@ -46891,8 +46891,8 @@
     "Cu": "0.16",
     "Mn": "1.11",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "012209",
@@ -46929,8 +46929,8 @@
     "Cu": "0.20",
     "Mn": "1.05",
     "remark": "福州",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍚",
+    "category": "谷薯类"
   },
   {
     "foodCode": "051056",
@@ -46967,8 +46967,8 @@
     "Cu": "0.79",
     "Mn": "1.46",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "219034",
@@ -47005,8 +47005,8 @@
     "Cu": "0.23",
     "Mn": "0.55",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍜",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "033204",
@@ -47044,7 +47044,7 @@
     "Mn": "0.22",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "042114",
@@ -47082,7 +47082,7 @@
     "Mn": "—",
     "remark": "武汉",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "124118",
@@ -47234,7 +47234,7 @@
     "Mn": "0.79",
     "remark": "青海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121125",
@@ -47386,7 +47386,7 @@
     "Mn": "1.31",
     "remark": "上海",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "039203",
@@ -47424,7 +47424,7 @@
     "Mn": "0.98",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "034101",
@@ -47462,7 +47462,7 @@
     "Mn": "1.22",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "034102",
@@ -47500,7 +47500,7 @@
     "Mn": "1.08",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "034103",
@@ -47538,7 +47538,7 @@
     "Mn": "—",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "034104",
@@ -47576,7 +47576,7 @@
     "Mn": "1.43",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081427",
@@ -47613,8 +47613,8 @@
     "Cu": "1.57",
     "Mn": "0.74",
     "remark": "云南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "051005",
@@ -47726,7 +47726,7 @@
     "Mn": "0.55",
     "remark": "兰州",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048047",
@@ -47763,7 +47763,7 @@
     "Cu": "—",
     "Mn": "0.53",
     "remark": "0.05",
-    "emoji": "🍴",
+    "emoji": "🥕",
     "category": "调味品类"
   },
   {
@@ -47800,8 +47800,8 @@
     "Se": "0.05",
     "Cu": "0.17",
     "Mn": "三沙",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "水果类"
   },
   {
     "foodCode": "044205",
@@ -47838,8 +47838,8 @@
     "Cu": "0.06",
     "Mn": "0.16",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "105010",
@@ -47877,7 +47877,7 @@
     "Mn": "0.03",
     "remark": "西藏",
     "emoji": "🍵",
-    "category": "调味品类"
+    "category": "油脂类"
   },
   {
     "foodCode": "061902",
@@ -47914,8 +47914,8 @@
     "Cu": "0.06",
     "Mn": "0.38",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍑",
+    "category": "水果类"
   },
   {
     "foodCode": "051016",
@@ -47951,8 +47951,8 @@
     "Cu": "0.51",
     "Mn": "3.75",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "072022",
@@ -48103,8 +48103,8 @@
     "Cu": "1.03",
     "Mn": "4.79",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥣",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "219016",
@@ -48141,7 +48141,7 @@
     "Cu": "0.08",
     "Mn": "3.61",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🍯",
     "category": "调味品类"
   },
   {
@@ -48446,7 +48446,7 @@
     "Mn": "0.03",
     "remark": "福建",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "034105",
@@ -48484,7 +48484,7 @@
     "Mn": "1.02",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "121407",
@@ -48559,8 +48559,8 @@
     "Cu": "0.10",
     "Mn": "0.25",
     "remark": "北京",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121144",
@@ -48597,8 +48597,8 @@
     "Cu": "—",
     "Mn": "0.04",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐟",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "121260",
@@ -48635,7 +48635,7 @@
     "Cu": "0.06",
     "Mn": "0.03",
     "remark": "三沙",
-    "emoji": "🍴",
+    "emoji": "🐟",
     "category": "调味品类"
   },
   {
@@ -48673,8 +48673,8 @@
     "Cu": "1.95",
     "Mn": "1.98",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "油脂类"
   },
   {
     "foodCode": "123306",
@@ -48787,8 +48787,8 @@
     "Cu": "0.14",
     "Mn": "3.20",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "072010",
@@ -48901,8 +48901,8 @@
     "Cu": "1.89",
     "Mn": "5.08",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🫗",
+    "category": "油脂类"
   },
   {
     "foodCode": "121255",
@@ -49054,7 +49054,7 @@
     "Mn": "0.78",
     "remark": "广东",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "121417",
@@ -49092,7 +49092,7 @@
     "Mn": "—",
     "remark": "辽宁",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121246",
@@ -49129,8 +49129,8 @@
     "Cu": "—",
     "Mn": "0.08",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍧",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "044106",
@@ -49167,8 +49167,8 @@
     "Cu": "0.05",
     "Mn": "0.17",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044302",
@@ -49206,7 +49206,7 @@
     "Mn": "0.62",
     "remark": "甘肃",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044303",
@@ -49244,7 +49244,7 @@
     "Mn": "0.78",
     "remark": "",
     "emoji": "💧",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044402",
@@ -49281,8 +49281,8 @@
     "Cu": "0.10",
     "Mn": "0.17",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048038",
@@ -49319,8 +49319,8 @@
     "Cu": "0.37",
     "Mn": "0.54",
     "remark": "BJV",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "123007",
@@ -49547,8 +49547,8 @@
     "Cu": "0.05",
     "Mn": "0.14",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "072020",
@@ -49623,8 +49623,8 @@
     "Cu": "2.42",
     "Mn": "3.48",
     "remark": "甘肃",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "油脂类"
   },
   {
     "foodCode": "071009",
@@ -49966,7 +49966,7 @@
     "Mn": "2.83",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "031103",
@@ -50004,7 +50004,7 @@
     "Mn": "2.25",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "035202",
@@ -50042,7 +50042,7 @@
     "Mn": "0.18",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "109005",
@@ -50118,7 +50118,7 @@
     "Mn": "1.46",
     "remark": "甘肃",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "081426",
@@ -50155,8 +50155,8 @@
     "Cu": "0.07",
     "Mn": "0.03",
     "remark": "上海",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "124309",
@@ -50193,8 +50193,8 @@
     "Cu": "—",
     "Mn": "0.13",
     "remark": "福建",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "045322",
@@ -50231,8 +50231,8 @@
     "Cu": "0.04",
     "Mn": "0.31",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048004",
@@ -50269,8 +50269,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048008",
@@ -50307,8 +50307,8 @@
     "Cu": "0.50",
     "Mn": "16.41",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧂",
+    "category": "油脂类"
   },
   {
     "foodCode": "048044",
@@ -50345,8 +50345,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048055",
@@ -50383,8 +50383,8 @@
     "Cu": "0.09",
     "Mn": "0.35",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048064",
@@ -50421,8 +50421,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "072021",
@@ -50498,7 +50498,7 @@
     "Mn": "0.17",
     "remark": "",
     "emoji": "🪵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048024",
@@ -50536,7 +50536,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "121230",
@@ -50725,8 +50725,8 @@
     "Cu": "0.08",
     "Mn": "0.04",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥩",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "051008",
@@ -50801,8 +50801,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048053",
@@ -50839,8 +50839,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "水果类"
   },
   {
     "foodCode": "048054",
@@ -50877,8 +50877,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048057",
@@ -50914,7 +50914,7 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
+    "emoji": "🥬",
     "category": "调味品类"
   },
   {
@@ -50952,8 +50952,8 @@
     "Cu": "0.18",
     "Mn": "0.38",
     "remark": "江苏",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "047303",
@@ -50990,8 +50990,8 @@
     "Cu": "0.03",
     "Mn": "3.38",
     "remark": "重庆",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥜",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051055",
@@ -51028,8 +51028,8 @@
     "Cu": "1.36",
     "Mn": "1.55",
     "remark": "吉林",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "124112",
@@ -51066,8 +51066,8 @@
     "Cu": "0.10",
     "Mn": "0.43",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "047103",
@@ -51104,7 +51104,7 @@
     "Cu": "—",
     "Mn": "0.20",
     "remark": "广东",
-    "emoji": "🍴",
+    "emoji": "🍜",
     "category": "调味品类"
   },
   {
@@ -51257,7 +51257,7 @@
     "Mn": "0.60",
     "remark": "广东",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "129007",
@@ -51333,7 +51333,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "048051",
@@ -51370,8 +51370,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051019",
@@ -51445,8 +51445,8 @@
     "Cu": "0.07",
     "Mn": "0.11",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🌰",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "044101",
@@ -51483,8 +51483,8 @@
     "Cu": "0.22",
     "Mn": "0.29",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "044103",
@@ -51521,8 +51521,8 @@
     "Cu": "0.11",
     "Mn": "0.24",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048059",
@@ -51559,8 +51559,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "谷薯类"
   },
   {
     "foodCode": "048062",
@@ -51597,8 +51597,8 @@
     "Cu": "0.03",
     "Mn": "0.26",
     "remark": "广东",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051002",
@@ -51711,8 +51711,8 @@
     "Cu": "1.45",
     "Mn": "4.13",
     "remark": "哈尔滨",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051054",
@@ -51749,8 +51749,8 @@
     "Cu": "2.51",
     "Mn": "8.47",
     "remark": "云南",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🐚",
+    "category": "肉禽水产类"
   },
   {
     "foodCode": "048005",
@@ -51787,8 +51787,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048072",
@@ -51824,8 +51824,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051020",
@@ -51901,7 +51901,7 @@
     "Mn": "0.03",
     "remark": "福建",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048015",
@@ -51938,8 +51938,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048018",
@@ -51976,8 +51976,8 @@
     "Cu": "0.25",
     "Mn": "0.42",
     "remark": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048039",
@@ -52014,8 +52014,8 @@
     "Cu": "—",
     "Mn": "0.24",
     "remark": "0.40",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051050",
@@ -52052,8 +52052,8 @@
     "Cu": "1.76",
     "Mn": "1.13",
     "remark": "四川",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051013",
@@ -52091,7 +52091,7 @@
     "Mn": "8.86",
     "remark": "",
     "emoji": "🪵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051018",
@@ -52127,8 +52127,8 @@
     "Cu": "10.30",
     "Mn": "1.63",
     "remark": "河北",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "101303",
@@ -52204,7 +52204,7 @@
     "Mn": "—",
     "remark": "—",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "121410",
@@ -52280,7 +52280,7 @@
     "Mn": "1.33",
     "remark": "北京",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "072002",
@@ -52318,7 +52318,7 @@
     "Mn": "0.65",
     "remark": "北京",
     "emoji": "🥜",
-    "category": "油脂类"
+    "category": "水果类"
   },
   {
     "foodCode": "051014",
@@ -52356,7 +52356,7 @@
     "Mn": "0.97",
     "remark": "",
     "emoji": "🪵",
-    "category": "调味品类"
+    "category": "蔬菜类"
   },
   {
     "foodCode": "048080",
@@ -52391,8 +52391,8 @@
     "Se": "—",
     "Cu": "—",
     "Mn": "—",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "121113",
@@ -52430,7 +52430,7 @@
     "Mn": "0.14",
     "remark": "福州",
     "emoji": "🐟",
-    "category": "肉禽水产类"
+    "category": "水果类"
   },
   {
     "foodCode": "042111",
@@ -52468,7 +52468,7 @@
     "Mn": "0.65",
     "remark": "",
     "emoji": "🫛",
-    "category": "蔬菜类"
+    "category": "调味品类"
   },
   {
     "foodCode": "129008",
@@ -52543,8 +52543,8 @@
     "Cu": "—",
     "Mn": "—",
     "remark": "",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🧅",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "051035",
@@ -52619,8 +52619,8 @@
     "Cu": "0.30",
     "Mn": "3.39",
     "remark": "吉林",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🍄",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "101168",
@@ -52847,8 +52847,8 @@
     "Cu": "—",
     "Mn": "0.44",
     "remark": "0.58",
-    "emoji": "🍴",
-    "category": "调味品类"
+    "emoji": "🥬",
+    "category": "蔬菜类"
   },
   {
     "foodCode": "101181",

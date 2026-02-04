@@ -34,6 +34,12 @@ class DietEntry extends HiveObject {
   final String time;
   @HiveField(8)
   final String date;
+  @HiveField(9)
+  final String? foodId;
+  @HiveField(10)
+  final bool isCustom;
+  @HiveField(11)
+  final String? emoji;
 
   double get totalCalories => calories.toDouble();
   double get totalProtein => protein;
@@ -51,6 +57,9 @@ class DietEntry extends HiveObject {
     required this.fat,
     required this.time,
     required this.date,
+    this.foodId,
+    this.isCustom = false,
+    this.emoji,
   });
 
   DietEntry copyWith({
@@ -63,6 +72,8 @@ class DietEntry extends HiveObject {
     double? fat,
     String? time,
     String? date,
+    String? foodId,
+    bool? isCustom,
   }) {
     return DietEntry(
       id: id ?? this.id,
@@ -74,6 +85,9 @@ class DietEntry extends HiveObject {
       fat: fat ?? this.fat,
       time: time ?? this.time,
       date: date ?? this.date,
+      foodId: foodId ?? this.foodId,
+      isCustom: isCustom ?? this.isCustom,
+      emoji: emoji ?? this.emoji,
     );
   }
 
@@ -88,6 +102,9 @@ class DietEntry extends HiveObject {
       'fat': fat,
       'time': time,
       'date': date,
+      'foodId': foodId,
+      'isCustom': isCustom,
+      'emoji': emoji,
     };
   }
 
@@ -102,6 +119,9 @@ class DietEntry extends HiveObject {
       fat: (json['fat'] as num).toDouble(),
       time: json['time'] as String,
       date: json['date'] as String,
+      foodId: json['foodId'] as String?,
+      isCustom: json['isCustom'] as bool? ?? false,
+      emoji: json['emoji'] as String?,
     );
   }
 }

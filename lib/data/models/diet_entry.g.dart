@@ -26,13 +26,16 @@ class DietEntryAdapter extends TypeAdapter<DietEntry> {
       fat: fields[6] as double,
       time: fields[7] as String,
       date: fields[8] as String,
+      foodId: fields[9] as String?,
+      isCustom: fields[10] as bool,
+      emoji: fields[11] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DietEntry obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +53,13 @@ class DietEntryAdapter extends TypeAdapter<DietEntry> {
       ..writeByte(7)
       ..write(obj.time)
       ..writeByte(8)
-      ..write(obj.date);
+      ..write(obj.date)
+      ..writeByte(9)
+      ..write(obj.foodId)
+      ..writeByte(10)
+      ..write(obj.isCustom)
+      ..writeByte(11)
+      ..write(obj.emoji);
   }
 
   @override
