@@ -56,6 +56,7 @@ class Validators {
   /// 预设：营养素校验（每100g，0-100范围）
   static String? nutrient(String? value, String fieldName) {
     return compose(value, [
+      (v) => required(v, fieldName),
       (v) => number(v, fieldName),
       (v) => range(v, min: 0, max: 100, fieldName: fieldName, unit: 'g'),
     ]);
@@ -64,6 +65,7 @@ class Validators {
   /// 预设：卡路里校验（每100g，0-900范围）
   static String? calories(String? value) {
     return compose(value, [
+      (v) => required(v, '卡路里'),
       (v) => number(v, '卡路里'),
       (v) => range(v, min: 0, max: 900, fieldName: '卡路里', unit: 'kcal'),
     ]);

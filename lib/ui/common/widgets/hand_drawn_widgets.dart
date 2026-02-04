@@ -773,17 +773,15 @@ class _HandDrawnTextFieldState extends State<HandDrawnTextField> {
                 ),
               ),
               if (_errorText != null)
-                Positioned(
-                  left: 0,
-                  top: 48,
-                  child: CompositedTransformFollower(
-                    link: _layerLink,
-                    showWhenUnlinked: false,
-                    offset: const Offset(0, 48),
-                    child: _HandDrawnErrorTag(
-                      message: _errorText!,
-                      maxWidth: constraints.maxWidth,
-                    ),
+                CompositedTransformFollower(
+                  link: _layerLink,
+                  targetAnchor: Alignment.bottomLeft,
+                  followerAnchor: Alignment.topLeft,
+                  showWhenUnlinked: false,
+                  offset: const Offset(0, 0),
+                  child: _HandDrawnErrorTag(
+                    message: _errorText!,
+                    maxWidth: constraints.maxWidth,
                   ),
                 ),
             ],
