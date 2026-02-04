@@ -2,19 +2,15 @@ main:
   push:
     - name: App Release Build
       runner:
-        # 使用 arm64 架构构建节点
-        tags: cnb:arch:arm64:v8
+        # 使用 amd64 架构构建节点
+        tags: cnb:arch:amd64
         # 指定资源配额
-        cpus: 16
+        cpus: 64
       docker:
         # 使用预装 Flutter 环境的镜像
         image: ghcr.io/cirruslabs/flutter:latest
       imports:
         - https://cnb.cool/bytebites.ai/secrets/-/blob/main/env.prod.yml
-      # 缓存配置以加速构建
-      volumes:
-        - /root/.gradle:cache
-        - /root/.pub-cache:cache
       stages:
         - name: 环境检查
           script: |
@@ -31,10 +27,11 @@ main:
               exit 1
             fi
             
-            # 创建 android/keystore.jks
-            echo "$KEYSTORE_BASE64" | base64 -d > android/keystore.jks
+            # 创建 android/app/keystore.jks (Gradle 默认相对于 app 目录查找)
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/keystore.jks
             
-            # 创建 key.properties 用于签名
+            # 创建 android/key.properties 用于签名渲染
+            # 注意：build.gradle.kts 中 file(it) 会相对于 app 目录查找
             echo "storeFile=keystore.jks" > android/key.properties
             echo "storePassword=$STORE_PASSWORD" >> android/key.properties
             echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
@@ -49,20 +46,16 @@ main:
           
         - name: 文件重命名
           script: |
-            # 从 pubspec.yaml 提取版本号，避免 main 分支下 VERSION 为 "main"
-            VERSION=$(grep '^version: ' pubspec.yaml | sed 's/version: //')
-            # 这里的 VERSION 可能包含 + 号，处理一下
-            VERSION_NAME=$(echo $VERSION | cut -d '+' -f 1)
-            
+            # 从 pubspec.yaml 提取版本号
+            VERSION_NAME=$(grep '^version: ' pubspec.yaml | sed 's/version: //;s/+.*//')
             echo "Building version: $VERSION_NAME"
             
-            cd build/app/outputs/flutter-apk/
-            mv app-armeabi-v7a-release.apk capyfit-$VERSION_NAME-armeabi-v7a.apk
-            mv app-arm64-v8a-release.apk capyfit-$VERSION_NAME-arm64-v8a.apk
-            mv app-x86_64-release.apk capyfit-$VERSION_NAME-x86_64.apk
+            APK_DIR="build/app/outputs/flutter-apk"
             
-            # 将变量导出供后续阶段使用
-            echo "APP_VERSION=$VERSION_NAME" >> $CNB_ENV
+            # 重命名产物，使用完整路径避免 cd 导致的路径失效
+            [ -f "$APK_DIR/app-armeabi-v7a-release.apk" ] && mv "$APK_DIR/app-armeabi-v7a-release.apk" "$APK_DIR/capyfit-$VERSION_NAME-armeabi-v7a.apk"
+            [ -f "$APK_DIR/app-arm64-v8a-release.apk" ] && mv "$APK_DIR/app-arm64-v8a-release.apk" "$APK_DIR/capyfit-$VERSION_NAME-arm64-v8a.apk"
+            [ -f "$APK_DIR/app-x86_64-release.apk" ] && mv "$APK_DIR/app-x86_64-release.apk" "$APK_DIR/capyfit-$VERSION_NAME-x86_64.apk"
             
         - name: 创建发布记录 (Release)
           image: cnbcool/release:latest
