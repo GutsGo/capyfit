@@ -518,7 +518,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                               ),
 
                             Wrap(
-                              spacing: 12,
+                              spacing: 20,
                               runSpacing: 10,
                               children: [
                                 HandDrawnButton(

@@ -55,20 +55,8 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 child: Row(
                   children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFF5E6D3),
-                        border: Border.all(color: Colors.white, width: 3),
-                        image: DecorationImage(
-                          image: _getAvatarImage(
-                            appState.userProfile.avatarPath,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    AnimatedProfileAvatar(
+                      avatarPath: appState.userProfile.avatarPath,
                     ),
                     const SizedBox(width: 20),
                     Expanded(
@@ -382,7 +370,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  ImageProvider _getAvatarImage(String? avatarPath) {
+  static ImageProvider getAvatarImage(String? avatarPath) {
     if (avatarPath == null) {
       return const AssetImage(GlobalAssets.capybaraMascot);
     }
@@ -390,5 +378,85 @@ class ProfilePage extends StatelessWidget {
       return AssetImage(avatarPath);
     }
     return FileImage(File(avatarPath));
+  }
+}
+
+class AnimatedProfileAvatar extends StatefulWidget {
+  final String? avatarPath;
+  final double size;
+
+  const AnimatedProfileAvatar({super.key, this.avatarPath, this.size = 80});
+
+  @override
+  State<AnimatedProfileAvatar> createState() => _AnimatedProfileAvatarState();
+}
+
+class _AnimatedProfileAvatarState extends State<AnimatedProfileAvatar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // 旋转的彩色边框
+          RotationTransition(
+            turns: _controller,
+            child: Container(
+              width: widget.size,
+              height: widget.size,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: SweepGradient(
+                  colors: [
+                    Colors.red,
+                    Colors.orange,
+                    Colors.yellow,
+                    Colors.green,
+                    Colors.blue,
+                    Colors.indigo,
+                    Colors.purple,
+                    Colors.red,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // 内部头像 Container
+          Container(
+            width: widget.size - 6, // 边框宽度
+            height: widget.size - 6,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFFF5E6D3),
+              border: Border.all(color: Colors.white, width: 2),
+              image: DecorationImage(
+                image: ProfilePage.getAvatarImage(widget.avatarPath),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
