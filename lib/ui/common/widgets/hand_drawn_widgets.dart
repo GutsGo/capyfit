@@ -693,6 +693,8 @@ class HandDrawnTextField extends StatefulWidget {
 }
 
 class _HandDrawnTextFieldState extends State<HandDrawnTextField> {
+  final OverlayPortalController _overlayPortalController =
+      OverlayPortalController();
   final LayerLink _layerLink = LayerLink();
   String? _errorText;
 
@@ -710,81 +712,85 @@ class _HandDrawnTextFieldState extends State<HandDrawnTextField> {
       builder: (context, constraints) {
         return CompositedTransformTarget(
           link: _layerLink,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              HandDrawnContainer(
-                color: effectiveFillColor,
-                borderRadius: 12,
-                borderColor: effectiveBorderColor,
-                borderWidth: 1.5,
-                child: TextFormField(
-                  controller: widget.controller,
-                  keyboardType: widget.keyboardType,
-                  validator: (val) {
+          child: OverlayPortal(
+            controller: _overlayPortalController,
+            overlayChildBuilder: (context) {
+              return CompositedTransformFollower(
+                link: _layerLink,
+                targetAnchor: Alignment.bottomLeft,
+                followerAnchor: Alignment.topLeft,
+                showWhenUnlinked: false,
+                offset: const Offset(0, 0),
+                child: _HandDrawnErrorTag(
+                  message: _errorText ?? '',
+                  maxWidth: constraints.maxWidth,
+                ),
+              );
+            },
+            child: HandDrawnContainer(
+              color: effectiveFillColor,
+              borderRadius: 12,
+              borderColor: effectiveBorderColor,
+              borderWidth: 1.5,
+              child: TextFormField(
+                controller: widget.controller,
+                keyboardType: widget.keyboardType,
+                validator: (val) {
+                  final result = widget.validator?.call(val);
+                  if (result != _errorText) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        setState(() {
+                          _errorText = result;
+                          if (_errorText != null) {
+                            _overlayPortalController.show();
+                          } else {
+                            _overlayPortalController.hide();
+                          }
+                        });
+                      }
+                    });
+                  }
+                  return result;
+                },
+                maxLines: widget.maxLines,
+                obscureText: widget.obscureText,
+                textInputAction: widget.textInputAction,
+                onChanged: (val) {
+                  if (_errorText != null) {
                     final result = widget.validator?.call(val);
-                    if (result != _errorText) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (mounted) {
-                          setState(() {
-                            _errorText = result;
-                          });
-                        }
-                      });
-                    }
-                    return result;
-                  },
-                  maxLines: widget.maxLines,
-                  obscureText: widget.obscureText,
-                  textInputAction: widget.textInputAction,
-                  onChanged: (val) {
-                    if (_errorText != null) {
-                      final result = widget.validator?.call(val);
-                      setState(() {
-                        _errorText = result;
-                      });
-                    }
-                    widget.onChanged?.call(val);
-                  },
-                  autofocus: widget.autofocus,
-                  style:
-                      widget.style ??
-                      TextStyle(
-                        fontSize: 16,
-                        color: effectiveTextColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                  decoration: InputDecoration(
-                    labelText: widget.labelText,
-                    labelStyle: TextStyle(color: effectiveHintColor),
-                    hintText: widget.hintText,
-                    hintStyle: TextStyle(color: effectiveHintColor),
-                    prefixIcon: widget.prefixIcon,
-                    suffixIcon: widget.suffixIcon,
-                    border: InputBorder.none,
-                    errorStyle: const TextStyle(height: 0, fontSize: 0),
-                    contentPadding:
-                        widget.contentPadding ??
-                        const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                  ),
+                    setState(() {
+                      _errorText = result;
+                      if (_errorText == null) {
+                        _overlayPortalController.hide();
+                      }
+                    });
+                  }
+                  widget.onChanged?.call(val);
+                },
+                autofocus: widget.autofocus,
+                style:
+                    widget.style ??
+                    TextStyle(
+                      fontSize: 16,
+                      color: effectiveTextColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                decoration: InputDecoration(
+                  labelText: widget.labelText,
+                  labelStyle: TextStyle(color: effectiveHintColor),
+                  hintText: widget.hintText,
+                  hintStyle: TextStyle(color: effectiveHintColor),
+                  prefixIcon: widget.prefixIcon,
+                  suffixIcon: widget.suffixIcon,
+                  border: InputBorder.none,
+                  errorStyle: const TextStyle(height: 0, fontSize: 0),
+                  contentPadding:
+                      widget.contentPadding ??
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
-              if (_errorText != null)
-                CompositedTransformFollower(
-                  link: _layerLink,
-                  targetAnchor: Alignment.bottomLeft,
-                  followerAnchor: Alignment.topLeft,
-                  showWhenUnlinked: false,
-                  offset: const Offset(0, 0),
-                  child: _HandDrawnErrorTag(
-                    message: _errorText!,
-                    maxWidth: constraints.maxWidth,
-                  ),
-                ),
-            ],
+            ),
           ),
         );
       },
