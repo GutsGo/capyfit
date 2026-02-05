@@ -60,19 +60,21 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Hero Image Card
-                Hero(
-                  tag: 'exercise_img_${widget.exercise.id}',
-                  child: HandDrawnCard(
-                    width: double.infinity,
-                    padding: EdgeInsets.zero,
-                    color: AppColors.getCardColor(context),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
+                HandDrawnCard(
+                  width: double.infinity,
+                  padding: EdgeInsets.zero,
+                  color: _getCategoryColor(
+                    widget.exercise.category,
+                  ).withValues(alpha: 0.1),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Hero(
+                      tag: 'exercise_img_${widget.exercise.id}',
                       child: widget.exercise.image != null
                           ? Image.asset(
                               widget.exercise.image!,
                               width: double.infinity,
-                              height: 200,
+                              height: 150,
                               fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) =>
                                   _buildImagePlaceholder(),
@@ -379,6 +381,20 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
         ),
       ),
     );
+  }
+
+  Color _getCategoryColor(ExerciseCategory cat) {
+    switch (cat) {
+      case ExerciseCategory.cardio:
+        return AppColors.accentMint;
+      case ExerciseCategory.bodySculpting:
+        return AppColors.accentPurple;
+      case ExerciseCategory.core:
+      case ExerciseCategory.upperBody:
+      case ExerciseCategory.lowerBody:
+      case ExerciseCategory.fullBody:
+        return AppColors.primary;
+    }
   }
 
   String _getCategoryLabel(ExerciseCategory cat) {

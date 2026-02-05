@@ -137,130 +137,142 @@ class _ExercisePageState extends State<ExercisePage> {
     // In a real DB we'd have a separate method, here we can use a fixed list or get once
     final dynamicCategories = ['核心', '上肢', '下肢', '全身', '有氧', '形体'];
 
-    // Split exercises into two columns for masonry-like adaptive height
-    final leftColumnItems = <Exercise>[];
-    final rightColumnItems = <Exercise>[];
-    for (var i = 0; i < _exercises.length; i++) {
-      if (i % 2 == 0) {
-        leftColumnItems.add(_exercises[i]);
-      } else {
-        rightColumnItems.add(_exercises[i]);
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('动作库'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: HandDrawnTextField(
-                    onChanged: _onSearchChanged,
-                    hintText: '搜索动作...',
-                    prefixIcon: Icon(
-                      LucideIcons.search,
-                      size: 20,
-                      color: AppColors.getBorderColor(context),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                    style: TextStyle(
-                      color: AppColors.getTextMainColor(context),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => _showFilterSheet(dynamicCategories),
-                  child: HandDrawnContainer(
-                    padding: const EdgeInsets.all(12),
-                    color: AppColors.getCardColor(context),
-                    borderRadius: 12,
-                    child: Icon(
-                      LucideIcons.filter,
-                      size: 20,
-                      color: AppColors.getTextMainColor(context),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+      body: Builder(
+        builder: (context) {
+          // 将动作按索引拆分到左右两列，以实现高度自适应的平铺效果
+          final leftColumnItems = <Exercise>[];
+          final rightColumnItems = <Exercise>[];
+          for (var i = 0; i < _exercises.length; i++) {
+            if (i % 2 == 0) {
+              leftColumnItems.add(_exercises[i]);
+            } else {
+              rightColumnItems.add(_exercises[i]);
+            }
+          }
 
-          // Exercise List with Adaptive Height
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          return Column(
+            children: [
+              // Search Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: HandDrawnTextField(
+                        onChanged: _onSearchChanged,
+                        hintText: '搜索动作...',
+                        prefixIcon: Icon(
+                          LucideIcons.search,
+                          size: 20,
+                          color: AppColors.getBorderColor(context),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                        style: TextStyle(
+                          color: AppColors.getTextMainColor(context),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => _showFilterSheet(dynamicCategories),
+                      child: HandDrawnContainer(
+                        padding: const EdgeInsets.all(12),
+                        color: AppColors.getCardColor(context),
+                        borderRadius: 12,
+                        child: Icon(
+                          LucideIcons.filter,
+                          size: 20,
+                          color: AppColors.getTextMainColor(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Exercise List with Adaptive Height
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : SingleChildScrollView(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
                           children: [
-                            // Left Column
-                            Expanded(
-                              child: Column(
-                                children: leftColumnItems
-                                    .map(
-                                      (ex) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 12,
-                                        ),
-                                        child: _buildExerciseCard(ex),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // 左列
+                                Expanded(
+                                  child: Column(
+                                    children: leftColumnItems
+                                        .map(
+                                          (ex) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 12,
+                                            ),
+                                            child: _buildExerciseCard(ex),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                // 右列
+                                Expanded(
+                                  child: Column(
+                                    children: rightColumnItems
+                                        .map(
+                                          (ex) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 12,
+                                            ),
+                                            child: _buildExerciseCard(ex),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            // Right Column
-                            Expanded(
-                              child: Column(
-                                children: rightColumnItems
-                                    .map(
-                                      (ex) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 12,
+                            if (_hasMore)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
+                                child: _isLoadingMore
+                                    ? const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      )
+                                    : Text(
+                                        '滑动加载更多',
+                                        style: TextStyle(
+                                          color: AppColors.getTextMutedColor(
+                                            context,
+                                          ),
+                                          fontSize: 12,
                                         ),
-                                        child: _buildExerciseCard(ex),
                                       ),
-                                    )
-                                    .toList(),
                               ),
-                            ),
+                            const SizedBox(height: 80),
                           ],
                         ),
-                        if (_hasMore)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: _isLoadingMore
-                                ? const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  )
-                                : Text(
-                                    '滑动加载更多',
-                                    style: TextStyle(
-                                      color: AppColors.getTextMutedColor(
-                                        context,
-                                      ),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                          ),
-                      ],
-                    ),
-                  ),
-          ),
-        ],
+                      ),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: _showBackToTop
           ? HandDrawnFAB(
@@ -374,7 +386,7 @@ class _ExercisePageState extends State<ExercisePage> {
                   child: ex.image != null
                       ? Image.asset(
                           ex.image!,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
                               color: AppColors.primaryLight.withValues(

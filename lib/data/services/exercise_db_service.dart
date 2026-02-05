@@ -83,21 +83,7 @@ class ExerciseDbService {
         difficulty = Difficulty.advanced;
       }
 
-      final imageName = data['image'] ?? '';
-      const existingImages = {
-        'capy_dance.gif',
-        'capy_dumbbell_curl.webp',
-        'capy_plank.webp',
-        'capy_pushup.webp',
-        'capy_running.webp',
-        'capy_squat.webp',
-        'capy_yoga.webp',
-        'capybara-mascot.webp',
-      };
-
-      final safeImage = existingImages.contains(imageName)
-          ? imageName
-          : 'capybara-mascot.webp';
+      final safeImage = data['image'] ?? '';
 
       return Exercise(
         id: data['id'].toString(),
@@ -111,7 +97,7 @@ class ExerciseDbService {
         description: data['description'],
         tips: List<String>.from(data['tips'] ?? []),
         steps: List<String>.from(data['steps'] ?? []),
-        image: '${GlobalAssets.imagesPath}/$safeImage',
+        image: '${GlobalAssets.exercisesPath}/$safeImage',
       );
     }).toList();
   }
