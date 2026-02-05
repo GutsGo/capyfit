@@ -243,11 +243,6 @@ class _ExerciseSelectionSheetState extends State<ExerciseSelectionSheet> {
                               fontSize: 13,
                             ),
                           ),
-                          trailing: const Icon(
-                            LucideIcons.plusCircle,
-                            color: AppColors.primary,
-                            size: 24,
-                          ),
                           onTap: () => widget.onSelect(ex),
                         ),
                       ),

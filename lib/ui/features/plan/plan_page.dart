@@ -122,6 +122,7 @@ class _PlanPageState extends State<PlanPage> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: HandDrawnCard(
+                              padding: EdgeInsetsGeometry.all(12),
                               onTap: () => context.push(
                                 GlobalRoutes.planDetail,
                                 extra: {'plan': plan, 'date': selectedDateStr},
@@ -129,8 +130,8 @@ class _PlanPageState extends State<PlanPage> {
                               child: Row(
                                 children: [
                                   Container(
-                                    width: 48,
-                                    height: 48,
+                                    width: 56,
+                                    height: 56,
                                     decoration: BoxDecoration(
                                       color: _getPlanTypeColor(
                                         plan.type,
@@ -138,10 +139,11 @@ class _PlanPageState extends State<PlanPage> {
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Center(
-                                      child: Icon(
-                                        _getPlanTypeIcon(plan.type),
-                                        color: _getPlanTypeColor(plan.type),
-                                        size: 24,
+                                      child: Image.asset(
+                                        _getPlanTypeImage(plan.type),
+                                        width: 48,
+                                        height: 48,
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
@@ -239,7 +241,7 @@ class _PlanPageState extends State<PlanPage> {
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          '${plan.time} · ${plan.duration}分钟 · ${_getIntensityLabel(plan.intensity)}',
+                                          '${plan.duration}分钟 · ${_getIntensityLabel(plan.intensity)}',
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: AppColors.getTextMutedColor(
@@ -291,8 +293,8 @@ class _PlanPageState extends State<PlanPage> {
         children: [
           Image.asset(
             GlobalAssets.iconNoPlan,
-            width: 150,
-            height: 150,
+            width: 120,
+            height: 120,
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 16),
@@ -333,16 +335,16 @@ class _PlanPageState extends State<PlanPage> {
     }
   }
 
-  IconData _getPlanTypeIcon(WorkoutType type) {
+  String _getPlanTypeImage(WorkoutType type) {
     switch (type) {
       case WorkoutType.strength:
-        return LucideIcons.dumbbell;
+        return GlobalAssets.iconStrengthType2;
       case WorkoutType.cardio:
-        return LucideIcons.heart;
+        return GlobalAssets.iconCardioType2;
       case WorkoutType.yoga:
-        return LucideIcons.sparkles;
+        return GlobalAssets.iconYogaType2;
       case WorkoutType.other:
-        return LucideIcons.activity;
+        return GlobalAssets.iconOtherType2;
     }
   }
 
