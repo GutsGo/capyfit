@@ -12,9 +12,45 @@ import 'package:capyfit/data/utils/constants.dart';
 import 'package:capyfit/data/utils/utils.dart';
 import 'package:capyfit/data/utils/routes.dart';
 import 'package:capyfit/data/services/level_service.dart';
+import 'package:capyfit/data/services/share_service.dart';
+import 'package:flutter/rendering.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+
+  static ImageProvider getAvatarImage(String? avatarPath) {
+    if (avatarPath == null) {
+      return const AssetImage(GlobalAssets.capybaraMascot);
+    }
+    if (avatarPath.startsWith('assets/')) {
+      return AssetImage(avatarPath);
+    }
+    return FileImage(File(avatarPath));
+  }
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String _version = '';
+  final GlobalKey _shareKey = GlobalKey();
+  bool _isSharing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final version = await GlobalUtils.getAppVersion();
+    if (mounted) {
+      setState(() {
+        _version = version;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +81,7 @@ class ProfilePage extends StatelessWidget {
       ),
       body: SafeArea(
         top: false,
+        bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 2, 20, 16),
           child: Column(
@@ -52,7 +89,7 @@ class ProfilePage extends StatelessWidget {
             children: [
               // User Profile Card
               HandDrawnCard(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24).copyWith(right: 16),
                 child: Row(
                   children: [
                     AnimatedProfileAvatar(
@@ -63,14 +100,46 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            appState.userProfile.nickname ??
-                                GlobalConstants.profileUserDefaultName,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.getTextMainColor(context),
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  appState.userProfile.nickname ??
+                                      GlobalConstants.profileUserDefaultName,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.getTextMainColor(context),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 0),
+                                child: Transform.translate(
+                                  offset: const Offset(0, -2),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      LucideIcons.share2,
+                                      color: AppColors.getTextMutedColor(
+                                        context,
+                                      ),
+                                      size: 20,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () => _showShareDialog(
+                                      context,
+                                      stats,
+                                      appState,
+                                    ),
+                                    tooltip: '分享成就',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -112,12 +181,16 @@ class ProfilePage extends StatelessWidget {
                                         color: realmColor,
                                       ),
                                       const SizedBox(width: 4),
-                                      Text(
-                                        levelInfo.fullDisplayName,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: realmColor,
+                                      Flexible(
+                                        child: Text(
+                                          levelInfo.fullDisplayName,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: realmColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                     ],
@@ -180,6 +253,24 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 12),
+              _buildSettingsItem(
+                context,
+                icon: LucideIcons.barChart2,
+                title: '数据中心',
+                iconBgColor: const Color(0xFFFDF0E8),
+                iconColor: const Color(0xFFE8A87C),
+                onTap: () => context.push(GlobalRoutes.stats),
+              ),
+              const SizedBox(height: 12),
+              _buildSettingsItem(
+                context,
+                icon: LucideIcons.gem,
+                title: '猛练勋章',
+                iconBgColor: const Color(0xFFE8F0FD),
+                iconColor: const Color(0xFF5C7BCF),
+                onTap: () => context.push(GlobalRoutes.profileMedals),
               ),
               const SizedBox(height: 24),
 
@@ -259,7 +350,7 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      GlobalConstants.profileVersion,
+                      '${GlobalConstants.profileVersion} v$_version',
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.getTextMutedColor(context),
@@ -370,14 +461,289 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  static ImageProvider getAvatarImage(String? avatarPath) {
-    if (avatarPath == null) {
-      return const AssetImage(GlobalAssets.capybaraMascot);
+  Future<void> _showShareDialog(
+    BuildContext context,
+    UserStats stats,
+    AppProvider appState,
+  ) async {
+    final levelInfo = LevelService.getLevelInfo(stats.activeDays);
+    // 随机选择背景
+    final shareImages = [
+      'assets/images/shares/share_1.jpg',
+      'assets/images/shares/share_2.jpg',
+      'assets/images/shares/share_3.jpg',
+    ];
+    final randomImage =
+        shareImages[DateTime.now().millisecond % shareImages.length];
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Stack(
+              children: [
+                // 遮罩层
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(color: Colors.black.withOpacity(0.7)),
+                  ),
+                ),
+                // 内容层
+                Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RepaintBoundary(
+                        key: _shareKey,
+                        child: _SharePreviewContent(
+                          stats: stats,
+                          levelInfo: levelInfo,
+                          nickname:
+                              appState.userProfile.nickname ??
+                              GlobalConstants.profileUserDefaultName,
+                          backgroundImage: randomImage,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: HandDrawnButton(
+                          label: _isSharing ? '正在生成...' : '分享海报',
+                          onPressed: _isSharing
+                              ? () {}
+                              : () async {
+                                  setDialogState(() => _isSharing = true);
+                                  try {
+                                    await _captureAndShare();
+                                  } finally {
+                                    if (context.mounted) {
+                                      setDialogState(() => _isSharing = false);
+                                    }
+                                  }
+                                },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // 关闭按钮
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 10,
+                  right: 20,
+                  child: IconButton(
+                    icon: const Icon(
+                      LucideIcons.x,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _captureAndShare() async {
+    try {
+      final shareText =
+          '我在 Capyfit 已经坚持健身 ${GlobalUtils.formatJoinedDays((context.read<AppProvider>().userStats.joinedDays))} 啦！快来和我一起努力吧！';
+      await ShareService.captureAndShare(_shareKey, text: shareText);
+    } catch (e) {
+      debugPrint('Capture and share error: $e');
     }
-    if (avatarPath.startsWith('assets/')) {
-      return AssetImage(avatarPath);
-    }
-    return FileImage(File(avatarPath));
+  }
+}
+
+class _SharePreviewContent extends StatelessWidget {
+  final UserStats stats;
+  final dynamic levelInfo;
+  final String nickname;
+  final String backgroundImage;
+
+  const _SharePreviewContent({
+    required this.stats,
+    required this.levelInfo,
+    required this.nickname,
+    required this.backgroundImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      height: 533, // 9:16 aspect ratio
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 20,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          // 背景图 (随机选择)
+          Positioned.fill(
+            child: Image.asset(backgroundImage, fit: BoxFit.cover),
+          ),
+          // 强化底部遮罩，确保数据清晰
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.4, 0.65, 1.0],
+                  colors: [
+                    Colors.black.withOpacity(0.05),
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.95),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // 数据展示
+          Positioned(
+            left: 24,
+            right: 24,
+            bottom: 32,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  nickname,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black45,
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: (levelInfo.mainColor as Color).withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    levelInfo.fullDisplayName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildShareStatItem(
+                      '坚持天数',
+                      stats.activeDays.toString(),
+                      '天',
+                    ),
+                    _buildShareStatItem(
+                      '训练时间',
+                      (stats.totalDuration / 60).toStringAsFixed(1),
+                      '小时',
+                    ),
+                    _buildShareStatItem(
+                      '总消耗',
+                      stats.totalCalories.toString(),
+                      'kcal',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Logo 或 品牌标识 (带黑色描边)
+          Positioned(
+            top: 32,
+            right: 24,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                OutlinedText(
+                  'CAPYFIT',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  outlineWidth: 3,
+                ),
+                OutlinedText(
+                  'Stay cozy, stay fit',
+                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                  outlineColor: Colors.black54,
+                  outlineWidth: 2,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShareStatItem(String label, String value, String unit) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'monospace',
+              ),
+            ),
+            const SizedBox(width: 2),
+            Text(
+              unit,
+              style: const TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

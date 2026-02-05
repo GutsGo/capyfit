@@ -1,5 +1,6 @@
 class GlobalAssets {
   static const String imagesPath = 'assets/images';
+  static const String exercisesPath = '$imagesPath/exercises';
   static const String _iconsPath = '$imagesPath/icons';
   static const String _jsonPath = 'assets/data';
 
@@ -26,6 +27,15 @@ class GlobalAssets {
   static const String iconRun = '$_iconsPath/run.webp';
   static const String iconStrong = '$_iconsPath/strong.webp';
   static const String iconTrain = '$_iconsPath/train.webp';
+
+  static const String iconStrengthType = '$_iconsPath/strength_type.webp';
+  static const String iconCardioType = '$_iconsPath/cardio_type.webp';
+  static const String iconYogaType = '$_iconsPath/yoga_type.webp';
+  static const String iconOtherType = '$_iconsPath/other_type.webp';
+  static const String iconStrengthType2 = '$_iconsPath/strength2_type.webp';
+  static const String iconCardioType2 = '$_iconsPath/cardio2_type.webp';
+  static const String iconYogaType2 = '$_iconsPath/yoga2_type.webp';
+  static const String iconOtherType2 = '$_iconsPath/other2_type.webp';
 
   // JSON
   static const String foodDb = '$_jsonPath/food_db.json';

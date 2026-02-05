@@ -141,7 +141,7 @@ class _DietPageState extends State<DietPage> {
                         isFuture,
                       ),
 
-                      const SizedBox(height: 100),
+                      const SizedBox(height: 24),
                     ],
                   ),
                 ),

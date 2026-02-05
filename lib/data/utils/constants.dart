@@ -74,7 +74,7 @@ class GlobalConstants {
   static const String profileTerms = '用户协议';
   static const String profilePrivacy = '隐私政策';
   static const String profileLevelSystem = '等级系统说明';
-  static const String profileVersion = '猛练卡皮 v1.2.0';
+  static const String profileVersion = '猛练卡皮';
   static const int maxAvatarSize = 3 * 1024 * 1024; // 3MB
 
   // Onboarding
@@ -86,7 +86,7 @@ class GlobalConstants {
   static const String onboardingBodyDataSubtitle = '这些数据帮助我们计算你的每日所需热量';
 
   // Home Profile Reminder
-  static const String homeProfileReminder = '完善身体数据，让系统更懂你 →';
+  static const String homeProfileReminder = '完善身体数据，让卡皮更懂你 →';
 
   // --- Security ---
   // 用于备份数据的 HMAC 签名私钥

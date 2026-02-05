@@ -36,7 +36,7 @@ class DietEntry extends HiveObject {
   final String date;
   @HiveField(9)
   final String? foodId;
-  @HiveField(10)
+  @HiveField(10, defaultValue: false)
   final bool isCustom;
   @HiveField(11)
   final String? emoji;

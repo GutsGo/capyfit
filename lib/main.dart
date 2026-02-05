@@ -27,6 +27,8 @@ import 'package:capyfit/ui/features/profile/profile_settings_page.dart';
 import 'package:capyfit/ui/features/profile/goals_page.dart';
 import 'package:capyfit/ui/features/profile/reminders_page.dart';
 import 'package:capyfit/ui/features/profile/data_backup_page.dart';
+import 'package:capyfit/ui/features/profile/medal_library_page.dart';
+import 'package:capyfit/ui/features/stats/stats_page.dart';
 // Settings module
 import 'package:capyfit/ui/features/settings/help.dart';
 import 'package:capyfit/ui/features/settings/feedback_page.dart';
@@ -45,6 +47,7 @@ import 'package:capyfit/ui/features/home/home_vm.dart';
 import 'package:capyfit/ui/features/diet/diet_vm.dart';
 import 'package:capyfit/ui/features/exercise/exercise_vm.dart';
 import 'package:capyfit/ui/features/plan/plan_vm.dart';
+import 'package:capyfit/ui/features/stats/stats_vm.dart';
 
 late final GoRouter _router;
 late final AppProvider _appProvider;
@@ -75,6 +78,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DietViewModel()..init()),
         ChangeNotifierProvider(create: (_) => ExerciseViewModel()..init()),
         ChangeNotifierProvider(create: (_) => PlanViewModel()..init()),
+        ChangeNotifierProvider(create: (_) => StatsViewModel()..init()),
       ],
       child: const MyApp(),
     ),
@@ -246,6 +250,16 @@ GoRouter _createRouter(bool hasUserProfile) {
         path: GlobalRoutes.profileLevelSystem,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const LevelSystemPage(),
+      ),
+      GoRoute(
+        path: GlobalRoutes.profileMedals,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const MedalLibraryPage(),
+      ),
+      GoRoute(
+        path: GlobalRoutes.stats,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const StatsPage(),
       ),
       GoRoute(
         path: GlobalRoutes.terms,

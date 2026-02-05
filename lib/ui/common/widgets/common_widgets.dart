@@ -229,3 +229,38 @@ class _HandDrawnToastWidgetState extends State<_HandDrawnToastWidget>
     );
   }
 }
+
+class OutlinedText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final Color outlineColor;
+  final double outlineWidth;
+
+  const OutlinedText(
+    this.text, {
+    super.key,
+    required this.style,
+    this.outlineColor = Colors.black,
+    this.outlineWidth = 2.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // 描边层
+        Text(
+          text,
+          style: style.copyWith(
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = outlineWidth
+              ..color = outlineColor,
+          ),
+        ),
+        // 填充层
+        Text(text, style: style),
+      ],
+    );
+  }
+}

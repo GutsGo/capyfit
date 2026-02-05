@@ -101,10 +101,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Welcome Header
               _buildHeader(dateStr, greeting, appState),
@@ -126,12 +127,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     return GestureDetector(
                       onTap: () => _showStepsInput(context, appState),
                       child: _buildStatCardWithImage(
-                        LucideIcons.footprints,
                         '${(appState.todaySteps * val).round()}',
                         '/${appState.userProfile.dailyStepsGoal}',
                         '今日步数',
-                        GlobalAssets.iconRun,
+                        GlobalAssets.iconCardioType,
                         color: const Color(0xFF5D9FE3),
+                        fullWidth: true,
+                        isAchieved:
+                            appState.todaySteps >=
+                            (appState.userProfile.dailyStepsGoal ?? 0),
                       ),
                     );
                   },
@@ -140,6 +144,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
               if (todayPlans.isNotEmpty) ...[
                 HandDrawnCard(
+                  width: double.infinity,
                   child: Column(
                     children: [
                       Row(
@@ -218,18 +223,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                const Text(
-                  GlobalConstants.homeMotto,
-                  style: TextStyle(color: AppColors.primary, fontSize: 14),
-                ),
               ],
-            ),
-            Image.asset(
-              GlobalAssets.capybaraDance,
-              width: 80,
-              height: 80,
-              fit: BoxFit.contain,
             ),
           ],
         ),
@@ -242,45 +236,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       animation: _countController,
       builder: (context, child) {
         final val = _countController.value;
-        return GridView.count(
+        return GridView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 2,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            mainAxisExtent: 90,
+          ),
           children: [
             _buildStatCardWithImage(
-              LucideIcons.calendar,
               (stats.weeklyWorkoutCount * val).round().toString(),
               '次',
               '本周训练',
               GlobalAssets.iconTrain,
               color: const Color(0xFF8B6B61),
+              isAchieved: stats.weeklyWorkoutCount >= 10,
             ),
             _buildStatCardWithImage(
-              LucideIcons.flame,
               (stats.streakDays * val).round().toString(),
               '天',
               '连续打卡',
               GlobalAssets.iconCheckin,
               color: const Color(0xFFE57373),
+              isAchieved: stats.streakDays >= 5,
             ),
             _buildStatCardWithImage(
-              LucideIcons.trendingUp,
               (stats.todayCalories * val).round().toString(),
               'kcal',
               '消耗热量',
               GlobalAssets.iconKcal,
               color: const Color(0xFF81C784),
+              isAchieved: stats.todayCalories >= 8000,
             ),
             _buildStatCardWithImage(
-              LucideIcons.clock,
               (stats.weeklyDurationHours * val).toStringAsFixed(1),
               'h',
               '训练时长',
               GlobalAssets.iconDuration,
               color: const Color(0xFFA1887F),
+              isAchieved: stats.weeklyDurationHours >= 12,
             ),
           ],
         );
@@ -289,77 +285,83 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildStatCardWithImage(
-    IconData icon,
     String value,
     String unit,
     String label,
     String imagePath, {
     Color color = AppColors.primary,
+    bool fullWidth = false,
+    bool isAchieved = false,
   }) {
+    final bgColor = isAchieved
+        ? AppColors.accentOrange.withValues(alpha: 0.2)
+        : null;
+    final displayColor = isAchieved ? AppColors.accentOrange : color;
+
     return HandDrawnCard(
-      padding: const EdgeInsets.all(12),
-      child: Stack(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          value,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+      width: fullWidth ? double.infinity : null,
+      padding: EdgeInsets.zero,
+      color: bgColor,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: isAchieved
+                              ? AppColors.accentOrange
+                              : AppColors.getTextMainColor(context),
                         ),
-                        Text(
-                          unit,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.getTextMutedColor(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.getTextMutedColor(context),
                       ),
+                      const SizedBox(width: 4),
+                      Text(
+                        unit,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.getTextMutedColor(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.getTextMutedColor(context),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              right: -4,
+              bottom: -8,
+              child: Opacity(
+                opacity: 0.9,
+                child: Image.asset(
+                  imagePath,
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.contain,
                 ),
               ),
-            ],
-          ),
-          Positioned(
-            right: -4,
-            bottom: -4,
-            child: Image.asset(
-              imagePath,
-              width: 48,
-              height: 48,
-              fit: BoxFit.contain,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -376,88 +378,74 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildPlanItem(WorkoutPlan plan, AppProvider appState) {
-    final isStrength = plan.type == WorkoutType.strength;
-    final imagePath = isStrength
-        ? GlobalAssets.iconStrong
-        : GlobalAssets.iconRun;
     final todayStr = GlobalUtils.dateOnly(DateTime.now());
     final isCompleted = plan.isCompletedOn(todayStr);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: HandDrawnCard(
+        width: double.infinity,
         onTap: () => context.push(
           GlobalRoutes.planDetail,
           extra: {'plan': plan, 'date': todayStr},
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: _getPlanTypeColor(plan.type).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Icon(
-                  isStrength ? LucideIcons.dumbbell : LucideIcons.heart,
-                  color: _getPlanTypeColor(plan.type),
-                  size: 24,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Check for narrow screens (e.g. iPhone SE 1st gen is 320px wide)
+            // Card content width approx: 320 - 32(screen pad) - 24(card pad) = 264
+            // Standard iPhone (375px) width approx: 319
+            final isNarrow = constraints.maxWidth < 300;
+
+            final infoText = isNarrow
+                ? GlobalUtils.formatDuration(plan.duration)
+                : '${GlobalUtils.formatDuration(plan.duration)} · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}';
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  plan.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    decoration: isCompleted ? TextDecoration.lineThrough : null,
+                    color: isCompleted
+                        ? AppColors.getTextMutedColor(context)
+                        : AppColors.getTextMainColor(context),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    plan.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      decoration: isCompleted
-                          ? TextDecoration.lineThrough
-                          : null,
-                      color: isCompleted
-                          ? AppColors.getTextMutedColor(context)
-                          : AppColors.getTextMainColor(context),
-                    ),
+                const SizedBox(height: 4),
+                Text(
+                  infoText,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.getTextMutedColor(context),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${plan.time} · ${GlobalUtils.formatDuration(plan.duration)} · ${plan.calories}kcal · ${_getIntensityLabel(plan.intensity)}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.getTextMutedColor(context),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Image.asset(imagePath, width: 48, height: 48, fit: BoxFit.contain),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
   Widget _buildQuickActions(BuildContext context, AppProvider appState) {
-    return GridView.count(
+    return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.5,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 84,
+      ),
       children: [
         _buildActionCardWithImage(
           GlobalConstants.homeExerciseLibrary,
           '学习标准动作',
           GlobalAssets.iconExerciseLib,
           () => context.push(GlobalRoutes.exercise),
-          icon: LucideIcons.dumbbell,
           iconColor: const Color(0xFF8B8B61),
         ),
         _buildActionCardWithImage(
@@ -465,7 +453,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           '查看食物营养',
           GlobalAssets.iconDietLib,
           () => context.push(GlobalRoutes.dietLibrary),
-          icon: LucideIcons.utensils,
           iconColor: const Color(0xFFC17D5C),
         ),
       ],
@@ -477,64 +464,55 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     String desc,
     String imagePath,
     VoidCallback onTap, {
-    required IconData icon,
     required Color iconColor,
   }) {
     return HandDrawnCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(12),
-      child: Stack(
-        children: [
-          // Icon Top Left
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+      padding: EdgeInsets.zero,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: AppColors.getTextMainColor(context),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    desc,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
               ),
-              child: Icon(icon, color: iconColor, size: 18),
             ),
-          ),
-          // Mascot Image Right Center
-          Positioned(
-            right: 0,
-            bottom: 8,
-            child: Image.asset(
-              imagePath,
-              width: 56,
-              height: 56,
-              fit: BoxFit.contain,
-            ),
-          ),
-          // Text Bottom Left
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: AppColors.getTextMainColor(context),
-                  ),
+            Positioned(
+              right: -4,
+              bottom: -8,
+              child: Opacity(
+                opacity: 0.9,
+                child: Image.asset(
+                  imagePath,
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.contain,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  desc,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textMuted,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -544,30 +522,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Center(
         child: Column(
           children: [
-            Image.asset(GlobalAssets.iconNoPlan, width: 80, height: 80),
+            Image.asset(GlobalAssets.iconNoPlan, width: 64, height: 64),
             const SizedBox(height: 8),
             Text(
               GlobalConstants.homeEmptyPlans,
               style: TextStyle(
                 color: AppColors.getTextMutedColor(context),
-                fontSize: 14,
+                fontSize: 12,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Color _getPlanTypeColor(WorkoutType type) {
-    switch (type) {
-      case WorkoutType.strength:
-        return AppColors.primary;
-      case WorkoutType.cardio:
-        return AppColors.accentMint;
-      default:
-        return AppColors.accentOrange;
-    }
   }
 
   String _getIntensityLabel(Intensity intensity) {

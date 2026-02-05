@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/models/diet_entry.dart';
@@ -5,7 +6,9 @@ import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
 import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/models/daily_step_entry.dart';
+import 'package:capyfit/data/models/medal.dart';
 import 'package:capyfit/data/services/hive_service.dart';
+import 'package:capyfit/data/services/medal_service.dart';
 import 'package:capyfit/data/utils/constants.dart';
 
 class UserStats {
@@ -47,6 +50,7 @@ class AppProvider extends ChangeNotifier {
   List<DailyStepEntry> _stepEntries = [];
   List<FoodItem> _foodPresets = [];
   List<Exercise> _exercises = [];
+  List<Medal> _earnedMedals = [];
   UserProfile? _userProfile;
 
   Future<void> init() async {
@@ -72,6 +76,12 @@ class AppProvider extends ChangeNotifier {
     _dietEntries = _hiveService.getDietEntries();
     _foodPresets = _hiveService.getFoodItems();
     _exercises = _hiveService.getExercises();
+
+    // Load medals
+    final medalJsons = _hiveService.getEarnedMedalJsonList();
+    _earnedMedals = medalJsons
+        .map((s) => Medal.fromJson(jsonDecode(s) as Map<String, dynamic>))
+        .toList();
 
     _isInitialized = true;
     notifyListeners();
@@ -182,6 +192,30 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
+  List<Medal> get earnedMedals => _earnedMedals;
+
+  void _checkMedals() {
+    final newlyEarned = MedalService.checkNewMedals(
+      dietEntries: _dietEntries,
+      plans: _plans,
+      stepEntries: _stepEntries,
+      profile: userProfile,
+      earnedMedalIds: _earnedMedals.map((m) => m.id).toList(),
+      calorieGoal: calorieGoal,
+    );
+
+    if (newlyEarned.isNotEmpty) {
+      _earnedMedals.addAll(newlyEarned);
+      final jsonList = _earnedMedals
+          .map((m) => jsonEncode(m.toJson()))
+          .toList();
+      _hiveService.saveEarnedMedalJsonList(jsonList);
+      notifyListeners();
+
+      // In a real app, we might trigger a global notification or UI event here
+    }
+  }
+
   List<WorkoutPlan> get plans => _plans;
   List<DietEntry> get dietEntries => _dietEntries;
   List<DailyStepEntry> get stepEntries => _stepEntries;
@@ -249,6 +283,7 @@ class AppProvider extends ChangeNotifier {
       final updatedPlan = _plans[index].toggleCompletionFor(dateStr);
       _plans[index] = updatedPlan;
       _hiveService.saveWorkoutPlan(updatedPlan);
+      _checkMedals();
       notifyListeners();
     }
   }
@@ -280,6 +315,7 @@ class AppProvider extends ChangeNotifier {
   void addDietEntry(DietEntry entry) {
     _dietEntries.add(entry);
     _hiveService.saveDietEntry(entry);
+    _checkMedals();
     notifyListeners();
   }
 
@@ -338,6 +374,7 @@ class AppProvider extends ChangeNotifier {
       _stepEntries.add(entry);
     }
     _hiveService.saveDailySteps(entry);
+    _checkMedals();
     notifyListeners();
   }
 

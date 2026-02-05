@@ -1,3 +1,4 @@
+import 'package:package_info_plus/package_info_plus.dart';
 import 'constants.dart';
 
 class GlobalUtils {
@@ -39,5 +40,11 @@ class GlobalUtils {
   /// 格式化加入天数
   static String formatJoinedDays(int days) {
     return '加入猛练卡皮第 $days 天';
+  }
+
+  /// 获取应用版本号
+  static Future<String> getAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
   }
 }

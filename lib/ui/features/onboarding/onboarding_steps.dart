@@ -26,7 +26,7 @@ class WelcomeStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24).copyWith(bottom: 12),
       child: Column(
         children: [
           Expanded(
@@ -128,7 +128,7 @@ class WelcomeStep extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           HandDrawnButton(
             key: const ValueKey('onboarding_start_button'),
             label: GlobalConstants.onboardingStart,
@@ -139,7 +139,7 @@ class WelcomeStep extends StatelessWidget {
                 : Colors.grey.shade300,
             textColor: isAgreed ? Colors.white : Colors.grey.shade600,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -170,7 +170,7 @@ class BodyDataStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
       child: Column(
         children: [
           Expanded(
@@ -268,7 +268,7 @@ class BodyDataStep extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Center(
             child: TextButton(
               onPressed: onSkip,
@@ -281,7 +281,7 @@ class BodyDataStep extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           HandDrawnButton(
             key: const ValueKey('onboarding_next_body_button'),
             label: '下一步',
@@ -408,7 +408,7 @@ class ProfileStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
       child: Column(
         children: [
           Expanded(
@@ -450,7 +450,7 @@ class ProfileStep extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           HandDrawnButton(
             key: const ValueKey('onboarding_finish_button'),
             label: '开始健身之旅 💪',

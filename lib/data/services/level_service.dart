@@ -133,6 +133,20 @@ class LevelService {
       mainColor: const Color(0xFF9E9E9E),
     );
   }
+
+  static double getStageProgress(int days) {
+    for (var realm in realms) {
+      for (var stage in realm.stages) {
+        if (days >= stage.minDays && days <= stage.maxDays) {
+          if (stage.maxDays > 10000) return 1.0; // Last stage
+          final range = stage.maxDays - stage.minDays + 1;
+          final current = days - stage.minDays + 1;
+          return (current / range).clamp(0.0, 1.0);
+        }
+      }
+    }
+    return 0.0;
+  }
 }
 
 class RealmData {

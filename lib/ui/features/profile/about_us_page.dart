@@ -8,9 +8,32 @@ import 'package:capyfit/data/utils/routes.dart';
 import 'package:capyfit/data/services/app_update_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:capyfit/data/utils/assets.dart';
+import 'package:capyfit/data/utils/utils.dart';
 
-class AboutUsPage extends StatelessWidget {
+class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
+
+  @override
+  State<AboutUsPage> createState() => _AboutUsPageState();
+}
+
+class _AboutUsPageState extends State<AboutUsPage> {
+  String _version = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final version = await GlobalUtils.getAppVersion();
+    if (mounted) {
+      setState(() {
+        _version = version;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +69,7 @@ class AboutUsPage extends StatelessWidget {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  GlobalConstants.profileVersion,
+                  'v$_version',
                   style: TextStyle(color: AppColors.getTextMutedColor(context)),
                 ),
               ],

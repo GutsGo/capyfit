@@ -27,7 +27,7 @@ class DietEntryAdapter extends TypeAdapter<DietEntry> {
       time: fields[7] as String,
       date: fields[8] as String,
       foodId: fields[9] as String?,
-      isCustom: fields[10] as bool,
+      isCustom: fields[10] as bool? ?? false,
       emoji: fields[11] as String?,
     );
   }

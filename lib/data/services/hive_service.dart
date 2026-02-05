@@ -112,6 +112,15 @@ class HiveService {
     await _settingsBox.put('lastBackupTime', date.millisecondsSinceEpoch);
   }
 
+  // ========== Medals ==========
+  List<String> getEarnedMedalJsonList() {
+    return _settingsBox.get('earnedMedals', defaultValue: <String>[]);
+  }
+
+  Future<void> saveEarnedMedalJsonList(List<String> medalJsons) async {
+    await _settingsBox.put('earnedMedals', medalJsons);
+  }
+
   // ========== Exercises ==========
   List<Exercise> getExercises() {
     return _exercisesBox.values.toList();
