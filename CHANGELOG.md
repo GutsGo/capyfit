@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-06
+
+### Added
+- **勋章系统**：上线全新的勋章馆页面，记录用户的每一个进步时刻。
+- **智能计划联动**：在添加计划时，运动项目、时长与卡路里消耗实现智能动态计算与联动。
+- **分享背景增强**：分享功能支持随机精美背景图预览，满足个性化分享需求。
+
+### Changed
+- **运动库布局**：重构运动库页面，支持高度自适应的瀑布流卡片布局，提升浏览体验。
+- **手绘图表优化**：优化训练分析卡片及所有手绘风格图表（柱状图、折线图等），修复了 iOS 端的闪烁问题，并增强了主题颜色适配。
+- **首页视觉重构**：优化首页卡片装饰图展示效果，并将养成看板迁移至等级系统页面。
+- **导航体验**：为底部导航栏新增平滑的选中项背景动画，并微调全局安全区域间距。
+
+### Fixed
+- **UI 细节**：修复了多处布局溢出及交互冲突问题。
+
+### Build
+- **iOS 支持**：升级 iOS 部署版本至 14.0，以兼容最新的系统特性与依赖库。
+
 ## [Unreleased]
 
 ## [1.2.3] - 2026-02-04
