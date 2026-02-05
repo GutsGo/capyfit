@@ -93,7 +93,10 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/shares/
+    - assets/images/medals/
     - assets/images/icons/
+    - assets/images/exercises/
     - assets/data/
     - assets/logo.jpg
     - assets/logo-mac.png
