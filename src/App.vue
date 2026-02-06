@@ -43,6 +43,37 @@ const features = [
     desc: '您的数据存储在本地，不上传云端，最大程度保护您的个人隐私。' 
   }
 ]
+
+const handleDownload = async () => {
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+  
+  if (isIOS) {
+    alert('暂不支持 iOS 系统，敬请期待！');
+    return;
+  }
+
+  const triggerDownload = (url) => {
+    const link = document.createElement('a');
+    link.href = url;
+    // 提取文件名作为下载名称
+    const fileName = url.split('/').pop();
+    link.download = fileName || 'capyfit.apk';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  try {
+    const resp = await fetch('/__dev__/capy_conf.json');
+    const conf = await resp.json();
+    const downloadUrl = `${conf.urls.base}/${conf.urls.android['arm64-v8a']}`;
+    triggerDownload(downloadUrl);
+  } catch (e) {
+    console.error('获取下载配置失败:', e);
+    alert('下载失败，请稍后重试');
+  }
+};
 </script>
 
 <template>
@@ -51,16 +82,16 @@ const features = [
     <header class="hero container">
       <div class="hero-main">
         <h1 class="name">
-          <span class="clip">猛练卡皮</span>
+          <span class="clip">猛练豚</span>
         </h1>
         <p class="text">让健身像卡皮巴拉一样稳定而有趣。</p>
         <p class="tagline">基于 Flutter 的治愈系健身软件，全手绘视觉风格，极致的隐私保护。</p>
         
         <div class="actions">
-          <a href="https://github.com/alien/kapi_fit_flutter/releases" class="vp-button brand">
+          <a @click.prevent="handleDownload" href="javascript:void(0)" class="vp-button brand">
             立即下载 <Download :size="16" style="margin-left: 4px; vertical-align: middle;" />
           </a>
-          <a href="https://github.com/alien/kapi_fit_flutter" class="vp-button alt">
+          <a href="https://github.com/GutsGo/CapyFitHub" class="vp-button alt">
             GitHub <Github :size="16" style="margin-left: 4px; vertical-align: middle;" />
           </a>
         </div>
