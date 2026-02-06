@@ -64,6 +64,7 @@ $:
         - name: 上传 构建产物
           image: cnbcool/attachments:latest
           settings:
+            tag: $CNB_BRANCH
             attachments:
               - build/app/outputs/flutter-apk/*.apk
 
