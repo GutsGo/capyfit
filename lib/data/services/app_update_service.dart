@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -10,45 +11,81 @@ class UpdateInfo {
   final String releaseNotes;
   final String downloadUrl;
   final bool hasUpdate;
+  final bool isForceUpdate;
+  final bool shouldNotify;
 
   UpdateInfo({
     required this.latestVersion,
     required this.releaseNotes,
     required this.downloadUrl,
     required this.hasUpdate,
+    this.isForceUpdate = false,
+    this.shouldNotify = false,
   });
 }
 
 class AppUpdateService {
-  static const String _apiUrl = GlobalConstants.githubLatestReleaseUrl;
+  static const String _releaseConfigUrl =
+      '${GlobalConstants.updateBaseUrl}/capy_conf.json';
+  static const String _debugConfigUrl =
+      '${GlobalConstants.updateBaseUrl}/capy_conf.debug.json';
 
   /// 检查更新
   Future<UpdateInfo> checkUpdate() async {
+    // iOS 平台暂时跳过更新逻辑
+    if (Platform.isIOS) {
+      return UpdateInfo(
+        latestVersion: '',
+        releaseNotes: '',
+        downloadUrl: '',
+        hasUpdate: false,
+      );
+    }
+
     try {
-      final response = await http.get(Uri.parse(_apiUrl));
+      final configUrl = kDebugMode ? _debugConfigUrl : _releaseConfigUrl;
+      final response = await http.get(Uri.parse(configUrl));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final String latestVersion = data['tag_name'].toString().replaceFirst(
-          'v',
-          '',
-        );
+        final data = json.decode(utf8.decode(response.bodyBytes));
+        final String latestVersion = data['latestVersion'];
+        final bool isForceUpdate = data['forceUpdate'] ?? false;
+        final String releaseNotes = data['changelog'] ?? '无更新日志';
+
         final PackageInfo packageInfo = await PackageInfo.fromPlatform();
         final String currentVersion = packageInfo.version;
 
         bool hasUpdate = _isVersionGreater(latestVersion, currentVersion);
+        bool shouldNotify = isForceUpdate;
+        if (hasUpdate && !shouldNotify) {
+          shouldNotify = _isSignificantUpdate(latestVersion, currentVersion);
+        }
 
         String downloadUrl = '';
         if (hasUpdate) {
-          final assets = data['assets'] as List;
-          downloadUrl = await _getBestDownloadUrl(assets, latestVersion);
+          final urls = data['urls'] as Map<String, dynamic>;
+          String baseUrl = urls['base'] ?? '';
+          if (baseUrl.isNotEmpty && !baseUrl.endsWith('/')) {
+            baseUrl += '/';
+          }
+
+          if (Platform.isAndroid) {
+            final androidUrls = urls['android'] as Map<String, dynamic>;
+            final assetPath = await _getBestAndroidAssetPath(androidUrls);
+            downloadUrl = '$baseUrl$assetPath';
+          } else if (Platform.isIOS) {
+            // 虽然前面拦截了，但逻辑完整性保留
+            downloadUrl = '$baseUrl${urls['ios'] ?? ''}';
+          }
         }
 
         return UpdateInfo(
-          latestVersion: data['tag_name'],
-          releaseNotes: data['body'] ?? '无更新日志',
+          latestVersion: latestVersion,
+          releaseNotes: releaseNotes,
           downloadUrl: downloadUrl,
           hasUpdate: hasUpdate,
+          isForceUpdate: isForceUpdate,
+          shouldNotify: shouldNotify,
         );
       } else {
         throw Exception('无法获取更新信息: ${response.statusCode}');
@@ -70,44 +107,60 @@ class AppUpdateService {
     return v1Parts.length > v2Parts.length;
   }
 
-  /// 根据设备架构获取最佳下载链接
-  Future<String> _getBestDownloadUrl(List assets, String version) async {
-    if (!Platform.isAndroid) {
-      // 非 Android 平台返回默认 Release 页面
-      return GlobalConstants.githubLatestReleaseHtmlUrl;
+  /// 判断是否为重大更新（大版本或中版本变化）
+  bool _isSignificantUpdate(String latest, String current) {
+    List<int> latestParts = latest
+        .split('.')
+        .map((e) => int.tryParse(e) ?? 0)
+        .toList();
+    List<int> currentParts = current
+        .split('.')
+        .map((e) => int.tryParse(e) ?? 0)
+        .toList();
+
+    // 确保至少有主版本和次版本号
+    while (latestParts.length < 2) {
+      latestParts.add(0);
+    }
+    while (currentParts.length < 2) {
+      currentParts.add(0);
     }
 
+    // 检查大版本 (Major)
+    if (latestParts[0] > currentParts[0]) return true;
+
+    // 检查中版本 (Minor)
+    if (latestParts[0] == currentParts[0] && latestParts[1] > currentParts[1]) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /// 根据设备架构获取最佳 Android APK 路径
+  Future<String> _getBestAndroidAssetPath(
+    Map<String, dynamic> androidUrls,
+  ) async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     final List<String> supportedAbis = androidInfo.supportedAbis;
 
-    String? bestMatch;
-
     // 优先级排序：arm64-v8a > armeabi-v7a > x86_64
-    if (supportedAbis.contains('arm64-v8a')) {
-      bestMatch = _findAsset(assets, 'arm64-v8a');
+    if (supportedAbis.contains('arm64-v8a') &&
+        androidUrls.containsKey('arm64-v8a')) {
+      return androidUrls['arm64-v8a'];
     }
 
-    if (bestMatch == null && supportedAbis.contains('armeabi-v7a')) {
-      bestMatch = _findAsset(assets, 'armeabi-v7a');
+    if (supportedAbis.contains('armeabi-v7a') &&
+        androidUrls.containsKey('armeabi-v7a')) {
+      return androidUrls['armeabi-v7a'];
     }
 
-    if (bestMatch == null && supportedAbis.contains('x86_64')) {
-      bestMatch = _findAsset(assets, 'x86_64');
+    if (supportedAbis.contains('x86_64') && androidUrls.containsKey('x86_64')) {
+      return androidUrls['x86_64'];
     }
 
-    // 如果没有找到特定架构的，尝试找通用包或返回第一个 asset
-    return bestMatch ??
-        (assets.isNotEmpty ? assets[0]['browser_download_url'] : '');
-  }
-
-  String? _findAsset(List assets, String arch) {
-    for (var asset in assets) {
-      final String name = asset['name'].toString().toLowerCase();
-      if (name.contains(arch) && name.endsWith('.apk')) {
-        return asset['browser_download_url'];
-      }
-    }
-    return null;
+    // 回退逻辑：返回第一个非空的路径
+    return androidUrls.values.firstWhere((v) => v != null, orElse: () => '');
   }
 }

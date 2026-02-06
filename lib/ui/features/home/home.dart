@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -6,6 +7,8 @@ import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:capyfit/ui/common/widgets/update_dialog.dart';
+import 'package:capyfit/data/services/app_update_service.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
 import 'package:capyfit/data/utils/assets.dart';
 import 'package:capyfit/data/utils/constants.dart';
@@ -37,6 +40,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _fadeController.forward();
     _countController.forward();
+
+    // 登录成功进入首页后，自动执行检查更新逻辑（仅 Android）
+    _checkUpdate();
+  }
+
+  Future<void> _checkUpdate() async {
+    if (!Platform.isAndroid) return;
+
+    // 等待首帧渲染完成且有一小段延迟，确保 UI 已经稳定
+    await Future.delayed(const Duration(seconds: 1));
+    if (!mounted) return;
+
+    try {
+      final updateService = AppUpdateService();
+      final updateInfo = await updateService.checkUpdate();
+
+      if (updateInfo.hasUpdate && updateInfo.shouldNotify && mounted) {
+        UpdateDialog.show(context, updateInfo);
+      }
+    } catch (e) {
+      // 自动检查失败通常保持静默
+      debugPrint('Auto update check failed: $e');
+    }
   }
 
   @override

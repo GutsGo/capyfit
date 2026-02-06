@@ -15,8 +15,10 @@ class GlobalConstants {
       '$githubRepoUrl/releases/latest';
 
   // --- URLs ---
-  static const String termsUrl = 'https://capyfit.brace.fun/terms.html';
-  static const String privacyUrl = 'https://capyfit.brace.fun/privacy.html';
+  static const String docsUrl = 'https://capyfit.brace.fun';
+  static const String termsUrl = '$docsUrl/terms.html';
+  static const String privacyUrl = '$docsUrl/privacy.html';
+  static const String updateBaseUrl = '$docsUrl/__dev__';
 
   // --- UI 字符串 ---
   // App Name
