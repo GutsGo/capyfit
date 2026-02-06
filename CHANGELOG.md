@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-02-06
+
+### Added
+- **多端本地化适配**：全面完善 Android、iOS、macOS 及 Web 端的应用名称配置（猛练豚 / CapyFit），并同步更新了本地化字符串资源。
+- **反馈记录功能**：在本地存储中新增了反馈发送时间的持久化逻辑，用于优化后续的反馈频率控制。
+
+### Changed
+- **反馈系统升级**：重构了反馈页面的后端集成逻辑，接入了更标准的 GitHub Issues API，并支持多类别标签自动归类。
+- **个人中心 UI 优化**：微调了 Profile 页面的排版间距，移除了冗余的版本号显示，并优化了分享文案的动态拼接。
+- **帮助中心完善**：扩展了帮助页面（Help）的内容项，新增关于数据备份、自动更新及主题切换的详细引导。
+- **引导页统一**：启动引导（Onboarding）页面现在统一使用资源定义的全局应用名称。
+
+### Build
+- **macOS 多语言支持**：为 macOS 平台新增了完整的简中与英文本地化配置支持。
+
 ## [1.3.2] - 2026-02-06
 
 ### Added
