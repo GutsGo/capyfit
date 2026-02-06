@@ -78,6 +78,22 @@ jobs:
             build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-armeabi-v7a.apk
             build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-arm64-v8a.apk
             build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-x86_64.apk
+
+      # 同时上传至 CapyFitHub 仓库的 Release
+      - name: Upload to Hub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: GutsGo/CapyFitHub
+          name: "${{ steps.version.outputs.VERSION }}"
+          tag_name: "${{ steps.version.outputs.VERSION }}"
+          target_commitish: main
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+          token: ${{ secrets.HUB_RELEASE_TOKEN }}
+          files: |
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-armeabi-v7a.apk
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-arm64-v8a.apk
+            build/app/outputs/flutter-apk/capyfit-${{ steps.version.outputs.VERSION }}-x86_64.apk
       
       # 完成
       - run: echo "🍏 Build and Release job's status is ${{ job.status }}."
