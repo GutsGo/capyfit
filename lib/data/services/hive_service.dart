@@ -141,6 +141,19 @@ class HiveService {
     await _settingsBox.put('lastBackupTime', date.millisecondsSinceEpoch);
   }
 
+  // ========== Feedback Stats ==========
+  DateTime? get lastFeedbackTime {
+    final timestamp = _settingsBox.get('lastFeedbackTime');
+    if (timestamp != null) {
+      return DateTime.fromMillisecondsSinceEpoch(timestamp);
+    }
+    return null;
+  }
+
+  Future<void> saveLastFeedbackTime(DateTime date) async {
+    await _settingsBox.put('lastFeedbackTime', date.millisecondsSinceEpoch);
+  }
+
   // ========== Medals ==========
   List<String> getEarnedMedalJsonList() {
     return _settingsBox.get('earnedMedals', defaultValue: <String>[]);

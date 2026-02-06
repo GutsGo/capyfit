@@ -6,6 +6,7 @@ import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/data/utils/constants.dart';
+import 'package:capyfit/data/services/hive_service.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -40,7 +41,23 @@ class _FeedbackPageState extends State<FeedbackPage> {
     });
 
     try {
-      // [IMPORTANT] Get token via: flutter run --dart-define=GITHUB_TOKEN=your_token
+      // 频率限制：5分钟
+      final lastTime = HiveService().lastFeedbackTime;
+      if (lastTime != null) {
+        final diff = DateTime.now().difference(lastTime);
+        if (diff.inMinutes < 5) {
+          if (mounted) {
+            showHandDrawnSnackBar(
+              context,
+              '您反馈得太频繁了，请 ${5 - diff.inMinutes} 分钟后再试',
+              type: ToastType.error,
+            );
+          }
+          setState(() => _isSubmitting = false);
+          return;
+        }
+      }
+
       const String githubToken = String.fromEnvironment('GITHUB_TOKEN');
 
       if (githubToken.isEmpty) {
@@ -52,26 +69,29 @@ class _FeedbackPageState extends State<FeedbackPage> {
       }
 
       final response = await http.post(
-        Uri.parse(GlobalConstants.githubDispatchesUrl),
+        Uri.parse(GlobalConstants.cnbIssuesUrl),
         headers: {
-          'Authorization': 'Bearer $githubToken',
-          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': githubToken,
+          'Accept': 'application/vnd.cnb.api+json',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'event_type': 'create_feedback_issue',
-          'client_payload': {
-            'type': _types[_selectedType],
-            'content': _feedbackController.text.trim(),
-            'contact': _contactController.text.trim(),
-          },
+          'title': '[${_types[_selectedType]}] 用户反馈',
+          'body':
+              '反馈内容：\n\n${_feedbackController.text.trim()}\n\n---\n联系方式：${_contactController.text.trim()}',
+          'labels': ['feedback', _types[_selectedType]],
         }),
       );
 
       if (mounted) {
-        if (response.statusCode == 204) {
-          Navigator.pop(context);
-          showHandDrawnSnackBar(context, '感谢您的反馈！卡皮正在努力处理中...');
+        if (response.statusCode == 201) {
+          // 记录反馈时间
+          await HiveService().saveLastFeedbackTime(DateTime.now());
+
+          if (mounted) {
+            Navigator.pop(context);
+            showHandDrawnSnackBar(context, '感谢您的反馈！卡皮正在努力处理中...');
+          }
         } else {
           showHandDrawnSnackBar(
             context,
