@@ -39,7 +39,7 @@ class GlobalConstants {
   static const String homeProgress = '今日完成进度';
   static const String homeQuickActions = '快捷入口';
   static const String homeExerciseLibrary = '动作库';
-  static const String homeDietLibrary = '膳食库';
+  static const String homeDietLibrary = '食物库';
   static const String homeEmptyPlans = '今天还没有计划哦~';
   static const String homeGreetingMorning = '早安';
   static const String homeGreetingAfternoon = '午安';

@@ -28,19 +28,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 400),
     );
     _countController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 600),
     );
 
-    Future.delayed(const Duration(milliseconds: 150), () {
-      if (mounted) {
-        _fadeController.forward();
-        _countController.forward();
-      }
-    });
+    _fadeController.forward();
+    _countController.forward();
   }
 
   @override
@@ -236,51 +232,141 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       animation: _countController,
       builder: (context, child) {
         final val = _countController.value;
-        return GridView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            mainAxisExtent: 90,
-          ),
+        return Row(
           children: [
-            _buildStatCardWithImage(
-              (stats.weeklyWorkoutCount * val).round().toString(),
-              '次',
-              '本周训练',
-              GlobalAssets.iconTrain,
-              color: const Color(0xFF8B6B61),
-              isAchieved: stats.weeklyWorkoutCount >= 10,
+            Expanded(
+              child: _buildVerticalStatCard(
+                (stats.weeklyWorkoutCount * val).round().toString(),
+                '次',
+                '本周训练',
+                GlobalAssets.iconTrain,
+                isAchieved: stats.weeklyWorkoutCount >= 10,
+              ),
             ),
-            _buildStatCardWithImage(
-              (stats.streakDays * val).round().toString(),
-              '天',
-              '连续打卡',
-              GlobalAssets.iconCheckin,
-              color: const Color(0xFFE57373),
-              isAchieved: stats.streakDays >= 5,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildVerticalStatCard(
+                (stats.streakDays * val).round().toString(),
+                '天',
+                '连续打卡',
+                GlobalAssets.iconCheckin,
+                isAchieved: stats.streakDays >= 5,
+              ),
             ),
-            _buildStatCardWithImage(
-              (stats.todayCalories * val).round().toString(),
-              'kcal',
-              '消耗热量',
-              GlobalAssets.iconKcal,
-              color: const Color(0xFF81C784),
-              isAchieved: stats.todayCalories >= 8000,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildVerticalStatCard(
+                (stats.todayCalories * val).round().toString(),
+                'kcal',
+                '消耗热量',
+                GlobalAssets.iconKcal,
+                isAchieved: stats.todayCalories >= 8000,
+              ),
             ),
-            _buildStatCardWithImage(
-              (stats.weeklyDurationHours * val).toStringAsFixed(1),
-              'h',
-              '训练时长',
-              GlobalAssets.iconDuration,
-              color: const Color(0xFFA1887F),
-              isAchieved: stats.weeklyDurationHours >= 12,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildVerticalStatCard(
+                (stats.weeklyDurationHours * val).toStringAsFixed(1),
+                'h',
+                '训练时长',
+                GlobalAssets.iconDuration,
+                isAchieved: stats.weeklyDurationHours >= 12,
+              ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildVerticalStatCard(
+    String value,
+    String unit,
+    String label,
+    String imagePath, {
+    bool isAchieved = false,
+  }) {
+    final bgColor = isAchieved
+        ? AppColors.accentOrange.withValues(alpha: 0.2)
+        : null;
+
+    return HandDrawnCard(
+      padding: EdgeInsets.zero,
+      color: bgColor,
+      child: SizedBox(
+        height:
+            105, // Define a fixed height to avoid layout issues in ScrollView
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // Bottom Image with clipping effect
+              Positioned(
+                bottom: -12,
+                left: 0,
+                right: 0,
+                child: Opacity(
+                  opacity: 0.9,
+                  child: Image.asset(
+                    imagePath,
+                    height: 54,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              // Text Content area at the top
+              Padding(
+                padding: const EdgeInsets.only(top: 12, left: 12, right: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            value,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isAchieved
+                                  ? AppColors.accentOrange
+                                  : AppColors.getTextMainColor(context),
+                            ),
+                          ),
+                          const SizedBox(width: 1),
+                          Text(
+                            unit,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.getTextMutedColor(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.getTextMutedColor(context),
+                      ),
+                      textAlign: TextAlign.left,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -296,7 +382,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final bgColor = isAchieved
         ? AppColors.accentOrange.withValues(alpha: 0.2)
         : null;
-    final displayColor = isAchieved ? AppColors.accentOrange : color;
 
     return HandDrawnCard(
       width: fullWidth ? double.infinity : null,

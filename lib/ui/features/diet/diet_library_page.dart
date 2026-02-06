@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:capyfit/data/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
@@ -140,7 +141,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('膳食库'),
+        title: Text(GlobalConstants.homeDietLibrary),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -241,27 +242,9 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
                         const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       if (index == _foods.length) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: _isLoadingMore
-                                ? const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  )
-                                : Text(
-                                    '滑动加载更多',
-                                    style: TextStyle(
-                                      color: AppColors.getTextMutedColor(
-                                        context,
-                                      ),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                          ),
-                        );
+                        return _buildLoadMoreIndicator();
                       }
-                      final food = _foods[index];
-                      return _buildFoodCard(food);
+                      return _FoodCard(food: _foods[index]);
                     },
                   ),
           ),
@@ -279,6 +262,23 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
               ),
             )
           : null,
+    );
+  }
+
+  Widget _buildLoadMoreIndicator() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: _isLoadingMore
+            ? const CircularProgressIndicator(strokeWidth: 2)
+            : Text(
+                '滑动加载更多',
+                style: TextStyle(
+                  color: AppColors.getTextMutedColor(context),
+                  fontSize: 12,
+                ),
+              ),
+      ),
     );
   }
 
@@ -359,75 +359,92 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
       },
     );
   }
+}
 
-  Widget _buildFoodCard(FoodDatabaseItem food) {
-    return GestureDetector(
-      onTap: () => context.push('/diet/food', extra: food),
-      child: HandDrawnCard(
-        child: Row(
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(12),
+class _FoodCard extends StatelessWidget {
+  final FoodDatabaseItem food;
+
+  const _FoodCard({required this.food});
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTap: () => context.push('/diet/food', extra: food),
+        child: HandDrawnCard(
+          child: Row(
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.accentOrange.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(food.emoji, style: const TextStyle(fontSize: 28)),
+                ),
               ),
-              child: Center(
-                child: Text(food.emoji, style: const TextStyle(fontSize: 28)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      food.foodName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColors.getTextMainColor(context),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${food.energyKCal} kcal / 100g',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.getTextMutedColor(context),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    _CategoryTag(category: food.category),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    food.foodName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: AppColors.getTextMainColor(context),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${food.energyKCal} kcal / 100g',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.getTextMutedColor(context),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  _buildCategoryTag(food.category),
+                  _NutritionInfo(label: '蛋白质', value: '${food.protein}g'),
+                  const SizedBox(height: 2),
+                  _NutritionInfo(label: '碳水', value: '${food.cho}g'),
+                  const SizedBox(height: 2),
+                  _NutritionInfo(label: '脂肪', value: '${food.fat}g'),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildNutritionInfo('蛋白质', '${food.protein}g'),
-                const SizedBox(height: 2),
-                _buildNutritionInfo('碳水', '${food.cho}g'),
-                const SizedBox(height: 2),
-                _buildNutritionInfo('脂肪', '${food.fat}g'),
-              ],
-            ),
-            const SizedBox(width: 8),
-            Icon(
-              LucideIcons.chevronRight,
-              size: 20,
-              color: AppColors.getTextMutedColor(context),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Icon(
+                LucideIcons.chevronRight,
+                size: 20,
+                color: AppColors.getTextMutedColor(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildNutritionInfo(String label, String value) {
+class _NutritionInfo extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _NutritionInfo({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -449,8 +466,15 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
       ],
     );
   }
+}
 
-  Widget _buildCategoryTag(String category) {
+class _CategoryTag extends StatelessWidget {
+  final String category;
+
+  const _CategoryTag({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
     Color color = AppColors.primary;
     switch (category) {
       case '谷薯类':
@@ -479,9 +503,9 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withOpacity(0.5), width: 0.5),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 0.5),
       ),
       child: Text(
         category,
