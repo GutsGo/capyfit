@@ -1,14 +1,14 @@
 {
-    "forceUpdate": true,
-    "latestVersion": "1.3.3",
+    "forceUpdate": false,
+    "latestVersion": "1.3.4",
     "urls": {
         "base": "https://v6.gh-proxy.org/https://github.com/GutsGo/CapyFitHub/releases/download",
         "android": {
-            "arm64-v8a": "v1.3.3/capyfit-v1.3.3-arm64-v8a.apk",
-            "armeabi-v7a": "v1.3.3/capyfit-v1.3.3-armeabi-v7a.apk",
-            "x86_64": "v1.3.3/capyfit-v1.3.3-x86_64.apk"
+            "arm64-v8a": "v1.3.4/capyfit-v1.3.4-arm64-v8a.apk",
+            "armeabi-v7a": "v1.3.4/capyfit-v1.3.4-armeabi-v7a.apk",
+            "x86_64": "v1.3.4/capyfit-v1.3.4-x86_64.apk"
         },
-        "ios": "v1.3.3/capyfit-v1.3.3.ipa"
+        "ios": "v1.3.4/capyfit-v1.3.4.ipa"
     },
     "changelog": "修复了一些问题"
 }
