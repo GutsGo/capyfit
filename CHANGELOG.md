@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-02-06
+
+### Added
+- **原生启动页支持**：引入 `flutter_native_splash` 并完成双端适配，解决启动白屏问题。
+- **昵称格式校验**：为个人资料昵称增加格式约束，支持中英文混排长度计算。
+
+### Changed
+- **性能飞跃**：优化应用启动流程，采用并行加载与延迟读取策略，大幅缩短首屏等待时间。
+- **UI 精雕细琢**：重构首页统计卡片为更紧凑的垂直布局，优化图标裁剪视觉效果，并微调了运动库与饮食库的交互细节。
+- **分享功能优化**：完善分享预览逻辑，提升背景图加载稳定性。
+
+### Build & CI
+- **多版本共存**：区分 Debug 与 Release 版本的应用名称与 Bundle ID，方便开发与生产版本在同一设备共存。
+- **分发自动化**：升级 GitHub Actions 工作流，支持自动同步 Release 产物至 Hub 仓库。
+
 ## [1.3.0] - 2026-02-06
 
 ### Added
