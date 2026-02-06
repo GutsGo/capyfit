@@ -496,15 +496,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      RepaintBoundary(
-                        key: _shareKey,
-                        child: _SharePreviewContent(
-                          stats: stats,
-                          levelInfo: levelInfo,
-                          nickname:
-                              appState.userProfile.nickname ??
-                              GlobalConstants.profileUserDefaultName,
-                          backgroundImage: randomImage,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: RepaintBoundary(
+                          key: _shareKey,
+                          child: _SharePreviewContent(
+                            stats: stats,
+                            levelInfo: levelInfo,
+                            nickname:
+                                appState.userProfile.nickname ??
+                                GlobalConstants.profileUserDefaultName,
+                            backgroundImage: randomImage,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 32),
@@ -579,18 +592,7 @@ class _SharePreviewContent extends StatelessWidget {
     return Container(
       width: 300,
       height: 533, // 9:16 aspect ratio
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 20,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.white,
       child: Stack(
         children: [
           // 背景图 (随机选择)
