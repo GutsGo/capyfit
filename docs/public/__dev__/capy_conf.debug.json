@@ -1,0 +1,14 @@
+{
+    "forceUpdate": true,
+    "latestVersion": "1.0.0",
+    "urls": {
+        "base": "https://capyfit.gutsgo.com",
+        "android": {
+            "arm64-v8a": "/apk/arm64-v8a.apk",
+            "armeabi-v7a": "/apk/armeabi-v7a.apk",
+            "x86_64": "/apk/x86_64.apk"
+        },
+        "ios": "/ipa/capyfit.ipa"
+    },
+    "changelog": "修复了一些问题"
+}
