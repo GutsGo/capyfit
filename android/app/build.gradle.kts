@@ -37,7 +37,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["appName"] = "CapyFit"
+        manifestPlaceholders["appName"] = "@string/app_name"
     }
 
     signingConfigs {
@@ -54,7 +54,7 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            manifestPlaceholders["appName"] = "CapyFit(D)"
+            manifestPlaceholders["appName"] = "@string/app_name_debug"
         }
         release {
             signingConfig = signingConfigs.getByName("release")
