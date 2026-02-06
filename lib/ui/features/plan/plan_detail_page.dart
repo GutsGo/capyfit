@@ -144,6 +144,29 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
                 ),
               ),
             ],
+            if (isHistory && !isCompleted) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: Colors.grey.withValues(alpha: 0.5),
+                    width: 1,
+                  ),
+                ),
+                child: const Text(
+                  'UNFINISHED',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 8,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
         actions: const [],
@@ -339,6 +362,14 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
             _buildWorkoutTypeTag(plan.type),
             const SizedBox(width: 8),
             _buildTag(plan.recurrenceLabel, AppColors.accentPurple),
+            if (isCompleted) ...[
+              const SizedBox(width: 8),
+              _buildTag('完成时间 ${plan.time}', AppColors.accentMint),
+            ],
+            if (isHistory && !isCompleted) ...[
+              const SizedBox(width: 8),
+              _buildTag('未完成', Colors.grey),
+            ],
           ],
         ),
       ],
