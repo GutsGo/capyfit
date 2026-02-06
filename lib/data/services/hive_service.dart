@@ -47,7 +47,7 @@ class HiveService {
     ]);
 
     _userProfileBox = results[0] as Box<UserProfile>;
-    _settingsBox = results[1] as Box;
+    _settingsBox = results[1];
     _workoutPlansBox = results[2] as Box<WorkoutPlan>;
     _dailyStepsBox = results[3] as Box<DailyStepEntry>;
     _dietEntriesBox = results[4] as Box<DietEntry>;
@@ -55,7 +55,14 @@ class HiveService {
     _isInitialized = true;
 
     // 阶段 2: 后台异步打开其余大型数据库盒子，不阻塞启动
-    _initRemainingBoxes();
+    _remainingBoxesFuture = _initRemainingBoxes();
+  }
+
+  Future<void>? _remainingBoxesFuture;
+
+  /// 等待后台盒子初始化完成
+  Future<void> waitForRemainingBoxes() async {
+    await _remainingBoxesFuture;
   }
 
   void _registerAdapters() {

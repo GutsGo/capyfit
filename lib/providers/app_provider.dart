@@ -83,10 +83,9 @@ class AppProvider extends ChangeNotifier {
   }
 
   Future<void> _loadSecondaryData() async {
-    // 轮询或等待直到盒子开启（或者直接读取，如果已开启）
-    // 这里简单的再次由于 HiveService._initRemainingBoxes 是异步在后台跑的
-    // 我们等待一个微小的延迟或直接读取
-    await Future.delayed(const Duration(milliseconds: 300));
+    // 精准等待 Hive 后台盒子打开完成
+    await _hiveService.waitForRemainingBoxes();
+
     _foodPresets = _hiveService.getFoodItems();
     _exercises = _hiveService.getExercises();
 
