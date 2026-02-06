@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-02-06
+
+### Added
+- **Sentry 集成**：集成 Sentry SDK 并完成初始化配置，提升异常监控与错误追踪能力。
+- **保存确认**：个人设置页面添加退出保存确认功能，防止误操作导致未保存数据丢失。
+- **自动检查更新**：重构应用更新逻辑，接入智能自动检查功能，提升版本更迭效率。
+
+### Changed
+- **饮食页面优化**：优化饮食页面 UI 布局与信息展示，提升数据呈现的清晰度。
+- **备份服务升级**：更新备份服务逻辑以支持新增数据字段，确保备份数据的完整性。
+- **启动性能优化**：持续优化应用启动性能与核心数据加载逻辑，提升响应速度。
+
+### Removed
+- **仓库精简**：移除项目内文档目录，已迁移至独立 `docs` 分支管理。
+
 ## [1.3.1] - 2026-02-06
 
 ### Added
