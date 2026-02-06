@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2026-02-07
+
+### Added
+- **计划详情展示优化**：在计划详情页中新增对历史记录状态的支持。
+  - 针对未完成的历史记录，新增醒目的 "UNFINISHED" 状态标识。
+  - 针对已完成记录，支持展示具体的完成时间点。
+
+### Changed
+- **版本号升级**：应用版本号同步更新至 1.3.4。
+
 ## [1.3.3] - 2026-02-06
 
 ### Added
