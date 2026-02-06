@@ -49,6 +49,7 @@ import 'package:capyfit/ui/features/diet/diet_vm.dart';
 import 'package:capyfit/ui/features/exercise/exercise_vm.dart';
 import 'package:capyfit/ui/features/plan/plan_vm.dart';
 import 'package:capyfit/ui/features/stats/stats_vm.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 late final GoRouter _router;
 late final AppProvider _appProvider;
@@ -74,17 +75,27 @@ void main() async {
   // 3. 构建路由与应用
   _router = _createRouter(_appProvider.hasUserProfile);
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: _appProvider),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()..init()),
-        ChangeNotifierProvider(create: (_) => DietViewModel()..init()),
-        ChangeNotifierProvider(create: (_) => ExerciseViewModel()..init()),
-        ChangeNotifierProvider(create: (_) => PlanViewModel()..init()),
-        ChangeNotifierProvider(create: (_) => StatsViewModel()..init()),
-      ],
-      child: const MyApp(),
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://76d73fd1d36c1d0c621a9867bd18816c@o4503920768385024.ingest.us.sentry.io/4510838486401024';
+      options.tracesSampleRate = 0.2;
+      options.profilesSampleRate = 0.1;
+    },
+    appRunner: () => runApp(
+      SentryWidget(
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: _appProvider),
+            ChangeNotifierProvider(create: (_) => HomeViewModel()..init()),
+            ChangeNotifierProvider(create: (_) => DietViewModel()..init()),
+            ChangeNotifierProvider(create: (_) => ExerciseViewModel()..init()),
+            ChangeNotifierProvider(create: (_) => PlanViewModel()..init()),
+            ChangeNotifierProvider(create: (_) => StatsViewModel()..init()),
+          ],
+          child: const MyApp(),
+        ),
+      ),
     ),
   );
 
