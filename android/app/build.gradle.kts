@@ -51,6 +51,10 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["appName"] = "CapyFit(D)"
+        }
         release {
             signingConfig = signingConfigs.getByName("release")
             
