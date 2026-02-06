@@ -119,7 +119,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       '昵称',
                       _nicknameController,
                       TextInputType.text,
-                      (v) => Validators.required(v, '昵称'),
+                      Validators.nickname,
                     ),
                     const SizedBox(height: 16),
                     _buildGenderPicker(),

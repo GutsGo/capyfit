@@ -177,4 +177,36 @@ class Validators {
     }
     return '请输入有效的邮箱或手机号';
   }
+
+  /// 昵称校验：最多16个字符（中文算2个），仅限字母、数字和中文
+  static String? nickname(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '不能为空';
+    }
+
+    final trimmed = value.trim();
+
+    // 格式校验：只允许字母、数字和中文
+    // \u4e00-\u9fa5 是常见中文字符范围
+    final regex = RegExp(r'^[a-zA-Z0-9\u4e00-\u9fa5]+$');
+    if (!regex.hasMatch(trimmed)) {
+      return '只允许字母、数字和中文的组合';
+    }
+
+    // 长度校验：中文算2个字符
+    int length = 0;
+    for (int i = 0; i < trimmed.length; i++) {
+      if (trimmed.codeUnitAt(i) > 255) {
+        length += 2;
+      } else {
+        length += 1;
+      }
+    }
+
+    if (length > 16) {
+      return '超过字符长度上限';
+    }
+
+    return null;
+  }
 }
