@@ -6,6 +6,7 @@ import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
 import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/models/workout_plan.dart';
+import 'package:capyfit/data/models/daily_step_entry.dart';
 import 'package:capyfit/data/services/hive_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:capyfit/data/utils/constants.dart';
@@ -146,6 +147,14 @@ class BackupService {
           .toList(),
       'exercises': _hiveService.getExercises().map((e) => e.toJson()).toList(),
       'foodItems': _hiveService.getFoodItems().map((e) => e.toJson()).toList(),
+      'dailySteps': _hiveService
+          .getDailySteps()
+          .map((e) => {'date': e.date, 'steps': e.steps})
+          .toList(),
+      'settings': {
+        'joinedDate': _hiveService.joinedDate?.millisecondsSinceEpoch,
+        'earnedMedals': _hiveService.getEarnedMedalJsonList(),
+      },
     };
   }
 
@@ -173,12 +182,29 @@ class BackupService {
           customCalorieGoal: importedProfile.customCalorieGoal,
           nickname: importedProfile.nickname,
           avatarPath: importedProfile.avatarPath,
+          targetWeight: importedProfile.targetWeight,
+          dailyStepsGoal: importedProfile.dailyStepsGoal,
           // height, weight, gender, age are kept from currentProfile because importedProfile has defaults
         );
         await _hiveService.saveUserProfile(mergedProfile);
       } else {
         // If no profile exists, save imported one (user will need to update height/weight/age)
         await _hiveService.saveUserProfile(importedProfile);
+      }
+    }
+
+    // 1.1 Restore Settings (JoinedDate and Medals)
+    if (content.containsKey('settings')) {
+      final Map<String, dynamic> settings = content['settings'];
+      if (settings.containsKey('joinedDate') &&
+          settings['joinedDate'] != null) {
+        await _hiveService.saveJoinedDate(
+          DateTime.fromMillisecondsSinceEpoch(settings['joinedDate']),
+        );
+      }
+      if (settings.containsKey('earnedMedals')) {
+        final List<String> medals = List<String>.from(settings['earnedMedals']);
+        await _hiveService.saveEarnedMedalJsonList(medals);
       }
     }
 
@@ -215,6 +241,15 @@ class BackupService {
       for (var item in list) {
         final food = FoodItem.fromJson(item);
         await _hiveService.saveFoodItem(food);
+      }
+    }
+
+    // 6. Restore Daily Steps
+    if (content.containsKey('dailySteps')) {
+      final List list = content['dailySteps'];
+      for (var item in list) {
+        final entry = DailyStepEntry(date: item['date'], steps: item['steps']);
+        await _hiveService.saveDailySteps(entry);
       }
     }
   }
