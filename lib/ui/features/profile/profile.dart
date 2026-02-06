@@ -13,7 +13,6 @@ import 'package:capyfit/data/utils/utils.dart';
 import 'package:capyfit/data/utils/routes.dart';
 import 'package:capyfit/data/services/level_service.dart';
 import 'package:capyfit/data/services/share_service.dart';
-import 'package:flutter/rendering.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -100,56 +99,70 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.centerRight,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  appState.userProfile.nickname ??
-                                      GlobalConstants.profileUserDefaultName,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.getTextMainColor(context),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      appState.userProfile.nickname ??
+                                          GlobalConstants
+                                              .profileUserDefaultName,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.getTextMainColor(
+                                          context,
+                                        ),
+                                        height: 1.2,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
+                                  const SizedBox(width: 40), // 预留出按钮的宽度空间
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 0),
-                                child: Transform.translate(
-                                  offset: const Offset(0, -2),
-                                  child: IconButton(
-                                    icon: Icon(
+                              Positioned(
+                                right: -12, // 稍微向右偏移，增加右手握持时的点击便利性
+                                child: GestureDetector(
+                                  onTap: () => _showShareDialog(
+                                    context,
+                                    stats,
+                                    appState,
+                                  ),
+                                  behavior: HitTestBehavior.opaque,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(
+                                      12,
+                                    ), // 巨大的点击感应区
+                                    color: Colors.transparent,
+                                    child: Icon(
                                       LucideIcons.share2,
                                       color: AppColors.getTextMutedColor(
                                         context,
                                       ),
-                                      size: 20,
+                                      size: 18,
                                     ),
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () => _showShareDialog(
-                                      context,
-                                      stats,
-                                      appState,
-                                    ),
-                                    tooltip: '分享成就',
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           Text(
-                            GlobalUtils.formatJoinedDays(stats.joinedDays),
+                            GlobalUtils.getRandomProfileMotto(),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: AppColors.getTextMutedColor(context),
+                              fontStyle: FontStyle.italic,
+                              height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           Builder(
                             builder: (context) {
                               final levelInfo = LevelService.getLevelInfo(
@@ -350,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     Text(
-                      '${GlobalConstants.profileVersion} v$_version',
+                      '${GlobalConstants.appName} v$_version',
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.getTextMutedColor(context),
@@ -566,7 +579,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _captureAndShare() async {
     try {
       final shareText =
-          '我在 Capyfit 已经坚持健身 ${GlobalUtils.formatJoinedDays((context.read<AppProvider>().userStats.joinedDays))} 啦！快来和我一起努力吧！';
+          '我在 Capyfit 已经坚持健身 ${context.read<AppProvider>().userStats.joinedDays} 天啦！快来和我一起努力吧！';
       await ShareService.captureAndShare(_shareKey, text: shareText);
     } catch (e) {
       debugPrint('Capture and share error: $e');

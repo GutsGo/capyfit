@@ -37,7 +37,7 @@ class WelcomeStep extends StatelessWidget {
                 Image.asset(GlobalAssets.logoMac, width: 160, height: 160),
                 const SizedBox(height: 20),
                 Text(
-                  GlobalConstants.onboardingWelcomeTitle,
+                  GlobalConstants.appName,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,

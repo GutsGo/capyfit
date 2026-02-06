@@ -39,7 +39,14 @@ class GlobalUtils {
 
   /// 格式化加入天数
   static String formatJoinedDays(int days) {
-    return '加入猛练卡皮第 $days 天';
+    return '加入第 $days 天';
+  }
+
+  /// 随机获取一句可爱励志话语
+  static String getRandomProfileMotto() {
+    final mottos = GlobalConstants.profileMottos;
+    final index = DateTime.now().day % mottos.length;
+    return mottos[index];
   }
 
   /// 获取应用版本号

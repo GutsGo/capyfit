@@ -1,18 +1,6 @@
 class GlobalConstants {
-  // --- 配置信息 (GitHub & APIs) ---
-  static const String githubOwner = 'GutsGo';
-  static const String githubRepo = 'capyfit';
-
-  static const String _githubBaseApiUrl =
-      'https://api.github.com/repos/$githubOwner/$githubRepo';
-  static const String githubLatestReleaseUrl =
-      '$_githubBaseApiUrl/releases/latest';
-  static const String githubDispatchesUrl = '$_githubBaseApiUrl/dispatches';
-
-  static const String githubRepoUrl =
-      'https://github.com/$githubOwner/$githubRepo';
-  static const String githubLatestReleaseHtmlUrl =
-      '$githubRepoUrl/releases/latest';
+  static const String cnbIssuesUrl =
+      'https://api.cnb.cool/bytebites.ai/CapyFit/-/issues';
 
   // --- URLs ---
   static const String docsUrl = 'https://capyfit.brace.fun';
@@ -22,7 +10,7 @@ class GlobalConstants {
 
   // --- UI 字符串 ---
   // App Name
-  static const String appName = '猛练卡皮';
+  static const String appName = '猛练豚';
   static const String appNameEn = 'CapyFit';
 
   // Common
@@ -76,11 +64,17 @@ class GlobalConstants {
   static const String profileTerms = '用户协议';
   static const String profilePrivacy = '隐私政策';
   static const String profileLevelSystem = '等级系统说明';
-  static const String profileVersion = '猛练卡皮';
+  static const List<String> profileMottos = [
+    '今天也要元气满满哦 ✨',
+    '每一滴汗水都是成功的阶梯 💪',
+    '坚持就是胜利，卡皮为你加油！🧡',
+    '健康生活，从现在开始 🍎',
+    '慢慢来，比较快 🐝',
+    '做一只猛猛的卡皮巴拉 💪',
+  ];
   static const int maxAvatarSize = 3 * 1024 * 1024; // 3MB
 
   // Onboarding
-  static const String onboardingWelcomeTitle = '猛练卡皮';
   static const String onboardingWelcomeSubtitle = '你的专属健身与饮食伙伴';
   static const String onboardingWelcomeDesc = '让我们花几分钟设置你的个人资料\n以便为你提供更精准的建议';
   static const String onboardingStart = '开始设置 →';
