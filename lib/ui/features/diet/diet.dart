@@ -174,89 +174,127 @@ class _DietPageState extends State<DietPage> {
 
     return HandDrawnCard(
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-      child: Column(
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // Circular Progress
-          Center(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween<double>(begin: 0, end: calorieProgress),
-                    duration: const Duration(milliseconds: 1000),
-                    curve: Curves.easeOutCubic,
-                    builder: (context, value, child) {
-                      return CircularProgressIndicator(
-                        value: value,
-                        strokeWidth: 10,
-                        backgroundColor: AppColors.primary.withValues(
-                          alpha: 0.3,
+          if (state.userProfile.isSmartCalculation)
+            Positioned(
+              top: -8,
+              right: -8,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => HandDrawnDialog(
+                      title: '关于营养目标',
+                      child: Text(
+                        '当前目标是基于您的身高、体重、年龄以及健身目标，通过科学算法智能计算得出的推荐值。\n\n您可以在“我的 -> 目标设置”中关闭智能计算来手动设置目标。',
+                        style: TextStyle(
+                          color: AppColors.getTextMainColor(context),
+                          height: 1.5,
                         ),
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          AppColors.primary,
-                        ),
-                        strokeCap: StrokeCap.round,
-                      );
-                    },
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '$calories',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getTextMainColor(context),
                       ),
                     ),
-                    Text(
-                      '/ ${state.calorieGoal} kcal',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.getTextMutedColor(context),
+                  );
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Icon(
+                    LucideIcons.helpCircle,
+                    size: 20,
+                    color: AppColors.getTextMutedColor(
+                      context,
+                    ).withOpacity(0.6),
+                  ),
+                ),
+              ),
+            ),
+          Column(
+            children: [
+              // Circular Progress
+              Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0, end: calorieProgress),
+                        duration: const Duration(milliseconds: 1000),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, value, child) {
+                          return CircularProgressIndicator(
+                            value: value,
+                            strokeWidth: 10,
+                            backgroundColor: AppColors.primary.withValues(
+                              alpha: 0.3,
+                            ),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.primary,
+                            ),
+                            strokeCap: StrokeCap.round,
+                          );
+                        },
                       ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '$calories',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.getTextMainColor(context),
+                          ),
+                        ),
+                        Text(
+                          '/ ${state.calorieGoal} kcal',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.getTextMutedColor(context),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 40),
+              ),
+              const SizedBox(height: 40),
 
-          // Macros
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: _buildMacroProgress(
-                  '碳水',
-                  carbs,
-                  state.carbGoal,
-                  AppColors.accentOrange,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildMacroProgress(
-                  '蛋白质',
-                  protein,
-                  state.proteinGoal,
-                  AppColors.primary,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildMacroProgress(
-                  '脂肪',
-                  fat,
-                  state.fatGoal,
-                  AppColors.accentMint,
-                ),
+              // Macros
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: _buildMacroProgress(
+                      '碳水',
+                      carbs,
+                      state.carbGoal,
+                      AppColors.accentOrange,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildMacroProgress(
+                      '蛋白质',
+                      protein,
+                      state.proteinGoal,
+                      AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildMacroProgress(
+                      '脂肪',
+                      fat,
+                      state.fatGoal,
+                      AppColors.accentMint,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
