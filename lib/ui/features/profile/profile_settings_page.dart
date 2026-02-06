@@ -23,11 +23,20 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   late TextEditingController _ageController;
-
   late TextEditingController _nicknameController;
+
   late Gender _gender;
   String? _avatarPath;
   final ImagePicker _picker = ImagePicker();
+
+  String? _initialNickname;
+  late Gender _initialGender;
+  String? _initialAvatarPath;
+  late String _initialHeight;
+  late String _initialWeight;
+  late String _initialAge;
+
+  bool _isSaving = false;
 
   @override
   void initState() {
@@ -44,6 +53,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _gender = profile.gender;
     _avatarPath = profile.avatarPath;
 
+    _initialNickname = profile.nickname;
+    _initialGender = profile.gender;
+    _initialAvatarPath = profile.avatarPath;
+    _initialHeight = profile.height?.toString() ?? '';
+    _initialWeight = profile.weight?.toString() ?? '';
+    _initialAge = profile.age?.toString() ?? '';
+
     // Add listeners for real-time updates
     _heightController.addListener(_onInputChanged);
     _weightController.addListener(_onInputChanged);
@@ -54,6 +70,15 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     setState(() {
       // Just trigger rebuild
     });
+  }
+
+  bool _hasChanges() {
+    return _nicknameController.text != _initialNickname ||
+        _gender != _initialGender ||
+        _avatarPath != _initialAvatarPath ||
+        _heightController.text != _initialHeight ||
+        _weightController.text != _initialWeight ||
+        _ageController.text != _initialAge;
   }
 
   @override
@@ -83,129 +108,191 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       nickname: _nicknameController.text,
       avatarPath: _avatarPath,
     );
+    setState(() => _isSaving = true);
     provider.updateUserProfile(newProfile);
     Navigator.pop(context);
     showHandDrawnSnackBar(context, '个人资料已更新');
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '个人设置',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+  Future<bool> _showDiscardChangesDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
+        contentPadding: EdgeInsets.zero,
+        content: HandDrawnCard(
           padding: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _buildAvatarSection(),
-              const SizedBox(height: 24),
-              _buildSectionTitle('基本资料'),
-              HandDrawnCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildInputField(
-                      '昵称',
-                      _nicknameController,
-                      TextInputType.text,
-                      Validators.nickname,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildGenderPicker(),
-                  ],
-                ),
+              const Text(
+                '未保存的更改',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              const SizedBox(height: 16),
+              const Text('您有尚未保存的更改，确定要退出吗？', textAlign: TextAlign.center),
               const SizedBox(height: 24),
-
-              _buildSectionTitle('身体数据'),
-              HandDrawnCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildInputField(
-                      '身高 (cm)',
-                      _heightController,
-                      TextInputType.number,
-                      Validators.height,
+              Row(
+                children: [
+                  Expanded(
+                    child: HandDrawnButton(
+                      label: '取消',
+                      onPressed: () => Navigator.pop(context, false),
+                      backgroundColor: Colors.transparent,
+                      textColor: AppColors.getTextMainColor(context),
                     ),
-                    const SizedBox(height: 16),
-                    _buildInputField(
-                      '体重 (kg)',
-                      _weightController,
-                      TextInputType.number,
-                      Validators.weight,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: HandDrawnButton(
+                      label: '退出',
+                      onPressed: () => Navigator.pop(context, true),
+                      backgroundColor: Colors.redAccent,
+                      textColor: Colors.white,
                     ),
-                    const SizedBox(height: 16),
-                    _buildInputField(
-                      '年龄',
-                      _ageController,
-                      TextInputType.number,
-                      Validators.age,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
+    return result ?? false;
+  }
 
-              const SizedBox(height: 24),
-              // 数据隐私说明
-              Center(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          LucideIcons.shieldCheck,
-                          size: 14,
-                          color: AppColors.getTextMutedColor(context),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '隐私保护',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (_isSaving || !_hasChanges()) {
+          Navigator.pop(context);
+          return;
+        }
+        final shouldPop = await _showDiscardChangesDialog();
+        if (shouldPop && mounted) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: const Text(
+            '个人设置',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          foregroundColor: AppColors.getTextMainColor(context),
+        ),
+        body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAvatarSection(),
+                const SizedBox(height: 24),
+                _buildSectionTitle('基本资料'),
+                HandDrawnCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _buildInputField(
+                        '昵称',
+                        _nicknameController,
+                        TextInputType.text,
+                        Validators.nickname,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildGenderPicker(),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                _buildSectionTitle('身体数据'),
+                HandDrawnCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _buildInputField(
+                        '身高 (cm)',
+                        _heightController,
+                        TextInputType.number,
+                        Validators.height,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildInputField(
+                        '体重 (kg)',
+                        _weightController,
+                        TextInputType.number,
+                        Validators.weight,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildInputField(
+                        '年龄',
+                        _ageController,
+                        TextInputType.number,
+                        Validators.age,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                const SizedBox(height: 24),
+                // 数据隐私说明
+                Center(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            LucideIcons.shieldCheck,
+                            size: 14,
                             color: AppColors.getTextMutedColor(context),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '您的所有个人数据均仅存储在本地设备中，\n不会上传至任何云端服务器。',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.getTextMutedColor(context),
-                        height: 1.5,
+                          const SizedBox(width: 6),
+                          Text(
+                            '隐私保护',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getTextMutedColor(context),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        '您的所有个人数据均仅存储在本地设备中，\n不会上传至任何云端服务器。',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.getTextMutedColor(context),
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              Center(
-                child: HandDrawnButton(
-                  label: '保存设置',
-                  onPressed: _saveProfile,
-                  backgroundColor: AppColors.primary,
-                  textColor: Colors.white,
+                const SizedBox(height: 32),
+                Center(
+                  child: HandDrawnButton(
+                    label: '保存设置',
+                    onPressed: _saveProfile,
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

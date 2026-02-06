@@ -1,12 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:capyfit/ui/common/widgets/update_dialog.dart';
 import 'package:capyfit/data/utils/constants.dart';
 import 'package:capyfit/data/utils/routes.dart';
 import 'package:capyfit/data/services/app_update_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:capyfit/data/utils/assets.dart';
 import 'package:capyfit/data/utils/utils.dart';
 
@@ -103,13 +104,15 @@ class _AboutUsPageState extends State<AboutUsPage> {
             title: GlobalConstants.profilePrivacy,
             onTap: () => context.push(GlobalRoutes.privacy),
           ),
-          const SizedBox(height: 12),
-          _buildMenuItem(
-            context,
-            icon: LucideIcons.refreshCw,
-            title: GlobalConstants.profileUpdate,
-            onTap: () => _handleCheckUpdate(context),
-          ),
+          if (!Platform.isIOS) ...[
+            const SizedBox(height: 12),
+            _buildMenuItem(
+              context,
+              icon: LucideIcons.refreshCw,
+              title: GlobalConstants.profileUpdate,
+              onTap: () => _handleCheckUpdate(context),
+            ),
+          ],
         ],
       ),
     );
@@ -191,7 +194,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
       Navigator.of(context, rootNavigator: true).pop();
 
       if (updateInfo.hasUpdate) {
-        _showUpdateDialog(context, updateInfo);
+        UpdateDialog.show(context, updateInfo);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -249,75 +252,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   backgroundColor: AppColors.primary,
                   textColor: Colors.white,
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showUpdateDialog(BuildContext context, UpdateInfo info) {
-    showDialog(
-      context: context,
-      useRootNavigator: true,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: HandDrawnContainer(
-          color: AppColors.getBackgroundColor(context),
-          borderRadius: 24,
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '发现新版本 ${info.latestVersion}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                '更新日志：',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Flexible(
-                child: SingleChildScrollView(child: Text(info.releaseNotes)),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.of(context, rootNavigator: true).pop(),
-                    child: const Text(
-                      '以后再说',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  HandDrawnButton(
-                    onPressed: () async {
-                      final url = Uri.parse(info.downloadUrl);
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                      if (context.mounted) {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }
-                    },
-                    label: '立即下载',
-                    backgroundColor: AppColors.primary,
-                    textColor: Colors.white,
-                  ),
-                ],
               ),
             ],
           ),
