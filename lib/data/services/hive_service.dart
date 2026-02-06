@@ -34,7 +34,31 @@ class HiveService {
     if (_isInitialized) return;
     await Hive.initFlutter();
 
-    // Register adapters
+    // Register all adapters
+    _registerAdapters();
+
+    // 阶段 1: 仅打开启动必需的盒子 (用户资料和系统设置)
+    final results = await Future.wait([
+      Hive.openBox<UserProfile>(userProfileBoxName),
+      Hive.openBox(settingsBoxName),
+      Hive.openBox<WorkoutPlan>(workoutPlansBoxName), // 首页需要显示计划
+      Hive.openBox<DailyStepEntry>(dailyStepsBoxName), // 首页需要步数
+      Hive.openBox<DietEntry>(dietEntriesBoxName), // 首页需要热量
+    ]);
+
+    _userProfileBox = results[0] as Box<UserProfile>;
+    _settingsBox = results[1] as Box;
+    _workoutPlansBox = results[2] as Box<WorkoutPlan>;
+    _dailyStepsBox = results[3] as Box<DailyStepEntry>;
+    _dietEntriesBox = results[4] as Box<DietEntry>;
+
+    _isInitialized = true;
+
+    // 阶段 2: 后台异步打开其余大型数据库盒子，不阻塞启动
+    _initRemainingBoxes();
+  }
+
+  void _registerAdapters() {
     Hive.registerAdapter(UserProfileAdapter());
     Hive.registerAdapter(UserGoalAdapter());
     Hive.registerAdapter(GenderAdapter());
@@ -49,17 +73,15 @@ class HiveService {
     Hive.registerAdapter(IntensityAdapter());
     Hive.registerAdapter(PlanModeAdapter());
     Hive.registerAdapter(DailyStepEntryAdapter());
+  }
 
-    // Open boxes
-    _userProfileBox = await Hive.openBox<UserProfile>(userProfileBoxName);
-    _exercisesBox = await Hive.openBox<Exercise>(exercisesBoxName);
-    _foodItemsBox = await Hive.openBox<FoodItem>(foodItemsBoxName);
-    _dietEntriesBox = await Hive.openBox<DietEntry>(dietEntriesBoxName);
-    _workoutPlansBox = await Hive.openBox<WorkoutPlan>(workoutPlansBoxName);
-    _dailyStepsBox = await Hive.openBox<DailyStepEntry>(dailyStepsBoxName);
-    _settingsBox = await Hive.openBox(settingsBoxName);
-
-    _isInitialized = true;
+  Future<void> _initRemainingBoxes() async {
+    final results = await Future.wait([
+      Hive.openBox<Exercise>(exercisesBoxName),
+      Hive.openBox<FoodItem>(foodItemsBoxName),
+    ]);
+    _exercisesBox = results[0] as Box<Exercise>;
+    _foodItemsBox = results[1] as Box<FoodItem>;
   }
 
   // ========== User Profile ==========

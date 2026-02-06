@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
@@ -53,7 +54,10 @@ late final GoRouter _router;
 late final AppProvider _appProvider;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  // 1. 立即配置沉浸式 UI 样式
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -63,11 +67,11 @@ void main() async {
   );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  // Initialize AppProvider with Hive
+  // 2. 初始化核心业务数据 (已优化为分阶段加载)
   _appProvider = AppProvider();
   await _appProvider.init();
 
-  // Create router once with initial state
+  // 3. 构建路由与应用
   _router = _createRouter(_appProvider.hasUserProfile);
 
   runApp(
@@ -83,6 +87,9 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
+  // 4. 应用构建后第一时间移除启动页，实现丝滑切换
+  FlutterNativeSplash.remove();
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

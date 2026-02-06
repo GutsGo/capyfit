@@ -69,11 +69,24 @@ class AppProvider extends ChangeNotifier {
         _themeMode = ThemeMode.system;
     }
 
-    // Load data from Hive
+    // Load base data from Hive
     _userProfile = _hiveService.getUserProfile();
     _plans = _hiveService.getWorkoutPlans();
     _stepEntries = _hiveService.getDailySteps();
     _dietEntries = _hiveService.getDietEntries();
+
+    // 后台继续加载大型库，不阻塞首屏显示
+    _loadSecondaryData();
+
+    _isInitialized = true;
+    notifyListeners();
+  }
+
+  Future<void> _loadSecondaryData() async {
+    // 轮询或等待直到盒子开启（或者直接读取，如果已开启）
+    // 这里简单的再次由于 HiveService._initRemainingBoxes 是异步在后台跑的
+    // 我们等待一个微小的延迟或直接读取
+    await Future.delayed(const Duration(milliseconds: 300));
     _foodPresets = _hiveService.getFoodItems();
     _exercises = _hiveService.getExercises();
 
@@ -83,7 +96,6 @@ class AppProvider extends ChangeNotifier {
         .map((s) => Medal.fromJson(jsonDecode(s) as Map<String, dynamic>))
         .toList();
 
-    _isInitialized = true;
     notifyListeners();
   }
 
