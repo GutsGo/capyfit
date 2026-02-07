@@ -45,15 +45,7 @@ class _WebviewPageState extends State<WebviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),

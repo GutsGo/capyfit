@@ -67,8 +67,6 @@ class _PlanPageState extends State<PlanPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('训练计划'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           if (!_isSameDay(_selectedDate, DateTime.now()))
             IconButton(

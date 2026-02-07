@@ -83,15 +83,7 @@ class _GoalsPageState extends State<GoalsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '目标设置',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text('目标设置')),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

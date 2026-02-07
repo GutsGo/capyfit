@@ -55,15 +55,7 @@ class _RemindersPageState extends State<RemindersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '提醒设置',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text('提醒设置')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(

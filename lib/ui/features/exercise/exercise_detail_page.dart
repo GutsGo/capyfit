@@ -32,21 +32,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          widget.exercise.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            LucideIcons.chevronLeft,
-            color: AppColors.getTextMainColor(context),
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppBar(title: Text(widget.exercise.name)),
       body: Stack(
         children: [
           SingleChildScrollView(

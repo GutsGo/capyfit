@@ -26,11 +26,7 @@ class _StatsPageState extends State<StatsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('数据洞察'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('数据洞察')),
       body: Consumer<StatsViewModel>(
         builder: (context, vm, child) {
           if (vm.isLoading) {

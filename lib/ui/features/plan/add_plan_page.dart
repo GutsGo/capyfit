@@ -459,15 +459,16 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text('${widget.initialPlan == null ? "新增" : "编辑"}训练计划'),
-        centerTitle: true,
+        title: Text(
+          '${widget.initialPlan == null ? "新增" : "编辑"}训练计划',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             LucideIcons.chevronLeft,
             color: AppColors.getTextMainColor(context),
-            size: 28,
           ),
           onPressed: () => context.pop(),
         ),

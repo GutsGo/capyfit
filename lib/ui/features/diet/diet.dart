@@ -55,8 +55,6 @@ class _DietPageState extends State<DietPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('饮食记录'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           if (!_isSameDay(_selectedDate, DateTime.now()))
             IconButton(

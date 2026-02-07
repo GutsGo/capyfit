@@ -14,15 +14,7 @@ class LevelSystemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          GlobalConstants.profileLevelSystem,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text(GlobalConstants.profileLevelSystem)),
       body: Consumer<AppProvider>(
         builder: (context, appState, child) {
           final stats = appState.userStats;

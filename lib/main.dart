@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
@@ -327,13 +328,18 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.background,
-        appBarTheme: const AppBarTheme(
+        actionIconTheme: ActionIconThemeData(
+          backButtonIconBuilder: (context) =>
+              const Icon(LucideIcons.chevronLeft),
+        ),
+        appBarTheme: AppBarTheme(
           centerTitle: false,
           elevation: 0,
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
-          titleTextStyle: TextStyle(
+          iconTheme: const IconThemeData(color: AppColors.textMain),
+          titleTextStyle: const TextStyle(
             color: AppColors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -350,13 +356,18 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.darkBackground,
-        appBarTheme: const AppBarTheme(
+        actionIconTheme: ActionIconThemeData(
+          backButtonIconBuilder: (context) =>
+              const Icon(LucideIcons.chevronLeft),
+        ),
+        appBarTheme: AppBarTheme(
           centerTitle: false,
           elevation: 0,
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.light,
-          titleTextStyle: TextStyle(
+          iconTheme: const IconThemeData(color: AppColors.darkTextMain),
+          titleTextStyle: const TextStyle(
             color: AppColors.darkTextMain,
             fontSize: 20,
             fontWeight: FontWeight.bold,

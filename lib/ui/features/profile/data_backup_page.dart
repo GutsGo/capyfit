@@ -88,15 +88,7 @@ class _DataBackupPageState extends State<DataBackupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '数据备份',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text('数据备份')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(

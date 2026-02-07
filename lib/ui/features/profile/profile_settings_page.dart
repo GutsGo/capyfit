@@ -9,6 +9,7 @@ import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/data/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:io';
 
 class ProfileSettingsPage extends StatefulWidget {
@@ -110,7 +111,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
     setState(() => _isSaving = true);
     provider.updateUserProfile(newProfile);
-    Navigator.pop(context);
+    context.pop();
     showHandDrawnSnackBar(context, '个人资料已更新');
   }
 
@@ -168,25 +169,17 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
         if (_isSaving || !_hasChanges()) {
-          Navigator.pop(context);
+          context.pop();
           return;
         }
         final shouldPop = await _showDiscardChangesDialog();
         if (shouldPop && mounted) {
-          Navigator.pop(context);
+          context.pop();
         }
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: const Text(
-            '个人设置',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          foregroundColor: AppColors.getTextMainColor(context),
-        ),
+        appBar: AppBar(title: const Text('个人设置')),
         body: Form(
           key: _formKey,
           child: SingleChildScrollView(

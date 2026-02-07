@@ -5,7 +5,6 @@ import 'package:capyfit/data/models/medal.dart';
 import 'package:capyfit/data/services/medal_service.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 
 class MedalLibraryPage extends StatelessWidget {
@@ -15,13 +14,7 @@ class MedalLibraryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('猛练勋章'),
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppBar(title: const Text('猛练勋章')),
       body: Consumer<AppProvider>(
         builder: (context, appState, child) {
           final earnedMedals = appState.earnedMedals;

@@ -60,8 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(GlobalConstants.profileTitle),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           IconButton(
             icon: Icon(

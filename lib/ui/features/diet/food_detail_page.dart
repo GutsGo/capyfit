@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:go_router/go_router.dart';
 import 'package:capyfit/data/models/food_database.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
@@ -15,20 +14,7 @@ class FoodDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('食物详情'),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            LucideIcons.chevronLeft,
-            color: AppColors.getTextMainColor(context),
-            size: 28,
-          ),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: AppBar(title: const Text('食物详情')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

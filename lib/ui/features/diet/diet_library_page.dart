@@ -140,20 +140,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(GlobalConstants.homeDietLibrary),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            LucideIcons.chevronLeft,
-            color: AppColors.getTextMainColor(context),
-            size: 28,
-          ),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: AppBar(title: Text(GlobalConstants.homeDietLibrary)),
       body: Column(
         children: [
           // 搜索栏

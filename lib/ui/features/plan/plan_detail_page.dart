@@ -23,7 +23,7 @@ class PlanDetailPage extends StatefulWidget {
 
 class _PlanDetailPageState extends State<PlanDetailPage> {
   // Cache for resolved exercises (name -> Exercise)
-  Map<String, Exercise> _resolvedExercises = {};
+  final Map<String, Exercise> _resolvedExercises = {};
   final Set<String> _checkedExercises = {};
   bool _isLoading = true;
 
@@ -120,7 +120,7 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('计划详情'),
+            const Text('计划详情', style: TextStyle(fontWeight: FontWeight.bold)),
             if (isCompleted) ...[
               const SizedBox(width: 8),
               Container(
