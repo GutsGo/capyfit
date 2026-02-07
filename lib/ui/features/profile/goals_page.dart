@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:capyfit/providers/app_provider.dart';
 import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/utils/validators.dart';
@@ -75,7 +76,7 @@ class _GoalsPageState extends State<GoalsPage> {
 
     appProvider.updateUserProfile(newProfile);
 
-    Navigator.pop(context);
+    context.pop();
     showHandDrawnSnackBar(context, '目标设置已成功更新！');
   }
 

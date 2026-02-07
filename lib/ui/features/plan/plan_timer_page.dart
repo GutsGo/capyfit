@@ -124,7 +124,7 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     child: Text(
                       '继续训练',
                       style: TextStyle(color: AppColors.primary),
@@ -134,7 +134,7 @@ class _PlanTimerPageState extends State<PlanTimerPage> {
                   HandDrawnButton(
                     onPressed: () {
                       setState(() => _canPop = true);
-                      Navigator.pop(context);
+                      context.pop();
                       if (mounted) context.pop();
                     },
                     label: '放弃',

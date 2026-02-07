@@ -687,7 +687,7 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     child: Text(
                       '取消',
                       style: TextStyle(
@@ -699,7 +699,7 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
                   HandDrawnButton(
                     onPressed: () {
                       appState.deletePlan(plan.id);
-                      Navigator.pop(context); // Close dialog
+                      context.pop(); // Close dialog
                       context.pop(); // Go back to list
                       showHandDrawnSnackBar(context, '计划已删除');
                     },

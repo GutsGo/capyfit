@@ -5,6 +5,7 @@ import 'package:capyfit/data/models/medal.dart';
 import 'package:capyfit/data/services/medal_service.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class MedalLibraryPage extends StatelessWidget {
@@ -187,7 +188,7 @@ class MedalLibraryPage extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondaryAnimation) {
         return GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () => context.pop(),
           child: Material(
             color: Colors.transparent,
             child: ScaleTransition(

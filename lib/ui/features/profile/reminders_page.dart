@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/common_widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 
 class RemindersPage extends StatefulWidget {
@@ -113,7 +114,7 @@ class _RemindersPageState extends State<RemindersPage> {
               child: HandDrawnButton(
                 label: '保存设置',
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                   showHandDrawnSnackBar(context, '提醒设置已保存');
                 },
                 backgroundColor: AppColors.primary,

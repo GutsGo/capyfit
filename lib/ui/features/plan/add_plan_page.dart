@@ -278,7 +278,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         return ExerciseSelectionSheet(
           onSelect: (ex) {
             _addExerciseFromLibrary(ex);
-            Navigator.pop(context);
+            context.pop();
           },
         );
       },
@@ -313,7 +313,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   child: Text(
                     '取消',
                     style: TextStyle(
@@ -326,7 +326,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       _addCustomExercise(controller.text);
-                      Navigator.pop(context);
+                      context.pop();
                     }
                   },
                   label: '添加',
@@ -406,7 +406,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                       child: Text(
                         '取消',
                         style: TextStyle(
@@ -433,7 +433,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                             _isChinaHoliday = false;
                           }
                         });
-                        Navigator.pop(context);
+                        context.pop();
                       },
                       label: '确认',
                       backgroundColor: AppColors.primary,

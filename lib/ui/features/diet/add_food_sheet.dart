@@ -117,7 +117,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
               ),
             ),
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               icon: const Icon(LucideIcons.x),
             ),
           ],
@@ -410,10 +410,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
         title: const Text('提示'),
         content: Text(message),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('确定'),
-          ),
+          TextButton(onPressed: () => context.pop(), child: const Text('确定')),
         ],
       ),
     );
@@ -461,7 +458,7 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
 
     // 如果是仅添加到列表模式，直接关闭
     if (widget.onlyAddToList) {
-      Navigator.pop(context);
+      context.pop();
       return;
     }
 
@@ -495,6 +492,6 @@ class _AddFoodSheetState extends State<AddFoodSheet> {
     );
 
     Provider.of<AppProvider>(context, listen: false).addDietEntry(entry);
-    Navigator.pop(context);
+    context.pop();
   }
 }

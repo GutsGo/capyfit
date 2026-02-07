@@ -294,7 +294,7 @@ class _DietLibraryPageState extends State<DietLibraryPage> {
                     ),
                     IconButton(
                       icon: const Icon(LucideIcons.x, size: 20),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                     ),
                   ],
                 ),

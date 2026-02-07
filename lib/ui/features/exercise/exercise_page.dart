@@ -256,7 +256,7 @@ class _ExercisePageState extends State<ExercisePage> {
                     ),
                     IconButton(
                       icon: const Icon(LucideIcons.x, size: 20),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                     ),
                   ],
                 ),

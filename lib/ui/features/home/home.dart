@@ -696,7 +696,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   child: Text(
                     '取消',
                     style: TextStyle(
@@ -711,7 +711,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     if (formKey.currentState!.validate()) {
                       final steps = int.parse(controller.text);
                       appState.updateDailySteps(steps);
-                      Navigator.pop(context);
+                      context.pop();
                       showHandDrawnSnackBar(context, '步数已更新！');
                     }
                   },
