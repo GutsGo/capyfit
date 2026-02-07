@@ -154,8 +154,8 @@ class _BarChartPainter extends _HandDrawnPainter {
     required this.textColor,
     required this.valueColor,
     required this.maxValue,
-    required int seed,
-  }) : super(seed: seed);
+    required super.seed,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -320,8 +320,8 @@ class _LineChartPainter extends _HandDrawnPainter {
     required this.textColor,
     required this.valueColor,
     required this.maxValue,
-    required int seed,
-  }) : super(seed: seed);
+    required super.seed,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -481,8 +481,8 @@ class _PieChartPainter extends _HandDrawnPainter {
     required this.colors,
     required this.borderColor,
     required this.textColor,
-    required int seed,
-  }) : super(seed: seed);
+    required super.seed,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {

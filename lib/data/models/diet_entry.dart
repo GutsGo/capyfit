@@ -87,7 +87,7 @@ class DietEntry extends HiveObject {
       date: date ?? this.date,
       foodId: foodId ?? this.foodId,
       isCustom: isCustom ?? this.isCustom,
-      emoji: emoji ?? this.emoji,
+      emoji: emoji ?? emoji,
     );
   }
 
