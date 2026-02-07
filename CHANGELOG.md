@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.3.5] - 2026-02-08
+
+### Added
+- **反馈系统升级**：正式迁移意见反馈提交逻辑至 CNB API，支持更高效的问题追踪，并由环境变量 `GITHUB_TOKEN` 驱动认证。
+
+### Changed
+- **UI 规范化**：全量重构应用内的 AppBar 样式。通过全局 `AppBarTheme` 统一了标题对齐、背景透明度、阴影及文字外显。
+- **导航优化**：在全局主题中统一配置 `backButtonIconBuilder`，使用 `LucideIcons.chevronLeft` 替代默认图标。
+- **性能优化**：将全量页面中冗余的 `Navigator.pop(context)` 迁移至 `context.pop()` (GoRouter)，提升路由跳转的响应性能与一致性。
+- **代码重构**：应用 Dart 3 的 `super` 参数语法优化了手绘图表等核心组件的构造函数，精简了模板代码。
+- **版本更迭**：应用版本号正式升级至 v1.3.5。
+- **文档维护**：同步更新了帮助页面的说明细节。
+
 ## [1.3.4] - 2026-02-07
 
 ### Added
