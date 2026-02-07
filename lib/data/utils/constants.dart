@@ -45,7 +45,7 @@ class GlobalConstants {
   static const String profileTitle = '个人中心';
   static const String profileThemeToggle = '切换主题模式';
   static const String profileUserDefaultName = '皮大王';
-  static const String profileDefaultAvatar = 'assets/logo.jpg';
+  static const String profileDefaultAvatar = 'assets/brand/logo.jpg';
   static const String profileMemberLevel = '初级会员';
   static const String profileAchievements = '我的成就';
   static const String profileAchievementActiveDays = '坚持天数';

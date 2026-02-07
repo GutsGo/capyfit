@@ -67,28 +67,28 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/logo.jpg"
+  image_path: "assets/brand/logo.jpg"
   min_sdk_android: 21
   web:
     generate: true
-    image_path: "assets/logo.jpg"
+    image_path: "assets/brand/logo.jpg"
     background_color: "#ffffff"
     theme_color: "#ffffff"
   macos:
     generate: true
-    image_path: "assets/logo-mac.png"
+    image_path: "assets/brand/logo-mac.png"
 
 flutter_native_splash:
   color: "#FDFBF6"
   color_dark: "#1A1614"
-  image: "assets/logo-mac.png"
+  image: "assets/brand/splash.png"
   android: true
   ios: true
   fullscreen: false
   android_12:
     color: "#FDFBF6"
     color_dark: "#1A1614"
-    image: "assets/logo-mac.png"
+    image: "assets/brand/splash.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -108,8 +108,7 @@ flutter:
     - assets/images/icons/
     - assets/images/exercises/
     - assets/data/
-    - assets/logo.jpg
-    - assets/logo-mac.png
+    - assets/brand/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

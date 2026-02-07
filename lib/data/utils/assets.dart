@@ -4,8 +4,8 @@ class GlobalAssets {
   static const String _iconsPath = '$imagesPath/icons';
   static const String _jsonPath = 'assets/data';
 
-  static const String logo = 'assets/logo.jpg';
-  static const String logoMac = 'assets/logo-mac.png';
+  static const String logo = 'assets/brand/logo.jpg';
+  static const String logoMac = 'assets/brand/logo-mac.png';
 
   // Mascot
   static const String capybaraDance = '$imagesPath/capy_dance.gif';
