@@ -7,6 +7,7 @@ import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
 import 'package:capyfit/data/utils/validators.dart';
 import 'package:capyfit/data/utils/constants.dart';
 import 'package:capyfit/data/services/hive_service.dart';
+import 'package:go_router/go_router.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -89,7 +90,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
           await HiveService().saveLastFeedbackTime(DateTime.now());
 
           if (mounted) {
-            Navigator.pop(context);
+            context.pop();
             showHandDrawnSnackBar(context, '感谢您的反馈！卡皮正在努力处理中...');
           }
         } else {
@@ -117,15 +118,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '意见反馈',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text('意见反馈')),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
