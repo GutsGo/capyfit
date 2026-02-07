@@ -11,15 +11,7 @@ class HelpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          '使用帮助',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.getTextMainColor(context),
-      ),
+      appBar: AppBar(title: const Text('使用帮助')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
