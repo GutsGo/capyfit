@@ -7,6 +7,7 @@ import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/services/exercise_db_service.dart';
 import 'package:capyfit/ui/common/theme/app_colors.dart';
 import 'package:capyfit/ui/common/widgets/hand_drawn_widgets.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 class ExerciseSelectionSheet extends StatefulWidget {
   final Function(Exercise) onSelect;
@@ -126,7 +127,7 @@ class _ExerciseSelectionSheetState extends State<ExerciseSelectionSheet> {
         }
       }
     } catch (e) {
-      debugPrint('Error loading exercises: $e');
+      Log.e('Error loading exercises', e);
       if (mounted) setState(() => _isLoading = false);
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:capyfit/data/utils/logger.dart';
 import 'package:capyfit/data/models/user_profile.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/models/food_item.dart';
@@ -32,6 +33,7 @@ class HiveService {
 
   Future<void> init() async {
     if (_isInitialized) return;
+    Log.i('Initializing HiveService...');
     await Hive.initFlutter();
 
     // Register all adapters
@@ -55,6 +57,7 @@ class HiveService {
     _isInitialized = true;
 
     // 阶段 2: 后台异步打开其余大型数据库盒子，不阻塞启动
+    Log.d('Main boxes opened. Initializing remaining boxes in background...');
     _remainingBoxesFuture = _initRemainingBoxes();
   }
 
@@ -99,6 +102,7 @@ class HiveService {
   }
 
   Future<void> saveUserProfile(UserProfile profile) async {
+    Log.d('Saving user profile...');
     await _userProfileBox.put('current', profile);
   }
 
@@ -161,6 +165,18 @@ class HiveService {
 
   Future<void> saveEarnedMedalJsonList(List<String> medalJsons) async {
     await _settingsBox.put('earnedMedals', medalJsons);
+  }
+
+  // ========== Generic Settings Access ==========
+  /// 获取通用设置项
+  T? getSetting<T>(String key, {T? defaultValue}) {
+    return _settingsBox.get(key, defaultValue: defaultValue) as T?;
+  }
+
+  /// 保存通用设置项
+  Future<void> saveSetting<T>(String key, T value) async {
+    Log.d('Saving setting: $key = $value');
+    await _settingsBox.put(key, value);
   }
 
   // ========== Exercises ==========
@@ -236,7 +252,7 @@ class HiveService {
       await _workoutPlansBox.clear();
       await _dailyStepsBox.clear();
       await _settingsBox.clear();
-      print('DEBUG: All Hive boxes cleared.');
+      Log.w('DEBUG: All Hive boxes cleared.');
     }
   }
 }

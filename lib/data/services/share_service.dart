@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 class ShareService {
   /// 将 [GlobalKey] 关联的 [RepaintBoundary] 转换为图片并分享
@@ -30,7 +31,7 @@ class ShareService {
       // 唤起分享
       await Share.shareXFiles([XFile(file.path)], text: text);
     } catch (e) {
-      debugPrint('ShareService Error: $e');
+      Log.e('ShareService Error', e);
       rethrow;
     }
   }

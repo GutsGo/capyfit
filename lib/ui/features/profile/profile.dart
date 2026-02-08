@@ -13,6 +13,7 @@ import 'package:capyfit/data/utils/utils.dart';
 import 'package:capyfit/data/utils/routes.dart';
 import 'package:capyfit/data/services/level_service.dart';
 import 'package:capyfit/data/services/share_service.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -580,7 +581,7 @@ class _ProfilePageState extends State<ProfilePage> {
           '我在 Capyfit 已经坚持健身 ${context.read<AppProvider>().userStats.joinedDays} 天啦！快来和我一起努力吧！';
       await ShareService.captureAndShare(_shareKey, text: shareText);
     } catch (e) {
-      debugPrint('Capture and share error: $e');
+      Log.e('Capture and share error', e);
     }
   }
 }

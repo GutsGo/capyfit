@@ -14,6 +14,7 @@ import 'package:capyfit/data/utils/assets.dart';
 import 'package:capyfit/data/utils/constants.dart';
 import 'package:capyfit/data/utils/utils.dart';
 import 'package:capyfit/data/utils/routes.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       }
     } catch (e) {
       // 自动检查失败通常保持静默
-      debugPrint('Auto update check failed: $e');
+      Log.d('Auto update check failed: $e');
     }
   }
 

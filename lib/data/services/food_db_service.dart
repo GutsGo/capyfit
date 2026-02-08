@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:capyfit/data/models/food_database.dart';
 import 'package:capyfit/data/utils/assets.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 /// 食物数据库服务
 /// 提供懒加载、缓存和高效搜索功能
@@ -38,7 +39,7 @@ class FoodDbService {
       _cachedData = await compute(_parseJson, jsonString);
       return _cachedData!;
     } catch (e) {
-      debugPrint('加载食物数据库失败: $e');
+      Log.e('加载食物数据库失败', e);
       return [];
     } finally {
       _isLoading = false;
@@ -77,9 +78,29 @@ class FoodDbService {
       if (categories != null && categories.isNotEmpty) {
         matchesCategory = categories.contains(food.category);
       }
-
       return matchesQuery && matchesCategory;
     }).toList();
+
+    if (query.isNotEmpty) {
+      // 优化排序：完全匹配 > 前缀匹配 > 包含匹配
+      filteredFoods.sort((a, b) {
+        final aName = a.foodName.toLowerCase();
+        final bName = b.foodName.toLowerCase();
+
+        // 1. 完全匹配优先
+        if (aName == lowerQuery && bName != lowerQuery) return -1;
+        if (bName == lowerQuery && aName != lowerQuery) return 1;
+
+        // 2. 前缀匹配优先
+        final aStarts = aName.startsWith(lowerQuery);
+        final bStarts = bName.startsWith(lowerQuery);
+        if (aStarts && !bStarts) return -1;
+        if (bStarts && !aStarts) return 1;
+
+        // 3. 长度更短（更精准）优先 (例如 "辣椒" 优于 "辣椒油")
+        return aName.length.compareTo(bName.length);
+      });
+    }
 
     // 分页
     final end = (offset + limit).clamp(0, filteredFoods.length);
