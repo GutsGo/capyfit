@@ -85,7 +85,7 @@ const handleDownload = async () => {
           <span class="clip">猛练豚</span>
         </h1>
         <p class="text">让健身像卡皮巴拉一样稳定而有趣。</p>
-        <p class="tagline">基于 Flutter 的治愈系健身软件，全手绘视觉风格，极致的隐私保护。</p>
+        <p class="tagline">治愈系健身软件，全手绘视觉风格，极致的隐私保护。</p>
         
         <div class="actions">
           <a @click.prevent="handleDownload" href="javascript:void(0)" class="vp-button brand">
