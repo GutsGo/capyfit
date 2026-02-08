@@ -10,7 +10,7 @@ import 'package:capyfit/data/models/daily_step_entry.dart';
 import 'package:capyfit/data/services/hive_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:capyfit/data/utils/constants.dart';
-import 'package:flutter/foundation.dart';
+import 'package:capyfit/data/utils/logger.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -87,7 +87,7 @@ class BackupService {
         }
       }
     } catch (e) {
-      debugPrint('Export error: $e');
+      Log.e('Export error', e);
       throw '导出失败: $e';
     }
   }
@@ -119,7 +119,7 @@ class BackupService {
 
         final String calculatedSignature = _generateSignature(dataContent);
         if (fileSignature != calculatedSignature) {
-          debugPrint('Signature mismatch! Data might be tampered.');
+          Log.w('Signature mismatch! Data might be tampered.');
           throw '备份文件签名无效（数据可能已被篡改），导入已取消';
         }
 
@@ -129,7 +129,7 @@ class BackupService {
         return '取消导入';
       }
     } catch (e) {
-      debugPrint('Import error: $e');
+      Log.e('Import error', e);
       throw '导入失败: $e';
     }
   }

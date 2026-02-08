@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:capyfit/data/models/exercise.dart';
 import 'package:capyfit/data/utils/assets.dart';
+import 'package:capyfit/data/utils/logger.dart';
 
 /// 动作数据库服务
 /// 提供懒加载和高效搜索功能
@@ -36,7 +37,7 @@ class ExerciseDbService {
       _cachedData = await compute(_parseJson, jsonString);
       return _cachedData!;
     } catch (e) {
-      debugPrint('加载动作数据库失败: $e');
+      Log.e('加载动作数据库失败', e);
       return [];
     } finally {
       _isLoading = false;
