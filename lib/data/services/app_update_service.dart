@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:capyfit/data/utils/constants.dart';
+import 'package:capyfit/data/services/config_service.dart';
 
 class UpdateInfo {
   final String latestVersion;
@@ -25,10 +22,7 @@ class UpdateInfo {
 }
 
 class AppUpdateService {
-  static const String _releaseConfigUrl =
-      '${GlobalConstants.updateBaseUrl}/capy_conf.json';
-  static const String _debugConfigUrl =
-      '${GlobalConstants.updateBaseUrl}/capy_conf.debug.json';
+  final ConfigService _configService = ConfigService();
 
   /// 检查更新
   Future<UpdateInfo> checkUpdate() async {
@@ -43,53 +37,48 @@ class AppUpdateService {
     }
 
     try {
-      final configUrl = kDebugMode ? _debugConfigUrl : _releaseConfigUrl;
-      final response = await http.get(Uri.parse(configUrl));
+      // 获取最新配置（忽略缓存以确保检查到更新）
+      final data = await _configService.fetchConfig(ignoreCache: true);
 
-      if (response.statusCode == 200) {
-        final data = json.decode(utf8.decode(response.bodyBytes));
-        final String latestVersion = data['latestVersion'];
-        final bool isForceUpdate = data['forceUpdate'] ?? false;
-        final String releaseNotes = data['changelog'] ?? '无更新日志';
+      final String latestVersion = data['latestVersion'];
+      final bool isForceUpdate = data['forceUpdate'] ?? false;
+      final String releaseNotes = data['changelog'] ?? '无更新日志';
 
-        final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        final String currentVersion = packageInfo.version;
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      final String currentVersion = packageInfo.version;
 
-        bool hasUpdate = _isVersionGreater(latestVersion, currentVersion);
-        bool shouldNotify = isForceUpdate;
-        if (hasUpdate && !shouldNotify) {
-          shouldNotify = _isSignificantUpdate(latestVersion, currentVersion);
-        }
-
-        String downloadUrl = '';
-        if (hasUpdate) {
-          final urls = data['urls'] as Map<String, dynamic>;
-          String baseUrl = urls['base'] ?? '';
-          if (baseUrl.isNotEmpty && !baseUrl.endsWith('/')) {
-            baseUrl += '/';
-          }
-
-          if (Platform.isAndroid) {
-            final androidUrls = urls['android'] as Map<String, dynamic>;
-            final assetPath = await _getBestAndroidAssetPath(androidUrls);
-            downloadUrl = '$baseUrl$assetPath';
-          } else if (Platform.isIOS) {
-            // 虽然前面拦截了，但逻辑完整性保留
-            downloadUrl = '$baseUrl${urls['ios'] ?? ''}';
-          }
-        }
-
-        return UpdateInfo(
-          latestVersion: latestVersion,
-          releaseNotes: releaseNotes,
-          downloadUrl: downloadUrl,
-          hasUpdate: hasUpdate,
-          isForceUpdate: isForceUpdate,
-          shouldNotify: shouldNotify,
-        );
-      } else {
-        throw Exception('无法获取更新信息: ${response.statusCode}');
+      bool hasUpdate = _isVersionGreater(latestVersion, currentVersion);
+      bool shouldNotify = isForceUpdate;
+      if (hasUpdate && !shouldNotify) {
+        shouldNotify = _isSignificantUpdate(latestVersion, currentVersion);
       }
+
+      String downloadUrl = '';
+      if (hasUpdate) {
+        final urls = data['urls'] as Map<String, dynamic>;
+        String baseUrl = urls['base'] ?? '';
+        if (baseUrl.isNotEmpty && !baseUrl.endsWith('/')) {
+          baseUrl += '/';
+        }
+
+        if (Platform.isAndroid) {
+          final androidUrls = urls['android'] as Map<String, dynamic>;
+          final assetPath = await _getBestAndroidAssetPath(androidUrls);
+          downloadUrl = '$baseUrl$assetPath';
+        } else if (Platform.isIOS) {
+          // 虽然前面拦截了，但逻辑完整性保留
+          downloadUrl = '$baseUrl${urls['ios'] ?? ''}';
+        }
+      }
+
+      return UpdateInfo(
+        latestVersion: latestVersion,
+        releaseNotes: releaseNotes,
+        downloadUrl: downloadUrl,
+        hasUpdate: hasUpdate,
+        isForceUpdate: isForceUpdate,
+        shouldNotify: shouldNotify,
+      );
     } catch (e) {
       rethrow;
     }
