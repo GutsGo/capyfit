@@ -91,7 +91,7 @@ const handleDownload = async () => {
           <a @click.prevent="handleDownload" href="javascript:void(0)" class="vp-button brand">
             立即下载 <Download :size="16" style="margin-left: 4px; vertical-align: middle;" />
           </a>
-          <a href="https://github.com/GutsGo/CapyFitHub" class="vp-button alt">
+          <a href="https://github.com/GutsGo/capyfit" class="vp-button alt">
             GitHub <Github :size="16" style="margin-left: 4px; vertical-align: middle;" />
           </a>
         </div>
